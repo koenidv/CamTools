@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ndLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light_normal"
+    android:gravity="center_horizontal"
+    android:paddingBottom="72dp"
+    android:paddingEnd="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
+    tools:context=".MainActivity">
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/ndTimeCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        custom:layout_constraintBottom_toTopOf="@+id/ndStrengthCard"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                custom:layout_constraintEnd_toEndOf="parent"
+                custom:layout_constraintStart_toStartOf="parent"
+                custom:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/ndTimeTitleText"
+                    android:layout_width="148dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nd_time_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                <EditText
+                    android:id="@+id/ndTimeEditText"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/nd_time_hint"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="textEnd"/>
+
+                <TextView
+                    android:id="@+id/ndTimeIndicatorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/nd_time_indicator_seconds_short"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/ndTimeSeekbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:max="51"
+                android:padding="8dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="332dp"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/ndStrengthCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        custom:layout_constraintBottom_toBottomOf="parent"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintHorizontal_bias="1.0"
+        custom:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                custom:layout_constraintEnd_toEndOf="parent"
+                custom:layout_constraintStart_toStartOf="parent"
+                custom:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/ndStrengthTitle"
+                    android:layout_width="106dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nd_strength_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                <EditText
+                    android:id="@+id/ndStrengthEditText"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/nd_strength_hint"
+                    android:inputType="numberDecimal"
+                    android:textAlignment="textEnd"/>
+
+                <TextView
+                    android:id="@+id/ndStrengthIndicatorText"
+                    android:layout_width="28dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/nd_strength_type_stops"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+            </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/ndStrengthSeekbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:max="13"
+                android:padding="8dp"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="332dp"/>
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/ndResultTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Counter"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        custom:layout_constraintBottom_toTopOf="@+id/ndTimeCard"
+        custom:layout_constraintEnd_toEndOf="parent"
+        custom:layout_constraintStart_toStartOf="parent"
+        custom:layout_constraintTop_toTopOf="parent"/>
+
+</android.support.constraint.ConstraintLayout>

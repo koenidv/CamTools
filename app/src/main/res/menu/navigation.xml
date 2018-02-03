@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_sun"
+        android:icon="@drawable/ic_sun_black_24dp"
+        android:title="@string/title_sun_short"/>
+
+    <item
+        android:id="@+id/nav_stars"
+        android:icon="@drawable/ic_stars_black_24dp"
+        android:title="@string/title_stars_short"/>
+
+    <item
+        android:id="@+id/nav_focus"
+        android:icon="@drawable/ic_focus_black_24dp"
+        android:title="@string/title_focus_short"/>
+    <item
+        android:id="@+id/nav_nd"
+        android:icon="@drawable/ic_nd_black_24dp"
+        android:title="@string/title_nd_short"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:title="@string/title_settings_short"/>
+
+</menu>

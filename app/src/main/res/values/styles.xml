@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--TODO: Find a fix to make these true whilst keeping everything
+                    in place on devices with and without navbar-->
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
+
+    <style name="darkDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/background_dark_darker</item>
+        <item name="android:textColor">@color/text_main_dark</item>
+        <item name="android:textColorAlertDialogListItem">@color/text_main_dark</item>
+    </style>
+
+</resources>

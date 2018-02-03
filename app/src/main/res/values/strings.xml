@@ -1,0 +1,85 @@
+<resources>
+    <string name="app_name">CamTools</string>
+
+    <string name="aboutLibraries_description_showIcon">true</string>
+    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_text">A calculator for photographers.</string>
+
+    <string name="title_sun_short">Sun</string>
+    <string name="title_sun_long">Sun position</string>
+    <string name="title_stars_short">Stars</string>
+    <string name="title_stars_long">Startrails</string>
+    <string name="title_focus_short">Focus</string>
+    <string name="title_focus_long">Focus</string>
+    <string name="title_nd_short">ND</string>
+    <string name="title_nd_long">Neutral-density filter</string>
+    <string name="title_timelapse_short">Timelapse</string>
+    <string name="title_timelapse_long">Timelapse</string>
+    <string name="title_settings_short">Settings</string>
+    <string name="title_settings_long">Settings</string>
+    <string name="overflow_description">More options…</string>
+
+    <string name="settings_nd_strengthunit">Strength unit</string>
+    <string name="settings_nd_strengthunit_dialog">Optical density unit</string>
+    <string name="settings_nd_strengthunit_stops">F-stops</string>
+    <string name="settings_nd_strengthunit_times">Filter factor</string>
+    <string name="settings_nd_timelimits">Time limits</string>
+    <string name="settings_nd_strengthlimits">Strength limits</string>
+    <string name="appearance_appearance">Appearance</string>
+    <string name="appearance_darkmode">Dark theme</string>
+    <string name="appearance_color">Colors</string>
+    <string name="appearance_navbar">Bottom navigation</string>
+    <string name="appearance_labels">Navigation labels</string>
+    <string name="appearance_singlehand">Single-handed mode</string>
+    <string name="appearance_swipe">Swipe between tabs</string>
+    <string name="appearance_save">Save last tab</string>
+    <string name="appearance_customColors">Custom colors</string>
+    <string name="about_about">About</string>
+    <string name="about_rate">Rate / Send feedback</string>
+    <string name="about_me">About me</string>
+    <string name="about_app">About this app</string>
+
+    <string name="more_expand">Expand</string>
+    <string name="more_expanded">Collapse</string>
+
+    <string name="fallback_colorparse">Falling back to at least one standard color. Make sure to have entered a valid color code.</string>
+
+    <string name="title_activity_custom">Custom Colors</string>
+    <string name="custom_light_lighter">Lighter light (cards, navbar, etc)</string>
+    <string name="custom_light_normal">Normal light (mainly backgrounds)</string>
+    <string name="custom_light_darker">Darker light (no use yet)</string>
+    <string name="custom_dark_lighter">Lighter dark (mainly backgrounds)</string>
+    <string name="custom_dark_normal">Normal dark (cards, navbar, etc)</string>
+    <string name="custom_dark_darker">Darker dark (no use yet)</string>
+    <string name="custom_tab_sun">Sun tab accent color</string>
+    <string name="custom_tab_stars">Stars tab accent color</string>
+    <string name="custom_tab_focus">Focus tab accent color</string>
+    <string name="custom_tab_nd">ND tab accent color</string>
+    <string name="custom_tab_settings">Settings tab accent color</string>
+    <string name="custom_tab_timelapse">Timelapse tab accent color</string>
+    <string name="custom_text_main_light">Main text (light mode)</string>
+    <string name="custom_text_sub_light">Subtext (light mode)</string>
+    <string name="custom_text_main_dark">Main text (dark mode)</string>
+    <string name="custom_text_sub_dark">Subtext (dark mode)</string>
+
+    <string name="nd_time_title">Normal exposure:</string>
+    <string name="nd_time_hint">Exposure time…</string>
+    <string name="nd_time_indicator_seconds_short">s</string>
+    <string name="nd_time_indicator_seconds_long">seconds</string>
+    <string name="nd_strength_title">Filter strength:</string>
+    <string name="nd_strength_hint">Light transmittance…</string>
+    <string name="nd_strength_type_stops">stops</string>
+    <string name="nd_strength_type_times">times</string>
+
+    <string name="action_help">Get help</string>
+    <string name="action_advancedSettings">Advanced settings</string>
+
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="warning_reset_colors_title">Reset colors?</string>
+    <string name="warning_reset_colors_message">This will undo all changes you made to the theme. Other settings won\'t be affected.</string>
+
+    <string name="color_palette">Color Palette</string>
+    <string name="colors">Colors</string>
+</resources>

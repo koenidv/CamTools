@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.koenidv.camtools.CustomColorsActivity">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/customColorsResetFAB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_undo_black_24dp"
+        android:focusable="true"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/custom_light_lighter_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_light_lighter"/>
+
+            <Button
+                android:id="@+id/custom_light_normal_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_light_normal"/>
+
+            <Button
+                android:id="@+id/custom_light_darker_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_light_normal"/>
+
+            <Button
+                android:id="@+id/custom_dark_lighter_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_dark_lighter"/>
+
+            <Button
+                android:id="@+id/custom_dark_normal_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_dark_normal"/>
+
+            <Button
+                android:id="@+id/custom_dark_darker_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_dark_darker"/>
+
+            <Button
+                android:id="@+id/custom_tab_sun_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_tab_sun"/>
+
+            <Button
+                android:id="@+id/custom_tab_stars_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_tab_stars"/>
+
+            <Button
+                android:id="@+id/custom_tab_focus_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_tab_focus"/>
+
+            <Button
+                android:id="@+id/custom_tab_nd_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_tab_nd"/>
+
+            <Button
+                android:id="@+id/custom_tab_settings_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_tab_settings"/>
+
+            <Button
+                android:id="@+id/custom_tab_timelapse_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_tab_timelapse"/>
+
+            <Button
+                android:id="@+id/custom_text_main_light_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_text_main_light"/>
+
+            <Button
+                android:id="@+id/custom_text_sub_light_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_text_sub_light"/>
+
+            <Button
+                android:id="@+id/custom_text_main_dark_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_text_main_dark"/>
+
+            <Button
+                android:id="@+id/custom_text_sub_dark_Button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_text_sub_dark"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

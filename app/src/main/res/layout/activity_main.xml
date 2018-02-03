@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.koenidv.camtools.DraggableFAB
+        android:id="@+id/mainFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:layout_marginEnd="16dp"
+        android:tint="@android:color/white"
+        android:visibility="gone"
+        app:backgroundTint="@color/tab_nd"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/viewPager"
+        app:layout_anchorGravity="right|center"
+        app:rippleColor="@android:color/white"
+        app:srcCompat="@drawable/ic_countdown_black_24dp"/>
+
+    <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
+
+</android.support.design.widget.CoordinatorLayout>
