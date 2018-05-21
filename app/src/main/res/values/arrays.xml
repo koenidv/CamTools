@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="sensorFormats">
+        <item>35mm (full frame)</item>
+        <item>APS-H (Canon)</item>
+        <item>APS-C (Nikon, Sony, etc.)</item>
+        <item>APS-C (Canon)</item>
+        <item>Foveon (Sigma)</item>
+        <item>Four Thirds (Olympus, Panasonic)</item>
+        <item>1" (Nikon, Sony)</item>
+        <item>2/3" (Fuji, Nokia)</item>
+        <item>1/1.7"</item>
+        <item>1/2.5"</item>
+        <item>Custom</item>
+    </array>
+</resources>

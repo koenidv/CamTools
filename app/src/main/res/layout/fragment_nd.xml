@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ndLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light_normal"
+    android:background="@color/background_light_lighter"
     android:gravity="center_horizontal"
     android:paddingBottom="72dp"
-    android:paddingEnd="8dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingStart="8dp"
-    android:paddingTop="8dp"
     tools:context=".MainActivity">
 
 
@@ -21,11 +16,14 @@
         android:id="@+id/ndTimeCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        custom:layout_constraintBottom_toTopOf="@+id/ndStrengthCard"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintStart_toStartOf="parent"
-        >
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="@dimen/standardPadding"
+        android:layout_marginStart="@dimen/standardPadding"
+        app:cardCornerRadius="@dimen/cardCornerRadius"
+        app:cardElevation="@dimen/cardElevation"
+        app:layout_constraintBottom_toTopOf="@+id/ndStrengthCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,9 +35,9 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:padding="8dp"
-                custom:layout_constraintEnd_toEndOf="parent"
-                custom:layout_constraintStart_toStartOf="parent"
-                custom:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/ndTimeTitleText"
@@ -87,11 +85,15 @@
         android:id="@+id/ndStrengthCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        custom:layout_constraintBottom_toBottomOf="parent"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintHorizontal_bias="1.0"
-        custom:layout_constraintStart_toStartOf="parent">
+        android:layout_marginBottom="@dimen/cardMarginBottom"
+        android:layout_marginEnd="@dimen/standardPadding"
+        android:layout_marginStart="@dimen/standardPadding"
+        app:cardCornerRadius="@dimen/cardCornerRadius"
+        app:cardElevation="@dimen/cardElevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -103,22 +105,22 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:padding="8dp"
-                custom:layout_constraintEnd_toEndOf="parent"
-                custom:layout_constraintStart_toStartOf="parent"
-                custom:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
                     android:id="@+id/ndStrengthTitle"
-                    android:layout_width="106dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/nd_strength_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                 <EditText
                     android:id="@+id/ndStrengthEditText"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="@string/nd_strength_hint"
@@ -132,7 +134,15 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/nd_strength_type_stops"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:visibility="gone"/>
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:entries="@array/nd_strength_types"/>
 
             </LinearLayout>
 
@@ -160,9 +170,9 @@
         android:text="Counter"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        custom:layout_constraintBottom_toTopOf="@+id/ndTimeCard"
-        custom:layout_constraintEnd_toEndOf="parent"
-        custom:layout_constraintStart_toStartOf="parent"
-        custom:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintBottom_toTopOf="@+id/ndTimeCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

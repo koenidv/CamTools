@@ -68,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
             mNavigation.setBackgroundColor(getResources().getColor(R.color.background_dark_darker));
             mNavigation.setAccentColor(getResources().getColor(R.color.background_light_lighter));
         } else {
-            mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(prefs.getString("custom_light_lighter", getString((int) R.color.background_light_lighter)))));
-            mActionBar.setTitle(Html.fromHtml("<font color=\"gray\">" + mActionBar.getTitle() + "</font>"));
-            setOverflowButtonColor(this, Color.GRAY);
+            if (!prefs.getBoolean("colors", true)) {
+                mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(prefs.getString("custom_light_lighter", getString((int) R.color.background_light_lighter)))));
+                mActionBar.setTitle(Html.fromHtml("<font color=\"gray\">" + mActionBar.getTitle() + "</font>"));
+                setOverflowButtonColor(this, Color.GRAY);
+            }
         }
 
 

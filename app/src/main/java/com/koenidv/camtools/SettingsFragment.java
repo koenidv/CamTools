@@ -14,6 +14,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -41,7 +43,7 @@ public class SettingsFragment extends Fragment {
 
     //Called when Fragment should create its View object hierarchy
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         //Defines the xml file for the fragment
         return inflater.inflate(R.layout.fragment_settings, parent, false);
     }
@@ -61,13 +63,22 @@ public class SettingsFragment extends Fragment {
 
     //Called after onCreateView(). View setup here.
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
         LinearLayout mBackgroundLayout = view.findViewById(R.id.settingsLinearLayout);
         mSinglehandSpace = view.findViewById(R.id.settingsSinglehandSpace);
         final CardView mFunctionsCard = view.findViewById(R.id.functionsCard);
+        CardView mCamCard = view.findViewById(R.id.settingsCamCard);
+        ImageView mCamSymbol = view.findViewById(R.id.settingsCamSymbol);
+        TextView mCamText = view.findViewById(R.id.settingsCamTextView);
+        LinearLayout mChooseCamLayout = view.findViewById(R.id.settingsChooseCamLayout);
+        ImageView mChooseCamSymbol = view.findViewById(R.id.settingsChooseCamSymbol);
+        TextView mChooseCamText = view.findViewById(R.id.settingsChooseCamTextView);
+        LinearLayout mCamCocLayout = view.findViewById(R.id.settingsCamCocLayout);
+        ImageView mCamCocSymbol = view.findViewById(R.id.settingsCamCocSymbol);
+        TextView mCamCocText = view.findViewById(R.id.settingsCamCocTextView);
         CardView mNdCard = view.findViewById(R.id.settingsNdCard);
         ImageView mNdSymbol = view.findViewById(R.id.settingsNdSymbol);
         TextView mNdText = view.findViewById(R.id.settingsNdTextView);
@@ -211,6 +222,49 @@ public class SettingsFragment extends Fragment {
         }
 
 
+        mChooseCamLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View mView) {
+                final AlertDialog.Builder dialog;
+                if (prefs.getBoolean("darkmode", false)) {
+                    dialog = new AlertDialog.Builder(getActivity(), R.style.darkDialog);
+                } else {
+                    dialog = new AlertDialog.Builder(getActivity());
+                }
+                dialog.setTitle(getString(R.string.settings_cam_choose))
+                        .setNeutralButton(getString(R.string.offerHelp), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface mDialogInterface, int mI) {
+                                //TODO: Help for sensor size
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface mDialogInterface, int mI) {
+
+                            }
+                        })
+                        .setSingleChoiceItems(getResources().getStringArray(R.array.sensorFormats), 1 /*TODO: Restore last*/, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(final DialogInterface mDialogInterface, int mChecked) {
+                                prefsEdit.putBoolean("", true);
+                                new Handler().postDelayed(new Runnable() { //Post delayed so the user can see what he selected
+                                    @Override
+                                    public void run() {
+                                        mDialogInterface.dismiss();
+                                    }
+                                }, 100);
+                            }
+                        })
+                        .show();
+            }
+        });
+        mCamCocLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View mView) {
+
+            }
+        });
         mNdStrengthunitLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View mView) {

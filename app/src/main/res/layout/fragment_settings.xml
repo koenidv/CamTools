@@ -6,7 +6,7 @@
     android:id="@+id/settingsLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light_normal"
+    android:background="@color/background_light_lighter"
     android:orientation="vertical"
     >
 
@@ -20,12 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="72dp"
-            android:paddingEnd="8dp"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingStart="8dp"
-            android:paddingTop="8dp">
+            android:paddingBottom="72dp">
 
             <Space
                 android:id="@+id/settingsSinglehandSpace"
@@ -37,9 +32,133 @@
                 android:id="@+id/functionsCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="0dp"
-                android:visibility="gone">
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation">
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/settingsCamCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation">
+
+                <LinearLayout
+                    android:id="@+id/settingsCamFrameLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/settingsCamLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/settingsCamSymbol"
+                            android:layout_width="64dp"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            android:tint="@color/text_main_light"
+                            app:srcCompat="@drawable/ic_cam_black_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/settingsCamTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingEnd="16dp"
+                            android:paddingStart="16dp"
+                            android:text="@string/settings_cam_title"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="@color/text_main_light"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/settingsChooseCamLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/settingsChooseCamSymbol"
+                            android:layout_width="64dp"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            android:tint="@color/text_sub_light"
+                            app:srcCompat="@drawable/ic_choose_cam_black_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/settingsChooseCamTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="16dp"
+                            android:paddingStart="16dp"
+                            android:text="@string/settings_cam_choose"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/text_sub_light"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/settingsCamCocLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/settingsCamCocSymbol"
+                            android:layout_width="64dp"
+                            android:layout_height="30dp"
+                            android:layout_weight="1"
+                            android:tint="@color/text_sub_light"
+                            app:srcCompat="@drawable/ic_cam_coc_black_24dp"
+                            tools:ignore="ContentDescription"/>
+
+                        <TextView
+                            android:id="@+id/settingsCamCocTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingEnd="16dp"
+                            android:paddingStart="16dp"
+                            android:text="@string/settings_cam_coc"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/text_sub_light"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -47,7 +166,15 @@
                 android:id="@+id/settingsNdCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                android:visibility="gone"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation">
 
                 <LinearLayout
                     android:id="@+id/settingsNdFrameLayout"
@@ -191,8 +318,14 @@
                 android:id="@+id/appearanceCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                >
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation">
 
                 <LinearLayout
                     android:id="@+id/appearanceFrameLayout"
@@ -520,9 +653,15 @@
                 android:id="@+id/aboutCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
                 android:background="#FFFFFF"
-                >
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation">
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -19,6 +19,9 @@
     <string name="title_settings_long">Settings</string>
     <string name="overflow_description">More options…</string>
 
+    <string name="settings_cam_title">Camera</string>
+    <string name="settings_cam_choose">Choose camera</string>
+    <string name="settings_cam_coc">Circle of confusion</string>
     <string name="settings_nd_strengthunit">Strength unit</string>
     <string name="settings_nd_strengthunit_dialog">Optical density unit</string>
     <string name="settings_nd_strengthunit_stops">F-stops</string>
@@ -66,16 +69,21 @@
     <string name="nd_time_hint">Exposure time…</string>
     <string name="nd_time_indicator_seconds_short">s</string>
     <string name="nd_time_indicator_seconds_long">seconds</string>
-    <string name="nd_strength_title">Filter strength:</string>
+    <string name="nd_strength_title">Density:</string>
     <string name="nd_strength_hint">Light transmittance…</string>
     <string name="nd_strength_type_stops">stops</string>
     <string name="nd_strength_type_times">times</string>
+    <string-array name="nd_strength_types">
+        <item>stops</item>
+        <item>times</item>
+    </string-array>
 
     <string name="action_help">Get help</string>
     <string name="action_advancedSettings">Advanced settings</string>
 
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
+    <string name="offerHelp">Need help?</string>
 
     <string name="warning_reset_colors_title">Reset colors?</string>
     <string name="warning_reset_colors_message">This will undo all changes you made to the theme. Other settings won\'t be affected.</string>
