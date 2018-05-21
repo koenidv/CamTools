@@ -65,6 +65,17 @@
     <string name="custom_text_main_dark">Main text (dark mode)</string>
     <string name="custom_text_sub_dark">Subtext (dark mode)</string>
 
+    <string name="focus_length">Focal length</string>
+    <string name="focus_aperture">Aperture</string>
+    <string name="focus_distance">Distance</string>
+    <string name="focus_length_indicator">mm</string>
+    <string name="focus_aperture_indicator">f/</string>
+    <string name="focus_distance_indicator">m</string>
+    <string name="focus_distance_indicator_emperial">ft</string>
+    <string name="focus_length_hint">Focal length…</string>
+    <string name="focus_aperture_hint">Aperture…</string>
+    <string name="focus_distance_hint">Object distance…</string>
+
     <string name="nd_time_title">Normal exposure:</string>
     <string name="nd_time_hint">Exposure time…</string>
     <string name="nd_time_indicator_seconds_short">s</string>

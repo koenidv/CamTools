@@ -58,7 +58,7 @@ public class NDFragment extends Fragment {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
 
         mBackgroundLayout = view.findViewById(R.id.ndLayout);
-        mTimeCard = view.findViewById(R.id.ndTimeCard);
+        mTimeCard = view.findViewById(R.id.focusLengthCard);
         mTimeSeekbar = view.findViewById(R.id.ndTimeSeekbar);
         mTimeTitleText = view.findViewById(R.id.ndTimeTitleText);
         mTimeEditText = view.findViewById(R.id.ndTimeEditText);
