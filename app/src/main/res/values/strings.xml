@@ -84,10 +84,6 @@
     <string name="nd_strength_hint">Light transmittance…</string>
     <string name="nd_strength_type_stops">stops</string>
     <string name="nd_strength_type_times">times</string>
-    <string-array name="nd_strength_types">
-        <item>stops</item>
-        <item>times</item>
-    </string-array>
 
     <string name="action_help">Get help</string>
     <string name="action_advancedSettings">Advanced settings</string>

@@ -1,16 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="sensorFormats">
-        <item>35mm (full frame)</item>
-        <item>APS-H (Canon)</item>
-        <item>APS-C (Nikon, Sony, etc.)</item>
-        <item>APS-C (Canon)</item>
-        <item>Foveon (Sigma)</item>
+        <item>Full frame (35mm)</item>
+        <item>APS-H</item>
+        <item>APS-C</item>
         <item>Four Thirds (Olympus, Panasonic)</item>
-        <item>1" (Nikon, Sony)</item>
-        <item>2/3" (Fuji, Nokia)</item>
-        <item>1/1.7"</item>
-        <item>1/2.5"</item>
+        <item>1\" (Nikon, Sony)</item>
+        <item>1/1.7\"</item>
         <item>Custom</item>
     </array>
+    <string-array name="sensorFormatValues">
+        <item>0.029</item>
+        <item>0.023</item>
+        <item>0.018</item>
+        <item>0.015</item>
+        <item>0.011</item>
+        <item>0.007</item>
+    </string-array>
+
+    <string-array name="nd_strength_types">
+        <item>stops</item>
+        <item>times</item>
+    </string-array>
+
+    <string-array name="aperture_thirds">
+        <item>1</item>
+        <item>1.1</item>
+        <item>1.2</item>
+        <item>1.4</item>
+        <item>1.6</item>
+        <item>1.8</item>
+        <item>2</item>
+        <item>2.2</item>
+        <item>2.5</item>
+        <item>2.8</item>
+        <item>3.2</item>
+        <item>3.5</item>
+        <item>4</item>
+        <item>4.5</item>
+        <item>5</item>
+        <item>5.6</item>
+        <item>6.3</item>
+        <item>7.1</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>13</item>
+        <item>14</item>
+        <item>16</item>
+        <item>18</item>
+        <item>20</item>
+        <item>22</item>
+        <item>25</item>
+        <item>29</item>
+        <item>32</item>
+        <item>36</item>
+    </string-array>
 </resources>

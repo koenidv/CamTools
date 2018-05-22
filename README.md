@@ -28,3 +28,7 @@ You might check back later.
 > - [ ] Nearest / furthest focus
 > - [ ] Hyperfocal distance
 > - [ ] Reversed (calculate aperture)
+General
+> - [ ] Custom aperture steps
+> - [ ] Custom tabs
+> - [ ] Dark theme

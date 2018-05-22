@@ -244,16 +244,18 @@ public class SettingsFragment extends Fragment {
 
                             }
                         })
-                        .setSingleChoiceItems(getResources().getStringArray(R.array.sensorFormats), 1 /*TODO: Restore last*/, new DialogInterface.OnClickListener() {
+                        .setSingleChoiceItems(getResources().getStringArray(R.array.sensorFormats), prefs.getInt("chosenCamera", 0), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(final DialogInterface mDialogInterface, int mChecked) {
-                                prefsEdit.putBoolean("", true);
+                                prefsEdit.putInt("chosenCamera", mChecked);
+                                prefsEdit.putFloat("coc", Float.parseFloat(getResources().getStringArray(R.array.sensorFormatValues)[mChecked])).apply();
                                 new Handler().postDelayed(new Runnable() { //Post delayed so the user can see what he selected
                                     @Override
                                     public void run() {
                                         mDialogInterface.dismiss();
                                     }
-                                }, 100);
+                                }, 1);
+                                Toast.makeText(getActivity(), String.valueOf(prefs.getFloat("coc", 0.0029f)), Toast.LENGTH_LONG).show();
                             }
                         })
                         .show();
