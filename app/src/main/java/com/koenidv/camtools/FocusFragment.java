@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Locale;
+import java.util.Objects;
 
 public class FocusFragment extends Fragment {
 
@@ -113,6 +120,7 @@ public class FocusFragment extends Fragment {
                 }
 
                 prefsEditor.putString("focusAperture", s.toString()).apply();
+                calculate(FocusFragment.this.getView());
             }
 
             @Override
@@ -147,7 +155,7 @@ public class FocusFragment extends Fragment {
                 if (!distanceDisable[0] && s.length() > 0) {
                     distanceDisable[0] = true;
                     if (Build.VERSION.SDK_INT >= 24) {
-                        distanceSeekbar.setProgress(Integer.parseInt(s.toString()) - 8, true);
+                        distanceSeekbar.setProgress(Math.round(Float.valueOf(s.toString())) - 8, true);
                     } else {
                         distanceSeekbar.setProgress(Integer.parseInt(s.toString()) - 8);
                     }
@@ -155,6 +163,7 @@ public class FocusFragment extends Fragment {
                 }
 
                 prefsEditor.putString("focusDistance", s.toString()).apply();
+                calculate(FocusFragment.this.getView());
             }
 
             @Override
@@ -186,6 +195,7 @@ public class FocusFragment extends Fragment {
         });
     }
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void calculate(View view) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 
@@ -196,18 +206,51 @@ public class FocusFragment extends Fragment {
         final EditText apertureEditText = view.findViewById(R.id.focusApertureEditText);
         final EditText distanceEditText = view.findViewById(R.id.focusDistanceEditText);
 
+        if (lengthEditText.getText().toString().equals("")
+                || apertureEditText.getText().toString().equals("")) {
+            return;
+        }
+
         float length = Float.valueOf(lengthEditText.getText().toString());
         float aperture = Float.valueOf(apertureEditText.getText().toString());
         float coc = prefs.getFloat("coc", 0.0029f);
-        float distance = Float.valueOf(distanceEditText.getText().toString());
+        float distance = 0;
+        try {
+            distance = Float.valueOf(distanceEditText.getText().toString()) * 1000;
+        } catch (NumberFormatException nfe) {
+            //
+        }
 
-        float nearest = 0;
-        float hyper = (length * length) / (aperture * coc) + length;
-        float furthest = 0;
+        float hyper = (((length * length) / (aperture * coc)) + length);
+        float nearest = (hyper * distance) / (hyper + (distance - length));
+        float furthest = (hyper * distance) / (hyper - (distance - length));
 
-        NearestTextView.setText(String.valueOf(nearest));
-        HyperTextView.setText(String.valueOf(hyper));
-        FurthestTextView.setText(String.valueOf(furthest));
+        Spanned hyperSpanned = Html.fromHtml(String.format("%.2f", hyper / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
+        Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
+        Spanned furthestSpanned = Html.fromHtml(String.format("%.2f", furthest / 100) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
+
+        if (hyper == Double.POSITIVE_INFINITY ||  String.valueOf(hyper).equals("NaN")) {
+            hyperSpanned  = Html.fromHtml("∞");
+        }
+        if (furthest < 0) {
+            furthestSpanned = Html.fromHtml("∞");
+        }
+
+        NearestTextView.setText(nearestSpanned);
+        HyperTextView.setText(hyperSpanned);
+        FurthestTextView.setText(furthestSpanned);
+
+        if (nearest == 0 || String.valueOf(nearest).equals("NaN")) {
+            NearestTextView.setVisibility(View.INVISIBLE);
+        } else {
+            NearestTextView.setVisibility(View.VISIBLE);
+            System.out.println(String.valueOf(nearest));
+        }
+        if (furthest == 0 || String.valueOf(furthest).equals("NaN")) {
+            FurthestTextView.setVisibility(View.INVISIBLE);
+        } else {
+            FurthestTextView.setVisibility(View.VISIBLE);
+        }
     }
 
     private String seekbarToAperture(int seekbarProgress) {

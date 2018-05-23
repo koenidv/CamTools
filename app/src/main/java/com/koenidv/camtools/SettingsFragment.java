@@ -436,9 +436,9 @@ public class SettingsFragment extends Fragment {
                             prefsEdit.putBoolean("appearanceExpanded", mExpandableLayout.isExpanded()).apply();
 
                             if (mExpandableLayout.isExpanded()) {
-                                mExpandSymbol.setImageResource(R.drawable.avd_collapse);
-                            } else {
                                 mExpandSymbol.setImageResource(R.drawable.avd_expand);
+                            } else {
+                                mExpandSymbol.setImageResource(R.drawable.avd_collapse);
                             }
                         }
                     };
