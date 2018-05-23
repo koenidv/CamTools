@@ -71,6 +71,9 @@
     <string name="focus_hyper_near_indicator">From: </string>
     <string name="focus_hyper_hyper_indicator">Focus: </string>
     <string name="focus_hyper_far_indicator">To: </string>
+    <string name="focus_limits_near_indicator">From</string>
+    <string name="focus_limits_far_indicator">To</string>
+    <string name="focus_limits_depth_indicator">Depth of field:</string>
     <string name="focus_length">Focal length</string>
     <string name="focus_aperture">Aperture</string>
     <string name="focus_distance">Distance</string>
@@ -93,6 +96,10 @@
 
     <string name="action_help">Get help</string>
     <string name="action_advancedSettings">Advanced settings</string>
+
+    <string name="meter">m</string>
+    <string name="feet">ft</string>
+    <string name="millimeter">mm</string>
 
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
