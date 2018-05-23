@@ -285,7 +285,6 @@ public class FocusFragment extends Fragment {
         TextView hyperTextView = view.findViewById(R.id.focusHyperHyperTextView);
         TextView furthestTextView = view.findViewById(R.id.focusHyperFurthestTextView);
         TextView nearestIndicatorTextView = view.findViewById(R.id.focusHyperNearestIndicatorTextView);
-        TextView hyperIndicatorTextView = view.findViewById(R.id.focusHyperHyperIndicatorTextView);
         TextView furthestIndicatorTextView = view.findViewById(R.id.focusHyperFurthestIndicatorTextView);
         final EditText lengthEditText = view.findViewById(R.id.focusLengthEditText);
         final EditText apertureEditText = view.findViewById(R.id.focusApertureEditText);
