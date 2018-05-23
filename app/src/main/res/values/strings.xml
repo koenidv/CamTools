@@ -65,6 +65,12 @@
     <string name="custom_text_main_dark">Main text (dark mode)</string>
     <string name="custom_text_sub_dark">Subtext (dark mode)</string>
 
+    <string name="focus_mode_hyper">Hyperfocal</string>
+    <string name="focus_mode_limits">Limits</string>
+    <string name="focus_mode_reverse">Aperture</string>
+    <string name="focus_hyper_near_indicator">From: </string>
+    <string name="focus_hyper_hyper_indicator">Focus: </string>
+    <string name="focus_hyper_far_indicator">To: </string>
     <string name="focus_length">Focal length</string>
     <string name="focus_aperture">Aperture</string>
     <string name="focus_distance">Distance</string>
