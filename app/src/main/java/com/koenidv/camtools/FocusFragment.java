@@ -1,6 +1,8 @@
 package com.koenidv.camtools;
 //  Created by koenidv on 19.01.2018.
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.Html;
@@ -18,6 +21,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -25,6 +31,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class FocusFragment extends Fragment {
+
+    int selectedButton = 0;
 
     //Called when Fragment should create its View object hierarchy
     @Override
@@ -35,7 +43,7 @@ public class FocusFragment extends Fragment {
 
     //Called after onCreateView(). View setup here.
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
 
@@ -52,6 +60,24 @@ public class FocusFragment extends Fragment {
         final Button selectHyperButton = view.findViewById(R.id.focusSelectHyperButton);
         final Button selectLimitsButton = view.findViewById(R.id.focusSelectLimitButton);
         final Button selectReverseButton = view.findViewById(R.id.focusSelectReverseButton);
+
+
+        final Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new FastOutSlowInInterpolator());
+        fadeIn.setDuration(300);
+
+        final Animation waitFadeIn = new AlphaAnimation(0, 1);
+        waitFadeIn.setInterpolator(new FastOutSlowInInterpolator());
+        waitFadeIn.setDuration(300);
+        waitFadeIn.setStartOffset(300);
+
+        final Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new FastOutSlowInInterpolator());
+        fadeOut.setDuration(300);
+
+        final AnimationSet fadeOutIn = new AnimationSet(false);
+        fadeOutIn.addAnimation(fadeOut);
+        fadeOutIn.addAnimation(waitFadeIn);
 
 
         final boolean[] lengthDisable = {false};
@@ -213,50 +239,89 @@ public class FocusFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 prefsEditor.putString("focusMode", "hyper").apply();
+
+                if (selectedButton == 1) {
+                    limitsLayout.startAnimation(fadeOut);
+                }
+                hyperLayout.startAnimation(fadeIn);
+                scrollLayout.startAnimation(fadeIn);
                 limitsLayout.setVisibility(View.GONE);
                 hyperLayout.setVisibility(View.VISIBLE);
                 distanceCard.setVisibility(View.GONE);
                 scrollLayout.setPadding(0, 800, 0, 60);
                 calculateHyper(FocusFragment.this.getView());
-                selectHyperButton.setBackgroundColor(getResources().getColor(R.color.tab_focus));
-                selectHyperButton.setTextColor(Color.WHITE);
-                selectLimitsButton.setBackgroundColor(Color.WHITE);
-                selectLimitsButton.setTextColor(getResources().getColor(R.color.text_sub_light));
-                selectReverseButton.setBackgroundColor(Color.WHITE);
-                selectReverseButton.setTextColor(getResources().getColor(R.color.text_sub_light));
+
+                if (selectedButton == 1|| selectedButton == 2) {
+                    animateButtonBackgroundColor(selectHyperButton, Color.WHITE, getResources().getColor(R.color.tab_focus), 300);
+                    animateButtonTextColor(selectHyperButton, getResources().getColor(R.color.text_sub_light), Color.WHITE, 300);
+                }
+                if (selectedButton == 1) {
+                    animateButtonBackgroundColor(selectLimitsButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonTextColor(selectLimitsButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
+                } else if (selectedButton == 2) {
+                    animateButtonBackgroundColor(selectReverseButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonTextColor(selectReverseButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
+                }
+
+                selectedButton = 0;
+
             }
         });
         selectLimitsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 prefsEditor.putString("focusMode", "limits").apply();
+
+                if (selectedButton == 0) {
+                    hyperLayout.startAnimation(fadeOut);
+                }
+                limitsLayout.startAnimation(fadeIn);
+                scrollLayout.startAnimation(fadeIn);
                 hyperLayout.setVisibility(View.GONE);
                 limitsLayout.setVisibility(View.VISIBLE);
                 distanceCard.setVisibility(View.VISIBLE);
                 scrollLayout.setPadding(0, 512, 0, 60);
                 calculateLimits(FocusFragment.this.getView());
-                selectLimitsButton.setBackgroundColor(getResources().getColor(R.color.tab_focus));
-                selectLimitsButton.setTextColor(Color.WHITE);
-                selectHyperButton.setBackgroundColor(Color.WHITE);
-                selectHyperButton.setTextColor(getResources().getColor(R.color.text_sub_light));
-                selectReverseButton.setBackgroundColor(Color.WHITE);
-                selectReverseButton.setTextColor(getResources().getColor(R.color.text_sub_light));
+
+                if (selectedButton == 0 || selectedButton == 2) {
+                    animateButtonBackgroundColor(selectLimitsButton, Color.WHITE, getResources().getColor(R.color.tab_focus), 300);
+                    animateButtonTextColor(selectLimitsButton, getResources().getColor(R.color.text_sub_light), Color.WHITE, 300);
+                }
+                if (selectedButton == 0) {
+                    animateButtonBackgroundColor(selectHyperButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonTextColor(selectHyperButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
+                } else if (selectedButton == 2) {
+                    animateButtonBackgroundColor(selectReverseButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonTextColor(selectReverseButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
+                }
+
+                selectedButton = 1;
             }
         });
         selectReverseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 prefsEditor.putString("focusMode", "reverse").apply();
+
+                scrollLayout.startAnimation(fadeIn);
                 hyperLayout.setVisibility(View.GONE);
                 limitsLayout.setVisibility(View.GONE);
                 distanceCard.setVisibility(View.GONE);
                 scrollLayout.setPadding(0, 60, 0, 260);
-                selectReverseButton.setBackgroundColor(getResources().getColor(R.color.tab_focus));
-                selectReverseButton.setTextColor(Color.WHITE);
-                selectHyperButton.setBackgroundColor(Color.WHITE);
-                selectHyperButton.setTextColor(getResources().getColor(R.color.text_sub_light));
-                selectLimitsButton.setBackgroundColor(Color.WHITE);
-                selectLimitsButton.setTextColor(getResources().getColor(R.color.text_sub_light));
+
+                if (selectedButton == 0 || selectedButton == 1) {
+                    animateButtonBackgroundColor(selectReverseButton, Color.WHITE, getResources().getColor(R.color.tab_focus), 300);
+                    animateButtonTextColor(selectReverseButton, getResources().getColor(R.color.text_sub_light), Color.WHITE, 300);
+                }
+                if (selectedButton == 0) {
+                    animateButtonBackgroundColor(selectHyperButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonTextColor(selectHyperButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
+                } else if (selectedButton == 1) {
+                    animateButtonBackgroundColor(selectLimitsButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonTextColor(selectLimitsButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
+                }
+
+                selectedButton = 2;
             }
         });
 
@@ -362,11 +427,9 @@ public class FocusFragment extends Fragment {
         }
 
         float hyper = (((length * length) / (aperture * coc)) + length);
-        float nearest = (hyper * distance) / (hyper + distance);
-        float furthest = (hyper * distance) / (hyper - distance);
+        float nearest = (hyper * distance) / (hyper + length);
+        float furthest = (hyper * distance) / (hyper - length);
         float depth = furthest - nearest;
-
-        System.out.println("nhu");
 
         Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
         Spanned furthestSpanned = Html.fromHtml(String.format("%.2f", furthest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
@@ -419,6 +482,31 @@ public class FocusFragment extends Fragment {
         }
 
         return seekbarProgress;
+    }
+
+    private void animateButtonBackgroundColor(final View view, int startColor, int endColor, int duration) {
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
+        colorAnimator.setDuration(duration); // milliseconds
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                view.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+        colorAnimator.start();
+    }
+    private void animateButtonTextColor(final Button view, int startColor, int endColor, int duration) {
+        ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
+        colorAnimator.setDuration(duration);
+        colorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                view.setTextColor((int) animation.getAnimatedValue());
+            }
+        });
+        colorAnimator.start();
     }
 
 

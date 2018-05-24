@@ -5,12 +5,14 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -403,11 +405,11 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = findViewById(R.id.viewPager);
         //@formatter:off
         switch (mViewPager.getCurrentItem()) {
-            case 0: getMenuInflater().inflate(R.menu.menu_sun, menu);break; //Sun tab menu
-            case 1: getMenuInflater().inflate(R.menu.menu_stars, menu);break; //Stars tab menu
-            case 2: getMenuInflater().inflate(R.menu.menu_focus, menu);break; //Focus tab menu
-            case 3: getMenuInflater().inflate(R.menu.menu_nd, menu);break; //ND tab menu
-            case 4: getMenuInflater().inflate(R.menu.menu_settings, menu);break; //Settings tab menu
+            case 0: getMenuInflater().inflate(R.menu.menu_sun, menu);return true; //Sun tab menu
+            case 1: getMenuInflater().inflate(R.menu.menu_stars, menu);return true; //Stars tab menu
+            case 2: getMenuInflater().inflate(R.menu.menu_focus, menu);return true; //Focus tab menu
+            case 3: getMenuInflater().inflate(R.menu.menu_nd, menu);return true; //ND tab menu
+            case 4: getMenuInflater().inflate(R.menu.menu_settings, menu);return true; //Settings tab menu
         }
         //@formatter:on
         getMenuInflater().inflate(R.menu.overflow_main, menu); //Menu for all tabs
@@ -421,6 +423,15 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_switch_advancedSettings:
                 SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+                break;
+            case R.id.action_focus_calculate:
+                Intent fcBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_more_calculate)));
+                startActivity(fcBrowserIntent);
+                break;
+            case R.id.action_focus_help:
+                Intent fhBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_help)));
+                startActivity(fhBrowserIntent);
+                break;
         }
 
         return super.onOptionsItemSelected(item);

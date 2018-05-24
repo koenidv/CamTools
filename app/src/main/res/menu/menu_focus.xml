@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_focus_calculate"
+        android:title="@string/focus_action_calculate"/>
+    <item
+        android:id="@+id/action_focus_help"
+        android:icon="@mipmap/github"
+        android:title="@string/action_help"
+        app:showAsAction="ifRoom"/>
 </menu>

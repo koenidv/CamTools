@@ -84,6 +84,7 @@
     <string name="focus_length_hint">Focal length…</string>
     <string name="focus_aperture_hint">Aperture…</string>
     <string name="focus_distance_hint">Object distance…</string>
+    <string name="focus_action_calculate">Equations</string>
 
     <string name="nd_time_title">Normal exposure:</string>
     <string name="nd_time_hint">Exposure time…</string>
