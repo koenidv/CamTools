@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/focusLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light_lighter"
@@ -22,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="horizontal" android:baselineAligned="false">
 
             <LinearLayout
                 android:id="@+id/focusLimitsNearLayout"
@@ -351,7 +352,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/focusApertureTitle"
+                            android:id="@+id/focusApertureTitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/lineHeight"
                             android:layout_weight="1"
@@ -422,7 +423,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
-                            android:id="@+id/focusDinstanceTitleText"
+                            android:id="@+id/focusDistanceTitleText"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/lineHeight"
                             android:layout_weight="1"

@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v7.widget.CardView;
@@ -29,10 +30,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class FocusFragment extends Fragment {
 
-    int selectedButton = 0;
+    int selectedButton = -1;
+    int buttonDisabledColor = Color.WHITE;
+    int buttonDisabledTextColor = 0;
 
     //Called when Fragment should create its View object hierarchy
     @Override
@@ -46,6 +50,11 @@ public class FocusFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+
+        buttonDisabledTextColor = getResources().getColor(R.color.text_sub_light);
+        if (prefs.getBoolean("darkmode", false)) {
+            enableDarkTheme(FocusFragment.this.getView());
+        }
 
         final LinearLayout scrollLayout = view.findViewById(R.id.focusScrollLayout);
         final LinearLayout hyperLayout = view.findViewById(R.id.focusHyperLayout);
@@ -251,15 +260,15 @@ public class FocusFragment extends Fragment {
                 scrollLayout.setPadding(0, 800, 0, 60);
                 calculateHyper(FocusFragment.this.getView());
 
-                if (selectedButton == 1|| selectedButton == 2) {
-                    animateButtonBackgroundColor(selectHyperButton, Color.WHITE, getResources().getColor(R.color.tab_focus), 300);
+                if (selectedButton != 0) {
+                    animateButtonBackgroundColor(selectHyperButton, buttonDisabledColor, getResources().getColor(R.color.tab_focus), 300);
                     animateButtonTextColor(selectHyperButton, getResources().getColor(R.color.text_sub_light), Color.WHITE, 300);
                 }
                 if (selectedButton == 1) {
-                    animateButtonBackgroundColor(selectLimitsButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonBackgroundColor(selectLimitsButton, getResources().getColor(R.color.tab_focus), buttonDisabledColor, 100);
                     animateButtonTextColor(selectLimitsButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
                 } else if (selectedButton == 2) {
-                    animateButtonBackgroundColor(selectReverseButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonBackgroundColor(selectReverseButton, getResources().getColor(R.color.tab_focus), buttonDisabledColor, 100);
                     animateButtonTextColor(selectReverseButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
                 }
 
@@ -283,15 +292,15 @@ public class FocusFragment extends Fragment {
                 scrollLayout.setPadding(0, 512, 0, 60);
                 calculateLimits(FocusFragment.this.getView());
 
-                if (selectedButton == 0 || selectedButton == 2) {
-                    animateButtonBackgroundColor(selectLimitsButton, Color.WHITE, getResources().getColor(R.color.tab_focus), 300);
+                if (selectedButton != 1) {
+                    animateButtonBackgroundColor(selectLimitsButton, buttonDisabledColor, getResources().getColor(R.color.tab_focus), 300);
                     animateButtonTextColor(selectLimitsButton, getResources().getColor(R.color.text_sub_light), Color.WHITE, 300);
                 }
                 if (selectedButton == 0) {
-                    animateButtonBackgroundColor(selectHyperButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonBackgroundColor(selectHyperButton, getResources().getColor(R.color.tab_focus), buttonDisabledColor, 100);
                     animateButtonTextColor(selectHyperButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
                 } else if (selectedButton == 2) {
-                    animateButtonBackgroundColor(selectReverseButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonBackgroundColor(selectReverseButton, getResources().getColor(R.color.tab_focus), buttonDisabledColor, 100);
                     animateButtonTextColor(selectReverseButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
                 }
 
@@ -309,15 +318,15 @@ public class FocusFragment extends Fragment {
                 distanceCard.setVisibility(View.GONE);
                 scrollLayout.setPadding(0, 60, 0, 260);
 
-                if (selectedButton == 0 || selectedButton == 1) {
-                    animateButtonBackgroundColor(selectReverseButton, Color.WHITE, getResources().getColor(R.color.tab_focus), 300);
+                if (selectedButton != 2) {
+                    animateButtonBackgroundColor(selectReverseButton, buttonDisabledColor, getResources().getColor(R.color.tab_focus), 300);
                     animateButtonTextColor(selectReverseButton, getResources().getColor(R.color.text_sub_light), Color.WHITE, 300);
                 }
                 if (selectedButton == 0) {
-                    animateButtonBackgroundColor(selectHyperButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonBackgroundColor(selectHyperButton, getResources().getColor(R.color.tab_focus), buttonDisabledColor, 100);
                     animateButtonTextColor(selectHyperButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
                 } else if (selectedButton == 1) {
-                    animateButtonBackgroundColor(selectLimitsButton, getResources().getColor(R.color.tab_focus), Color.WHITE, 100);
+                    animateButtonBackgroundColor(selectLimitsButton, getResources().getColor(R.color.tab_focus), buttonDisabledColor, 100);
                     animateButtonTextColor(selectLimitsButton, Color.WHITE, getResources().getColor(R.color.text_sub_light), 100);
                 }
 
@@ -349,8 +358,6 @@ public class FocusFragment extends Fragment {
         TextView nearestTextView = view.findViewById(R.id.focusHyperNearestTextView);
         TextView hyperTextView = view.findViewById(R.id.focusHyperHyperTextView);
         TextView furthestTextView = view.findViewById(R.id.focusHyperFurthestTextView);
-        TextView nearestIndicatorTextView = view.findViewById(R.id.focusHyperNearestIndicatorTextView);
-        TextView furthestIndicatorTextView = view.findViewById(R.id.focusHyperFurthestIndicatorTextView);
         final EditText lengthEditText = view.findViewById(R.id.focusLengthEditText);
         final EditText apertureEditText = view.findViewById(R.id.focusApertureEditText);
 
@@ -363,39 +370,20 @@ public class FocusFragment extends Fragment {
         float aperture = Float.valueOf(apertureEditText.getText().toString());
         float coc = prefs.getFloat("coc", 0.0029f);
 
-        float hyper = (((length * length) / (aperture * coc)) + length);
-        float nearest = (hyper * hyper) / (hyper + (hyper - length));
-        float furthest = (hyper * hyper) / (hyper - (hyper - length));
+        float hyper = length * length / (aperture * coc) + length;
+        float nearest = hyper * hyper / (hyper + hyper - length);
 
         Spanned hyperSpanned = Html.fromHtml(String.format("%.2f", hyper / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
         Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
-        Spanned furthestSpanned = Html.fromHtml(String.format("%.2f", furthest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
+        String furthestString = "∞";
 
         if (hyper == Double.POSITIVE_INFINITY || String.valueOf(hyper).equals("NaN")) {
             hyperSpanned = Html.fromHtml("∞");
         }
-        if (furthest < 0) {
-            furthestSpanned = Html.fromHtml("∞");
-        }
 
         nearestTextView.setText(nearestSpanned);
         hyperTextView.setText(hyperSpanned);
-        furthestTextView.setText(furthestSpanned);
-
-        if (nearest == 0 || String.valueOf(nearest).equals("NaN")) {
-            nearestTextView.setVisibility(View.INVISIBLE);
-            nearestIndicatorTextView.setVisibility(View.INVISIBLE);
-        } else {
-            nearestTextView.setVisibility(View.VISIBLE);
-            nearestIndicatorTextView.setVisibility(View.VISIBLE);
-        }
-        if (furthest == 0 || String.valueOf(furthest).equals("NaN")) {
-            furthestTextView.setVisibility(View.INVISIBLE);
-            furthestIndicatorTextView.setVisibility(View.INVISIBLE);
-        } else {
-            furthestTextView.setVisibility(View.VISIBLE);
-            furthestIndicatorTextView.setVisibility(View.VISIBLE);
-        }
+        furthestTextView.setText(furthestString);
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
@@ -426,9 +414,9 @@ public class FocusFragment extends Fragment {
             //
         }
 
-        float hyper = (((length * length) / (aperture * coc)) + length);
-        float nearest = (hyper * distance) / (hyper + length);
-        float furthest = (hyper * distance) / (hyper - length);
+        float hyper = length * length / (aperture * coc);
+        float nearest = hyper * distance / (hyper + distance - length);
+        float furthest = hyper * distance / (hyper - distance - length);
         float depth = furthest - nearest;
 
         Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
@@ -497,6 +485,7 @@ public class FocusFragment extends Fragment {
         });
         colorAnimator.start();
     }
+
     private void animateButtonTextColor(final Button view, int startColor, int endColor, int duration) {
         ValueAnimator colorAnimator = ValueAnimator.ofObject(new ArgbEvaluator(), startColor, endColor);
         colorAnimator.setDuration(duration);
@@ -509,5 +498,101 @@ public class FocusFragment extends Fragment {
         colorAnimator.start();
     }
 
+    @SuppressWarnings("RedundantCast")
+    private void enableDarkTheme(final View view) {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 
+        // Views
+        final ConstraintLayout background = view.findViewById(R.id.focusLayout);
+
+        TextView hyperNearestTextView = view.findViewById(R.id.focusHyperNearestTextView);
+        TextView hyperHyperTextView = view.findViewById(R.id.focusHyperHyperTextView);
+        TextView hyperFurthestTextView = view.findViewById(R.id.focusHyperFurthestTextView);
+        TextView hyperNearestIndicatorTextView = view.findViewById(R.id.focusHyperNearestIndicatorTextView);
+        TextView hyperHyperIndicatorTextView = view.findViewById(R.id.focusHyperHyperIndicatorTextView);
+        TextView hyperFurthestIndicatorTextView = view.findViewById(R.id.focusHyperFurthestIndicatorTextView);
+
+        TextView limitsNearTextView = view.findViewById(R.id.focusLimitsNearTextView);
+        TextView limitsFarTextView = view.findViewById(R.id.focusLimitsFarTextView);
+        TextView limitsDepthTextView = view.findViewById(R.id.focusLimitsDepthTextView);
+        TextView limitsNearIndicatorTextView = view.findViewById(R.id.focusLimitsNearIndicatorTextView);
+        TextView limitsFarIndicatorTextView = view.findViewById(R.id.focusLimitsFarIndicatorTextView);
+
+        final EditText lengthEditText = view.findViewById(R.id.focusLengthEditText);
+        final EditText apertureEditText = view.findViewById(R.id.focusApertureEditText);
+        final EditText distanceEditText = view.findViewById(R.id.focusDistanceEditText);
+
+        TextView lengthTitleTextView = view.findViewById(R.id.focusLengthTitleText);
+        TextView apertureTitleTextView = view.findViewById(R.id.focusApertureTitleText);
+        TextView distanceTitleTextView = view.findViewById(R.id.focusDistanceTitleText);
+        TextView lengthIndicatorTextView = view.findViewById(R.id.focusLengthIndicatorText);
+        TextView apertureIndicatorTextView = view.findViewById(R.id.focusApertureIndicatorText);
+        TextView distanceIndicatorTextView = view.findViewById(R.id.focusDistanceIndicatorText);
+
+        final CardView lengthCard = view.findViewById(R.id.focusLengthCard);
+        final CardView apertureCard = view.findViewById(R.id.focusApertureCard);
+        final CardView distanceCard = view.findViewById(R.id.focusDistanceCard);
+
+        final Button selectHyperButton = view.findViewById(R.id.focusSelectHyperButton);
+        final Button selectLimitsButton = view.findViewById(R.id.focusSelectLimitButton);
+        final Button selectReverseButton = view.findViewById(R.id.focusSelectReverseButton);
+
+        //Colors
+        int dark_lighter = getResources().getColor(R.color.background_dark_lighter);
+        int dark_normal = getResources().getColor(R.color.background_dark_normal);
+        int text_main = getResources().getColor(R.color.text_main_dark);
+        int text_sub = getResources().getColor(R.color.text_sub_dark);
+
+        try {
+            dark_lighter = Color.parseColor(prefs.getString("custom_dark_lighter", getString((int) R.color.background_dark_lighter)));
+            dark_normal = Color.parseColor(prefs.getString("custom_dark_normal", getString((int) R.color.background_dark_normal)));
+            text_main = Color.parseColor(prefs.getString("custom_text_main_dark", getString((int) R.color.text_main_dark)));
+            text_sub = Color.parseColor(prefs.getString("custom_text_sub_dark", getString((int) R.color.text_sub_dark)));
+        } catch (IllegalArgumentException iae) {
+            Toast.makeText(getActivity(), getString(R.string.fallback_colorparse), Toast.LENGTH_LONG).show();
+            iae.printStackTrace();
+        }
+
+        //Set
+        background.setBackgroundColor(dark_lighter);
+
+        hyperNearestTextView.setTextColor(text_main);
+        hyperHyperTextView.setTextColor(text_main);
+        hyperFurthestTextView.setTextColor(text_main);
+        hyperNearestIndicatorTextView.setTextColor(text_main);
+        hyperHyperIndicatorTextView.setTextColor(text_main);
+        hyperFurthestIndicatorTextView.setTextColor(text_main);
+        limitsNearTextView.setTextColor(text_main);
+        limitsFarTextView.setTextColor(text_main);
+        limitsDepthTextView.setTextColor(text_main);
+        limitsNearIndicatorTextView.setTextColor(text_main);
+        limitsFarIndicatorTextView.setTextColor(text_main);
+
+        lengthEditText.setTextColor(text_main);
+        apertureEditText.setTextColor(text_main);
+        distanceEditText.setTextColor(text_main);
+        lengthEditText.setHintTextColor(text_sub);
+        apertureEditText.setHintTextColor(text_sub);
+        distanceEditText.setHintTextColor(text_sub);
+
+        lengthTitleTextView.setTextColor(text_main);
+        apertureTitleTextView.setTextColor(text_main);
+        distanceTitleTextView.setTextColor(text_main);
+        lengthIndicatorTextView.setTextColor(text_main);
+        apertureIndicatorTextView.setTextColor(text_main);
+        distanceIndicatorTextView.setTextColor(text_main);
+
+        lengthCard.setBackgroundColor(dark_normal);
+        apertureCard.setBackgroundColor(dark_normal);
+        distanceCard.setBackgroundColor(dark_normal);
+        selectHyperButton.setBackgroundColor(dark_normal);
+        selectLimitsButton.setBackgroundColor(dark_normal);
+        selectReverseButton.setBackgroundColor(dark_normal);
+        selectHyperButton.setTextColor(text_sub);
+        selectLimitsButton.setTextColor(text_sub);
+        selectReverseButton.setTextColor(text_sub);
+
+        buttonDisabledColor = dark_normal;
+        buttonDisabledTextColor = text_sub;
+    }
 }
