@@ -29,6 +29,7 @@ You might check back later.
 > - [ ] Hyperfocal distance
 > - [ ] Reversed (calculate aperture)
 General
+> - [ ] Metric / emperial system
 > - [ ] Custom aperture steps
 > - [ ] Custom tabs
 > - [ ] Dark theme

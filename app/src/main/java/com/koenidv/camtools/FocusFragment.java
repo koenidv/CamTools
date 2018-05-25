@@ -59,13 +59,19 @@ public class FocusFragment extends Fragment {
         final LinearLayout scrollLayout = view.findViewById(R.id.focusScrollLayout);
         final LinearLayout hyperLayout = view.findViewById(R.id.focusHyperLayout);
         final LinearLayout limitsLayout = view.findViewById(R.id.focusLimitsLayout);
+        final LinearLayout reverseLayout = view.findViewById(R.id.focusReverseLayout);
         final EditText lengthEditText = view.findViewById(R.id.focusLengthEditText);
         final SeekBar lengthSeekbar = view.findViewById(R.id.focusLengthSeekbar);
+        final CardView apertureCard = view.findViewById(R.id.focusApertureCard);
         final EditText apertureEditText = view.findViewById(R.id.focusApertureEditText);
         final SeekBar apertureSeekbar = view.findViewById(R.id.focusApertureSeekbar);
         final CardView distanceCard = view.findViewById(R.id.focusDistanceCard);
         final EditText distanceEditText = view.findViewById(R.id.focusDistanceEditText);
         final SeekBar distanceSeekbar = view.findViewById(R.id.focusDistanceSeekbar);
+        final CardView nearCard = view.findViewById(R.id.focusNearCard);
+        EditText nearEditText = view.findViewById(R.id.focusNearEditText);
+        final CardView farCard = view.findViewById(R.id.focusFarCard);
+        EditText farEditText = view.findViewById(R.id.focusFarEditText);
         final Button selectHyperButton = view.findViewById(R.id.focusSelectHyperButton);
         final Button selectLimitsButton = view.findViewById(R.id.focusSelectLimitButton);
         final Button selectReverseButton = view.findViewById(R.id.focusSelectReverseButton);
@@ -119,6 +125,8 @@ public class FocusFragment extends Fragment {
                     calculateHyper(FocusFragment.this.getView());
                 } else if (prefs.getString("focusMode", "hyper").equals("limits")) {
                     calculateLimits(FocusFragment.this.getView());
+                } else if (prefs.getString("focusMode", "hyper").equals("reverse")) {
+                    calculateReverse(FocusFragment.this.getView());
                 }
             }
 
@@ -243,6 +251,22 @@ public class FocusFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+        TextWatcher nearFarTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateReverse(FocusFragment.this.getView());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        };
+        nearEditText.addTextChangedListener(nearFarTextWatcher);
+        farEditText.addTextChangedListener(nearFarTextWatcher);
 
         selectHyperButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,13 +275,19 @@ public class FocusFragment extends Fragment {
 
                 if (selectedButton == 1) {
                     limitsLayout.startAnimation(fadeOut);
+                } else if (selectedButton == 2) {
+                    reverseLayout.startAnimation(fadeOut);
                 }
                 hyperLayout.startAnimation(fadeIn);
                 scrollLayout.startAnimation(fadeIn);
                 limitsLayout.setVisibility(View.GONE);
+                reverseLayout.setVisibility(View.GONE);
                 hyperLayout.setVisibility(View.VISIBLE);
+                apertureCard.setVisibility(View.VISIBLE);
                 distanceCard.setVisibility(View.GONE);
-                scrollLayout.setPadding(0, 800, 0, 60);
+                nearCard.setVisibility(View.GONE);
+                farCard.setVisibility(View.GONE);
+                scrollLayout.setPadding(0, 824, 0, 120);
                 calculateHyper(FocusFragment.this.getView());
 
                 if (selectedButton != 0) {
@@ -283,13 +313,19 @@ public class FocusFragment extends Fragment {
 
                 if (selectedButton == 0) {
                     hyperLayout.startAnimation(fadeOut);
+                } else if (selectedButton == 2) {
+                    reverseLayout.startAnimation(fadeOut);
                 }
                 limitsLayout.startAnimation(fadeIn);
                 scrollLayout.startAnimation(fadeIn);
                 hyperLayout.setVisibility(View.GONE);
+                reverseLayout.setVisibility(View.GONE);
                 limitsLayout.setVisibility(View.VISIBLE);
+                apertureCard.setVisibility(View.VISIBLE);
                 distanceCard.setVisibility(View.VISIBLE);
-                scrollLayout.setPadding(0, 512, 0, 60);
+                nearCard.setVisibility(View.GONE);
+                farCard.setVisibility(View.GONE);
+                scrollLayout.setPadding(0, 536, 0, 120);
                 calculateLimits(FocusFragment.this.getView());
 
                 if (selectedButton != 1) {
@@ -312,11 +348,22 @@ public class FocusFragment extends Fragment {
             public void onClick(View v) {
                 prefsEditor.putString("focusMode", "reverse").apply();
 
+                if (selectedButton == 0) {
+                    hyperLayout.startAnimation(fadeOut);
+                } else if (selectedButton == 1) {
+                    limitsLayout.startAnimation(fadeOut);
+                }
                 scrollLayout.startAnimation(fadeIn);
+                reverseLayout.startAnimation(fadeIn);
                 hyperLayout.setVisibility(View.GONE);
                 limitsLayout.setVisibility(View.GONE);
+                reverseLayout.setVisibility(View.VISIBLE);
+                apertureCard.setVisibility(View.GONE);
                 distanceCard.setVisibility(View.GONE);
-                scrollLayout.setPadding(0, 60, 0, 260);
+                nearCard.setVisibility(View.VISIBLE);
+                farCard.setVisibility(View.VISIBLE);
+                scrollLayout.setPadding(0, 506, 0, 120);
+                calculateReverse(FocusFragment.this.getView());
 
                 if (selectedButton != 2) {
                     animateButtonBackgroundColor(selectReverseButton, buttonDisabledColor, getResources().getColor(R.color.tab_focus), 300);
@@ -373,8 +420,8 @@ public class FocusFragment extends Fragment {
         float hyper = length * length / (aperture * coc) + length;
         float nearest = hyper * hyper / (hyper + hyper - length);
 
-        Spanned hyperSpanned = Html.fromHtml(String.format("%.2f", hyper / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
-        Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
+        Spanned hyperSpanned = Html.fromHtml(String.format("%.2f", hyper / 1000) + "<small>" + getString(R.string.meter) + "</small>");
+        Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.meter) + "</small>");
         String furthestString = "∞";
 
         if (hyper == Double.POSITIVE_INFINITY || String.valueOf(hyper).equals("NaN")) {
@@ -419,15 +466,15 @@ public class FocusFragment extends Fragment {
         float furthest = hyper * distance / (hyper - distance - length);
         float depth = furthest - nearest;
 
-        Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
-        Spanned furthestSpanned = Html.fromHtml(String.format("%.2f", furthest / 1000) + "<small>" + getString(R.string.focus_distance_indicator) + "</small>");
-        Spanned depthSpanned = Html.fromHtml(getString(R.string.focus_limits_depth_indicator) + " <b>" + String.format("%.2f", depth / 1000) + "</b>");
+        Spanned nearestSpanned = Html.fromHtml(String.format("%.2f", nearest / 1000) + "<small>" + getString(R.string.meter) + "</small>");
+        Spanned furthestSpanned = Html.fromHtml(String.format("%.2f", furthest / 1000) + "<small>" + getString(R.string.meter) + "</small>");
+        Spanned depthSpanned = Html.fromHtml(getString(R.string.focus_depth_indicator) + " <b>" + String.format("%.2f", depth / 1000) + "</b>");
 
         if (furthest < 0) {
             furthestSpanned = Html.fromHtml("∞");
         }
         if (depth < 0) {
-            depthSpanned = Html.fromHtml(getString(R.string.focus_limits_depth_indicator) + " <b>∞</b>");
+            depthSpanned = Html.fromHtml(getString(R.string.focus_depth_indicator) + " <b>∞</b>");
         }
 
         nearTextView.setText(nearestSpanned);
@@ -447,6 +494,59 @@ public class FocusFragment extends Fragment {
         } else {
             farTextView.setVisibility(View.VISIBLE);
             farIndicatorTextView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
+    private void calculateReverse(View view) {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        LinearLayout reverseLayout = view.findViewById(R.id.focusReverseLayout);
+        TextView apertureTextView = view.findViewById(R.id.focusReverseApertureTextView);
+        TextView distanceTextView = view.findViewById(R.id.focusReverseDistanceTextView);
+        TextView depthTextView = view.findViewById(R.id.focusReverseDepthTextView);
+        final EditText lengthEditText = view.findViewById(R.id.focusLengthEditText);
+        final EditText nearEditText = view.findViewById(R.id.focusNearEditText);
+        final EditText farEditText = view.findViewById(R.id.focusFarEditText);
+
+        if (lengthEditText.getText().toString().equals("")
+                || nearEditText.getText().toString().equals("")
+                || farEditText.getText().toString().equals("")) {
+            return;
+        }
+
+        float length = Float.valueOf(lengthEditText.getText().toString());
+        float near = Float.valueOf(nearEditText.getText().toString()) * 1000;
+        float far = Float.valueOf(farEditText.getText().toString()) * 1000;
+        float coc = prefs.getFloat("coc", 0.0029f);
+
+        float calc = (length / near + length / far - 2) / (1 / far - 1 / near);
+        float aperture = length * length / (calc * coc);
+        float distance = (calc - length) / (calc / near - 1);
+        float depth = far - near;
+
+        Spanned apertureSpanned = Html.fromHtml("<small>" + getString(R.string.aperture) + "</small>" + String.format("%.2f", aperture));
+        Spanned distanceSpanned = Html.fromHtml(String.format("%.2f", distance / 1000) + "<small>" + getString(R.string.meter) + "</small>");
+        Spanned depthSpanned = Html.fromHtml(getString(R.string.focus_depth_indicator) + " <b>" + String.format("%.2f", depth / 1000) + "</b>");
+
+        apertureTextView.setText(apertureSpanned);
+        distanceTextView.setText(distanceSpanned);
+        depthTextView.setText(depthSpanned);
+
+        if (near >= far) {
+            final Animation fadeOut = new AlphaAnimation(1, 0);
+            fadeOut.setInterpolator(new FastOutSlowInInterpolator());
+            fadeOut.setDuration(300);
+
+            reverseLayout.startAnimation(fadeOut);
+            reverseLayout.setVisibility(View.GONE);
+        } else if (reverseLayout.getVisibility() == View.GONE) {
+            final Animation fadeIn = new AlphaAnimation(0, 1);
+            fadeIn.setInterpolator(new FastOutSlowInInterpolator());
+            fadeIn.setDuration(300);
+
+            reverseLayout.startAnimation(fadeIn);
+            reverseLayout.setVisibility(View.VISIBLE);
         }
     }
 

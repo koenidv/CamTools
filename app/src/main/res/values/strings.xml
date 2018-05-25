@@ -73,16 +73,18 @@
     <string name="focus_hyper_far_indicator">To: </string>
     <string name="focus_limits_near_indicator">From</string>
     <string name="focus_limits_far_indicator">To</string>
-    <string name="focus_limits_depth_indicator">Depth of field:</string>
+    <string name="focus_reverse_aperture_indicator">Aperture:</string>
+    <string name="focus_reverse_distance_indicator">Focus distance:</string>
+    <string name="focus_depth_indicator">Depth of field:</string>
     <string name="focus_length">Focal length</string>
     <string name="focus_aperture">Aperture</string>
     <string name="focus_distance">Distance</string>
-    <string name="focus_length_indicator">mm</string>
-    <string name="focus_aperture_indicator">f/</string>
-    <string name="focus_distance_indicator">m</string>
-    <string name="focus_distance_indicator_emperial">ft</string>
+    <string name="focus_limit_near">Near limit</string>
+    <string name="focus_limit_far">Far limit</string>
     <string name="focus_length_hint">Focal length…</string>
     <string name="focus_aperture_hint">Aperture…</string>
+    <string name="focus_limit_near_hint">Near focus limit…</string>
+    <string name="focus_limit_far_hint">Far focus limit…</string>
     <string name="focus_distance_hint">Object distance…</string>
     <string name="focus_action_calculate">Equations</string>
 
@@ -101,6 +103,7 @@
     <string name="meter">m</string>
     <string name="feet">ft</string>
     <string name="millimeter">mm</string>
+    <string name="aperture">f/</string>
 
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>

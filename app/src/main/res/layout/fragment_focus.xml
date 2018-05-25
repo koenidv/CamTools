@@ -10,11 +10,12 @@
     android:paddingBottom="64dp">
 
     <LinearLayout
-        android:id="@+id/focusLimitsLayout"
+        android:id="@+id/focusReverseLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,7 +24,85 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal" android:baselineAligned="false">
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/focusReverseApertureLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/focusReverseApertureIndicatorTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/focus_reverse_aperture_indicator"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/focusReverseApertureTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/focusReverseDistanceLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/focusReverseDistanceIndicatorTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/focus_reverse_distance_indicator"
+                    android:textAlignment="center"/>
+
+                <TextView
+                    android:id="@+id/focusReverseDistanceTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/focusReverseDepthTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="8dp"
+            android:text="@string/focus_depth_indicator"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/focusLimitsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/focusLimitsNearLayout"
@@ -35,7 +114,7 @@
                 <TextView
                     android:id="@+id/focusLimitsNearIndicatorTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:text="@string/focus_hyper_near_indicator"
                     android:textAlignment="center"/>
@@ -79,7 +158,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingTop="8dp"
-            android:text="@string/focus_limits_depth_indicator"
+            android:text="@string/focus_depth_indicator"
             android:textAlignment="center"/>
 
     </LinearLayout>
@@ -306,7 +385,7 @@
                             android:layout_height="@dimen/lineHeight"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="@string/focus_length_indicator"
+                            android:text="@string/millimeter"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     </LinearLayout>
@@ -365,7 +444,7 @@
                             android:layout_height="@dimen/lineHeight"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="@string/focus_aperture_indicator"
+                            android:text="@string/aperture"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                         <EditText
@@ -436,7 +515,6 @@
                             android:layout_height="@dimen/lineHeight"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:gravity="center"
                             android:hint="@string/focus_distance_hint"
                             android:inputType="numberDecimal"
                             android:textAlignment="textEnd"/>
@@ -447,7 +525,7 @@
                             android:layout_height="@dimen/lineHeight"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="@string/focus_distance_indicator"
+                            android:text="@string/meter"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     </LinearLayout>
@@ -461,6 +539,138 @@
                         android:padding="8dp"
                         tools:layout_editor_absoluteX="0dp"
                         tools:layout_editor_absoluteY="332dp"/>
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/focusNearCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation"
+                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/focusNearTitleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/focus_limit_near"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/focusNearEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/lineHeight"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/focus_limit_near_hint"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="textEnd"/>
+
+                        <TextView
+                            android:id="@+id/focusNearIndicatorText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/lineHeight"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/meter"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/focusFarCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation"
+                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/focusFarTitleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:paddingTop="8dp"
+                        android:text="@string/focus_limit_far"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <EditText
+                            android:id="@+id/focusFarEditText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/lineHeight"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:hint="@string/focus_limit_far_hint"
+                            android:inputType="numberDecimal"
+                            android:textAlignment="textEnd"/>
+
+                        <TextView
+                            android:id="@+id/focusFarIndicatorText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/lineHeight"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/meter"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
