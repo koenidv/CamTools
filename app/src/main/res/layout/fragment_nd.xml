@@ -162,17 +162,45 @@
     <TextView
         android:id="@+id/ndResultTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="63dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Counter"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        app:layout_constraintBottom_toTopOf="@+id/focusLengthCard"
+        app:layout_constraintBottom_toTopOf="@+id/ndTimeCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/ndResultIndicatorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/nd_result_indicator"
+        app:layout_constraintBottom_toTopOf="@+id/ndResultTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/cardMarginCombined"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/ndTimeCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ndResultTextView"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_countdown_black_24dp" android:focusable="true"/>
 
 </android.support.constraint.ConstraintLayout>

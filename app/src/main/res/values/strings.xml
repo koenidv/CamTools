@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">CamTools</string>
 
-    <string name="aboutLibraries_description_showIcon">true</string>
-    <string name="aboutLibraries_description_showVersion">true</string>
+    <string name="aboutLibraries_description_showIcon" translatable="false">true</string>
+    <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
     <string name="aboutLibraries_description_text">A calculator for photographers.</string>
 
     <string name="title_sun_short">Sun</string>
@@ -22,7 +22,7 @@
     <string name="settings_cam_title">Camera</string>
     <string name="settings_cam_choose">Choose camera</string>
     <string name="settings_cam_coc">Circle of confusion</string>
-    <string name="settings_nd_strengthunit">Strength unit</string>
+    <string name="settings_nd_strengthunit">Density unit</string>
     <string name="settings_nd_strengthunit_dialog">Optical density unit</string>
     <string name="settings_nd_strengthunit_stops">F-stops</string>
     <string name="settings_nd_strengthunit_times">Filter factor</string>
@@ -65,6 +65,11 @@
     <string name="custom_text_main_dark">Main text (dark mode)</string>
     <string name="custom_text_sub_dark">Subtext (dark mode)</string>
 
+    <string name="sun_mode_details">Details</string>
+    <string name="sun_mode_ar">AR</string>
+    <string name="sun_details_morning">Morning</string>
+    <string name="sun_details_morning_astronomical">Astronomical twilight</string>
+
     <string name="focus_mode_hyper">Hyperfocal</string>
     <string name="focus_mode_limits">Limits</string>
     <string name="focus_mode_reverse">Aperture</string>
@@ -91,20 +96,21 @@
 
     <string name="nd_time_title">Normal exposure:</string>
     <string name="nd_time_hint">Exposure time…</string>
-    <string name="nd_time_indicator_seconds_short">s</string>
+    <string name="nd_time_indicator_seconds_short" translatable="false">s</string>
     <string name="nd_time_indicator_seconds_long">seconds</string>
     <string name="nd_strength_title">Density:</string>
     <string name="nd_strength_hint">Light transmittance…</string>
     <string name="nd_strength_type_stops">stops</string>
     <string name="nd_strength_type_times">times</string>
+    <string name="nd_result_indicator">Eposure time:</string>
 
     <string name="action_help">Get help</string>
     <string name="action_advancedSettings">Advanced settings</string>
 
-    <string name="meter">m</string>
-    <string name="feet">ft</string>
-    <string name="millimeter">mm</string>
-    <string name="aperture">f/</string>
+    <string name="meter" translatable="false">m</string>
+    <string name="feet" translatable="false">ft</string>
+    <string name="millimeter" translatable="false">mm</string>
+    <string name="aperture" translatable="false">f/</string>
 
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>

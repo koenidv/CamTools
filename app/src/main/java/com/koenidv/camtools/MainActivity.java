@@ -195,6 +195,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CustomColorsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.nothing);
+            }
+        });
+
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -253,6 +264,7 @@ public class MainActivity extends AppCompatActivity {
                 Handler mHandler = new Handler();
                 mHandler.postDelayed(r, 1);
 
+                /* ToDo
                 if (position == 3) {
                     mFab.setVisibility(View.VISIBLE);
                     try {
@@ -338,6 +350,7 @@ public class MainActivity extends AppCompatActivity {
                                 .start();
                     }
                 }
+                */
             }
 
             @Override

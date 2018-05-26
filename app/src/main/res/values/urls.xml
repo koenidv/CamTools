@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="url_focus_more_calculate">http://dev.koenidv.de/help/camtools/focus/41/</string>
-    <string name="url_focus_help">http://dev.koenidv.de/help/camtools/58/</string>
+    <string name="url_focus_more_calculate" translatable="false">http://dev.koenidv.de/help/camtools/focus/41/</string>
+    <string name="url_focus_help" translatable="false">http://dev.koenidv.de/help/camtools/58/</string>
 </resources>

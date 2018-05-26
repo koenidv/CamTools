@@ -25,6 +25,6 @@ public class SunFragment extends Fragment {
     //Called after onCreateView(). View setup here.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        TextView sunText = (TextView) view.findViewById(R.id.sunText);
+
     }
 }

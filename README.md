@@ -11,23 +11,26 @@ You might check back later.
 
  - [ ] Sunset tab
 > - [ ] Sunset / sunrise / blue hour / golden hour times
-> - [ ] Sun compass
+> - [ ] Astronomical
+> - [ ] Nautical
+> - [ ] Civil
+> - [ ] Sunrise
+> - [ ] Golden hour
+> - [ ] Blue hour
+> - [ ] Noon
+> - [ ] Galactic center
+> - [ ] Moonrise / Moonset
+> - [ ] Sun compass (AR)
 > - [ ] Location search
 > - [ ] Notifications
 > - [ ] Menu
 > - [ ] Help articles
 - [ ] Stars tab
-> - [ ] Still stars (500 rule)
+> - [ ] 500 rule
+> - [ ] NPF rule
 > - [ ] Rotate stars by degree
 > - [ ] Timer / notification
 > - [ ] Light pollution
-> - [ ] Menu
-> - [ ] Help articles
-- [ ] ND tab
-> - [x] Calculate by exposure time and filter strength
-> - [x] Different strength units
-> - [ ] Logarithmic sliders
-> - [ ] Timer / notification
 > - [ ] Menu
 > - [ ] Help articles
 - [ ] Focus tab
@@ -37,7 +40,14 @@ You might check back later.
 > - [x] Logarithmic sliders
 > - [ ] Menu
 > - [ ] Help articles
-General
+- [ ] ND tab
+> - [x] Calculate by exposure time and filter strength
+> - [x] Different strength units
+> - [ ] Logarithmic sliders
+> - [ ] Timer / notification
+> - [ ] Menu
+> - [ ] Help articles
+- General
 > - [ ] Metric / emperial system
 > - [ ] Custom aperture steps
 > - [ ] Custom tabs

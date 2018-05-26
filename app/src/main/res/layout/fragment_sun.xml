@@ -4,19 +4,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light_lighter">
+    android:background="@color/background_light_lighter"
+    >
 
-    <TextView
-        android:id="@+id/sunText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="SUN"
+    <fragment
+        android:id="@+id/sunMainFragment"
+        android:name="com.koenidv.camtools.StarsFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/sunSelectCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:layout_marginEnd="@dimen/standardPadding"
+        android:layout_marginStart="@dimen/standardPadding"
+        app:cardCornerRadius="@dimen/cardCornerRadius"
+        app:cardElevation="@dimen/cardElevation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/sunSelectDetailsButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/focus_mode_hyper"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+
+            <Button
+                android:id="@+id/sunSelectARButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/focus_mode_limits"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
 </android.support.constraint.ConstraintLayout>

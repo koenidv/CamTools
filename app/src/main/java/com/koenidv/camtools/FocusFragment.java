@@ -56,6 +56,8 @@ public class FocusFragment extends Fragment {
             enableDarkTheme(FocusFragment.this.getView());
         }
 
+        selectedButton = -1;
+
         final LinearLayout scrollLayout = view.findViewById(R.id.focusScrollLayout);
         final LinearLayout hyperLayout = view.findViewById(R.id.focusHyperLayout);
         final LinearLayout limitsLayout = view.findViewById(R.id.focusLimitsLayout);
@@ -252,7 +254,7 @@ public class FocusFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
-        TextWatcher nearFarTextWatcher = new TextWatcher() {
+        nearEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -260,14 +262,28 @@ public class FocusFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 calculateReverse(FocusFragment.this.getView());
+                prefsEditor.putString("focusNear", s.toString()).apply();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
-        };
-        nearEditText.addTextChangedListener(nearFarTextWatcher);
-        farEditText.addTextChangedListener(nearFarTextWatcher);
+        });
+        farEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                calculateReverse(FocusFragment.this.getView());
+                prefsEditor.putString("focusFar", s.toString()).apply();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         selectHyperButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -400,6 +416,8 @@ public class FocusFragment extends Fragment {
         lengthEditText.setText(prefs.getString("focusLength", "24"));
         apertureEditText.setText(prefs.getString("focusAperture", "3.5"));
         distanceEditText.setText(prefs.getString("focusDistance", "4"));
+        nearEditText.setText(prefs.getString("focusNear", "3"));
+        farEditText.setText(prefs.getString("focusFar", "18"));
         if (prefs.getString("focusMode", "hyper").equals("hyper")) {
             selectHyperButton.callOnClick();
         } else if (prefs.getString("focusMode", "hyper").equals("limits")) {
