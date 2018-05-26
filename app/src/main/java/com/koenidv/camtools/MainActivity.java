@@ -422,7 +422,9 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_switch_advancedSettings:
-                SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
+                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE).edit();
+                prefsEditor.putBoolean("advancedSettings", !getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE).getBoolean("advancedSettings", false)).apply();
+                MainActivity.this.recreate();
                 break;
             case R.id.action_focus_calculate:
                 Intent fcBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_more_calculate)));

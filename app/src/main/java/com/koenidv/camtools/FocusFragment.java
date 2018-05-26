@@ -60,6 +60,7 @@ public class FocusFragment extends Fragment {
         final LinearLayout hyperLayout = view.findViewById(R.id.focusHyperLayout);
         final LinearLayout limitsLayout = view.findViewById(R.id.focusLimitsLayout);
         final LinearLayout reverseLayout = view.findViewById(R.id.focusReverseLayout);
+        final TextView errorTextView = view.findViewById(R.id.focusErrorTextView);
         final EditText lengthEditText = view.findViewById(R.id.focusLengthEditText);
         final SeekBar lengthSeekbar = view.findViewById(R.id.focusLengthSeekbar);
         final CardView apertureCard = view.findViewById(R.id.focusApertureCard);
@@ -276,7 +277,12 @@ public class FocusFragment extends Fragment {
                 if (selectedButton == 1) {
                     limitsLayout.startAnimation(fadeOut);
                 } else if (selectedButton == 2) {
-                    reverseLayout.startAnimation(fadeOut);
+                    if (errorTextView.getVisibility() == View.VISIBLE) {
+                        errorTextView.startAnimation(fadeOut);
+                        errorTextView.setVisibility(View.GONE);
+                    } else {
+                        reverseLayout.startAnimation(fadeOut);
+                    }
                 }
                 hyperLayout.startAnimation(fadeIn);
                 scrollLayout.startAnimation(fadeIn);
@@ -314,7 +320,12 @@ public class FocusFragment extends Fragment {
                 if (selectedButton == 0) {
                     hyperLayout.startAnimation(fadeOut);
                 } else if (selectedButton == 2) {
-                    reverseLayout.startAnimation(fadeOut);
+                    if (errorTextView.getVisibility() == View.VISIBLE) {
+                        errorTextView.startAnimation(fadeOut);
+                        errorTextView.setVisibility(View.GONE);
+                    } else {
+                        reverseLayout.startAnimation(fadeOut);
+                    }
                 }
                 limitsLayout.startAnimation(fadeIn);
                 scrollLayout.startAnimation(fadeIn);
@@ -502,6 +513,7 @@ public class FocusFragment extends Fragment {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
 
         LinearLayout reverseLayout = view.findViewById(R.id.focusReverseLayout);
+        TextView errorTextView = view.findViewById(R.id.focusErrorTextView);
         TextView apertureTextView = view.findViewById(R.id.focusReverseApertureTextView);
         TextView distanceTextView = view.findViewById(R.id.focusReverseDistanceTextView);
         TextView depthTextView = view.findViewById(R.id.focusReverseDepthTextView);
@@ -533,20 +545,23 @@ public class FocusFragment extends Fragment {
         distanceTextView.setText(distanceSpanned);
         depthTextView.setText(depthSpanned);
 
+        final Animation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setInterpolator(new FastOutSlowInInterpolator());
+        fadeIn.setDuration(300);
+        final Animation fadeOut = new AlphaAnimation(1, 0);
+        fadeOut.setInterpolator(new FastOutSlowInInterpolator());
+        fadeOut.setDuration(300);
+
         if (near >= far) {
-            final Animation fadeOut = new AlphaAnimation(1, 0);
-            fadeOut.setInterpolator(new FastOutSlowInInterpolator());
-            fadeOut.setDuration(300);
-
             reverseLayout.startAnimation(fadeOut);
+            errorTextView.startAnimation(fadeIn);
             reverseLayout.setVisibility(View.GONE);
+            errorTextView.setVisibility(View.VISIBLE);
         } else if (reverseLayout.getVisibility() == View.GONE) {
-            final Animation fadeIn = new AlphaAnimation(0, 1);
-            fadeIn.setInterpolator(new FastOutSlowInInterpolator());
-            fadeIn.setDuration(300);
-
             reverseLayout.startAnimation(fadeIn);
+            errorTextView.startAnimation(fadeOut);
             reverseLayout.setVisibility(View.VISIBLE);
+            errorTextView.setVisibility(View.GONE);
         }
     }
 

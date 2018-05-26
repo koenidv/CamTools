@@ -62,6 +62,7 @@ public class SettingsFragment extends Fragment {
     private AHBottomNavigation mNavigation;
 
     //Called after onCreateView(). View setup here.
+    @SuppressWarnings("RedundantCast")
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
@@ -137,6 +138,7 @@ public class SettingsFragment extends Fragment {
         mNavigation = getActivity().findViewById(R.id.navigation);
         final ScrollView scrollView = view.findViewById(R.id.settingsScrollView);
 
+        /* That's kind of annoying.
         Runnable run = new Runnable() {
             @Override
             public void run() {
@@ -147,7 +149,7 @@ public class SettingsFragment extends Fragment {
                     mExpandableLayout.collapse(0, null);
                 }
             }
-        };
+        };*/
         Runnable run2 = new Runnable() {
             @Override
             public void run() {
@@ -155,7 +157,7 @@ public class SettingsFragment extends Fragment {
             }
         };
         Handler mHandler = new Handler();
-        mHandler.postDelayed(run, 1);
+        //mHandler.postDelayed(run, 1);
         mHandler.postDelayed(run2, 2);
 
 
@@ -163,6 +165,12 @@ public class SettingsFragment extends Fragment {
         mSwipeLayout.setEnabled(false);
         mSwipeSymbol.setEnabled(false);
         mSwipeSwitch.setEnabled(false);
+
+        if (prefs.getBoolean("advancedSettings", false)) {
+            mNavbarLayout.setVisibility(View.VISIBLE);
+            mSwipeLayout.setVisibility(View.VISIBLE);
+            mSaveLayout.setVisibility(View.VISIBLE);
+        }
 
 
         //Darkmode

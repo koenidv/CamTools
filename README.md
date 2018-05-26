@@ -14,20 +14,29 @@ You might check back later.
 > - [ ] Sun compass
 > - [ ] Location search
 > - [ ] Notifications
+> - [ ] Menu
+> - [ ] Help articles
 - [ ] Stars tab
 > - [ ] Still stars (500 rule)
 > - [ ] Rotate stars by degree
 > - [ ] Timer / notification
 > - [ ] Light pollution
+> - [ ] Menu
+> - [ ] Help articles
 - [ ] ND tab
 > - [x] Calculate by exposure time and filter strength
 > - [x] Different strength units
 > - [ ] Logarithmic sliders
 > - [ ] Timer / notification
+> - [ ] Menu
+> - [ ] Help articles
 - [ ] Focus tab
-> - [ ] Nearest / furthest focus
-> - [ ] Hyperfocal distance
-> - [ ] Reversed (calculate aperture)
+> - [x] Nearest / furthest focus
+> - [x] Hyperfocal distance
+> - [x] Reversed (calculate aperture)
+> - [x] Logarithmic sliders
+> - [ ] Menu
+> - [ ] Help articles
 General
 > - [ ] Metric / emperial system
 > - [ ] Custom aperture steps

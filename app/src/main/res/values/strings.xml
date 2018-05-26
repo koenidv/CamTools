@@ -75,6 +75,7 @@
     <string name="focus_limits_far_indicator">To</string>
     <string name="focus_reverse_aperture_indicator">Aperture:</string>
     <string name="focus_reverse_distance_indicator">Focus distance:</string>
+    <string name="focus_reverse_error">The far focus limit must be greater than the near focus limit.</string>
     <string name="focus_depth_indicator">Depth of field:</string>
     <string name="focus_length">Focal length</string>
     <string name="focus_aperture">Aperture</string>

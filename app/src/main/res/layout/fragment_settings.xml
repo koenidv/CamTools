@@ -454,7 +454,8 @@
                                 android:focusable="true"
                                 android:longClickable="true"
                                 android:orientation="horizontal"
-                                android:padding="8dp">
+                                android:padding="8dp"
+                                android:visibility="gone">
 
                                 <ImageView
                                     android:id="@+id/navbarSymbol"
@@ -559,7 +560,8 @@
                                 android:focusable="true"
                                 android:longClickable="true"
                                 android:orientation="horizontal"
-                                android:padding="8dp">
+                                android:padding="8dp"
+                                android:visibility="gone">
 
                                 <ImageView
                                     android:id="@+id/swipeSymbol"
@@ -594,7 +596,8 @@
                                 android:focusable="true"
                                 android:longClickable="true"
                                 android:orientation="horizontal"
-                                android:padding="8dp">
+                                android:padding="8dp"
+                                android:visibility="gone">
 
                                 <ImageView
                                     android:id="@+id/saveSymbol"
