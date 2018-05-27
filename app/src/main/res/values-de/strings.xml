@@ -101,4 +101,27 @@
     <string name="warning_reset_colors_message">Dies wird alle deine Änderungen am Design zurücksetzen. Andere Einstellungen sind davon nicht betroffen.</string>
     <string name="color_palette">Farbpalette</string>
     <string name="colors">Farben</string>
+    <string name="sun_details_night">Nacht</string>
+    <string name="sun_details_astronomical">Astronomische Dämmerung</string>
+    <string name="sun_details_nautical">Nautische Dämmerung</string>
+    <string name="sun_details_bluehour">Blaue Stunde</string>
+    <string name="sun_details_goldenhour">Goldene Stunde</string>
+    <string name="sun_details_sunrise">Sonnenaufgang</string>
+    <string name="sun_details_day">Tag</string>
+    <string name="sun_details_noon">Sonnenhöchststand</string>
+    <string name="sun_details_sunset">Sonnenuntergang</string>
+    <string name="sun_details_morning_description_astronomical">Nacht endet</string>
+    <string name="sun_details_morning_description_nautical">Astronomische Dämmerung endet</string>
+    <string name="sun_details_morning_description_bluehour">Nautische Dämmerung endet&lt;br /&gt;Zivile Dämmerung beginnt</string>
+    <string name="sun_details_morning_description_goldenhour">Blaue Stunde endet</string>
+    <string name="sun_details_morning_description_sunrise">Zivile Dämmerung endet</string>
+    <string name="sun_details_morning_description_day">Goldene Stunde endet</string>
+    <string name="sun_details_evening">Abend</string>
+    <string name="sun_details_evening_description_goldenhour">Tag endet</string>
+    <string name="sun_details_evening_description_sunset">Zivile Dämmerung beginnt</string>
+    <string name="sun_details_evening_description_bluehour">Goldene Stunde endet</string>
+    <string name="sun_details_evening_description_nautical">Blaue Stunde endet&lt;br /&gt;Zivile Dämmerung endet</string>
+    <string name="sun_details_evening_description_astronomical">Nautische Dämmerung endet</string>
+    <string name="sun_details_evening_description_night">Astronomische Dämmerung endet</string>
+    <string name="sunDayDateFormat">EEEE, d. MMM</string>
 </resources>

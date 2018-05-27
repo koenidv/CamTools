@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sunDetailsHolderCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="0dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <pl.hypeapp.materialtimelineview.MaterialTimelineView
+        android:id="@+id/sunDetailsTimelineCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/sun_astronomical"
+        app:timeline_bottom_radio_color="@color/background_dark_lighter"
+        app:timeline_line_color="@color/background_dark_lighter"
+        app:timeline_margin_start="32dp"
+        app:timeline_position="middle"
+        app:timeline_radio_outline_radius="20"
+        app:timeline_radio_radius="12"
+        app:timeline_top_radio_color="@color/background_dark_lighter"
+        app:timeline_type="item">
+
+        <TextView
+            android:id="@+id/sunDetailName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/sun_details_astronomical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            app:layout_constraintStart_toEndOf="@+id/sunDetailTime"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/sunDetailDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/sun_details_morning_description_astronomical"
+            android:textColor="?android:attr/colorBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sunDetailTime"
+            app:layout_constraintTop_toBottomOf="@+id/sunDetailName"/>
+
+        <TextView
+            android:id="@+id/sunDetailTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="02:05"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </pl.hypeapp.materialtimelineview.MaterialTimelineView>
+
+</android.support.v7.widget.CardView>

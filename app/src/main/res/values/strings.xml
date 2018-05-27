@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">CamTools</string>
 
-    <string name="aboutLibraries_description_showIcon" translatable="false">true</string>
-    <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
     <string name="aboutLibraries_description_text">A calculator for photographers.</string>
 
     <string name="title_sun_short">Sun</string>
@@ -67,8 +65,30 @@
 
     <string name="sun_mode_details">Details</string>
     <string name="sun_mode_ar">AR</string>
+    <string name="sun_details_night">Nighttime</string>
+    <string name="sun_details_astronomical">Astronomical twilight</string>
+    <string name="sun_details_nautical">Nautical twilight</string>
+    <string name="sun_details_bluehour">Blue hour</string>
+    <string name="sun_details_goldenhour">Golden hour</string>
+    <string name="sun_details_sunrise">Sunrise</string>
+    <string name="sun_details_day">Daytime</string>
+    <string name="sun_details_noon">Solar noon</string>
+    <string name="sun_details_sunset">Sunset</string>
     <string name="sun_details_morning">Morning</string>
-    <string name="sun_details_morning_astronomical">Astronomical twilight</string>
+    <string name="sun_details_morning_description_astronomical">Nighttime ends</string>
+    <string name="sun_details_morning_description_nautical">Astronomical twilight ends</string>
+    <string name="sun_details_morning_description_bluehour">Nautical twilight ends&lt;br /&gt;Civil twilight begins</string>
+    <string name="sun_details_morning_description_goldenhour">Blue hour ends</string>
+    <string name="sun_details_morning_description_sunrise">Civil twilight ends</string>
+    <string name="sun_details_morning_description_day">Golden hour ends</string>
+    <string name="sun_details_morning_description_noon"/>
+    <string name="sun_details_evening">Evening</string>
+    <string name="sun_details_evening_description_goldenhour">Daytime ends</string>
+    <string name="sun_details_evening_description_sunset">Civil twilight begins</string>
+    <string name="sun_details_evening_description_bluehour">Golden hour ends</string>
+    <string name="sun_details_evening_description_nautical">Blue hour ends&lt;br /&gt;Civil twilight ends</string>
+    <string name="sun_details_evening_description_astronomical">Nautical twilight ends</string>
+    <string name="sun_details_evening_description_night">Astronomical twilight ends</string>
 
     <string name="focus_mode_hyper">Hyperfocal</string>
     <string name="focus_mode_limits">Limits</string>
@@ -121,4 +141,11 @@
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>
+
+    <!-- Functional -->
+    <string name="sunDayDateFormat">EEEE, MMM d</string>
+    <string name="aboutLibraries_description_showIcon" translatable="false">true</string>
+    <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
+    <string name="sun_details_morning_astronomical">Astronomical twilight</string>
+
 </resources>

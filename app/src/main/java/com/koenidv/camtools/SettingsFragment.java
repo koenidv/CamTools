@@ -326,10 +326,10 @@ public class SettingsFragment extends Fragment {
                             Intent intent = getActivity().getIntent();
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
                                     | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            getActivity().overridePendingTransition(0, 0);
+                            getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             getActivity().finish();
 
-                            getActivity().overridePendingTransition(0, 0);
+                            getActivity().overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             startActivity(intent);
                         }
                     });

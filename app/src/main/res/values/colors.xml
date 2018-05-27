@@ -14,14 +14,24 @@
     <color name="background_light_lighter">#ffffff</color> <!-- Cards, Navbar, Actionbar, etc. in light mode -->
     <color name="background_light_normal">#eeeeee</color>  <!-- Background in dark mode -->
     <color name="background_light_darker">#aaaaaa</color> <!-- No usage yet -->
-    <color name="background_dark_lighter">#303030</color> <!-- Background in dark mode -->
-    <color name="background_dark_normal">#181818</color>  <!-- Cards, Navbar, Actionbar, etc. in dark mode -->
+    <color name="background_dark_lighter">	#363535</color> <!-- Background in dark mode -->
+    <color name="background_dark_normal">#252728</color>  <!-- Cards, Navbar, Actionbar, etc. in dark mode -->
     <color name="background_dark_darker">#151515</color> <!-- Dialog background -->
 
     <color name="text_main_light">#000000</color> <!-- Card titles in light mode -->
     <color name="text_sub_light">#757575</color> <!-- Switchtexts / Icons in light mode -->
     <color name="text_main_dark">@color/background_light_lighter</color> <!-- Card titles in dark mode -->
     <color name="text_sub_dark">@color/background_light_darker</color> <!-- Switchtexts / Icons in dark mode -->
+
+    <color name="sun_astronomical">#11114E</color>
+    <color name="sun_nautical">#2d2973</color>
+    <color name="sun_bluehour">#403aba</color>
+    <color name="sun_goldenhour">#ffb84b</color>
+    <color name="sun_sunrise">#ffd86b</color>
+    <color name="sun_day">#fff88b</color>
+    <color name="sun_noon">#fff69d</color>
+    <color name="sun_sunset">#7b277d</color>
+    <color name="sun_night">#091e36</color>
 
     <color name="colorWarning">#f02c2c</color>
 </resources>

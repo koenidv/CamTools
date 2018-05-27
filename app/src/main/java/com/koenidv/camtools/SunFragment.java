@@ -1,8 +1,7 @@
 package com.koenidv.camtools;
 //  Created by koenidv on 19.01.2018.
 
-import android.graphics.drawable.Animatable;
-import android.graphics.drawable.Drawable;
+import android.app.FragmentContainer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,8 +9,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class SunFragment extends Fragment {
 
@@ -25,6 +22,6 @@ public class SunFragment extends Fragment {
     //Called after onCreateView(). View setup here.
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
+        View mFragment = view.findViewById(R.id.sunMainFragment);
     }
 }
