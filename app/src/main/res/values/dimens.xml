@@ -7,9 +7,9 @@
 
     <dimen name="lineHeight">48dp</dimen>
 
-    <dimen name="cardCornerRadius">8dp</dimen>
-    <dimen name="cardElevation">4dp</dimen>
-    <dimen name="cardMarginTop">4dp</dimen>
+    <dimen name="cardCornerRadius">12dp</dimen>
+    <dimen name="cardElevation">6dp</dimen>
+    <dimen name="cardMarginTop">6dp</dimen>
     <dimen name="cardMarginBottom">8dp</dimen>
     <dimen name="cardMarginCombined">12dp</dimen>
 </resources>

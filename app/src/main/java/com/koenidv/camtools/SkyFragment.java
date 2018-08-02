@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FocusFragment extends Fragment {
+public class SkyFragment extends Fragment {
 
     int selectedButton = -1;
     int buttonDisabledColor = Color.WHITE;
@@ -23,7 +23,7 @@ public class FocusFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         //Defines the xml file for the fragment
-        return inflater.inflate(R.layout.fragment_focus, parent, false);
+        return inflater.inflate(R.layout.fragment_sky, parent, false);
     }
 
     //Called after onCreateView(). View setup here.

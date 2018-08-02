@@ -3,19 +3,40 @@
 
     <string name="aboutLibraries_description_text">A calculator for photographers.</string>
 
-    <string name="title_sun_short">Sun</string>
-    <string name="title_sun_long">Sun position</string>
-    <string name="title_stars_short">Stars</string>
-    <string name="title_stars_long">Startrails</string>
+    <string name="title_sky_short">Sky</string>
+    <string name="title_sky_long">Sky</string>
+    <string name="title_exposure_short">Exposure</string>
+    <string name="title_exposure_long">Exposure time</string>
     <string name="title_focus_short">Focus</string>
     <string name="title_focus_long">Focus</string>
-    <string name="title_nd_short">ND</string>
-    <string name="title_nd_long">Neutral-density filter</string>
     <string name="title_timelapse_short">Timelapse</string>
     <string name="title_timelapse_long">Timelapse</string>
     <string name="title_settings_short">Settings</string>
     <string name="title_settings_long">Settings</string>
     <string name="overflow_description">More options…</string>
+
+
+    <string name="select_hyper">Hyperfocal</string>
+    <string name="description_hyper">Set the focus at this distance so that the DoF reaches to infinity.</string>
+    <string name="select_limits">Depth of field</string>
+    <string name="description_limits">Calculate which range will be sharp at a given focus point.</string>
+    <string name="select_reverse">Reverse</string>
+    <string name="description_reverse">Calculate the needed aperture for a given depth of field.</string>
+    <string name="select_nd">ND filter</string>
+    <string name="description_nd">Use a neutral density filter to extend the exposure time.</string>
+    <string name="select_stars">Stars</string>
+    <string name="description_stars">Calculate the maximum exposure time at which stars are shown as points.</string>
+    <string name="select_startrails">Startrails</string>
+    <string name="description_startrails">Calculate the exposure time for a specific rotation of stars.</string>
+
+    <string name="select_sky_overview">Overview</string>
+    <string name="description_sky_overview">An Overview with important times for sun and moon.</string>
+    <string name="select_sky_details">Details</string>
+    <string name="description_sky_details">All details about the sky.</string>
+    <string name="select_sky_ar">Augmented Reality</string>
+    <string name="description_sky_ar">See where the sun and moon will be in real life.</string>
+    <string name="select_lightpollution">Light pollution</string>
+    <string name="description_lightpollution">Explore where you can take the best night-time images.</string>
 
     <string name="settings_cam_title">Camera</string>
     <string name="settings_cam_choose">Choose camera</string>
@@ -135,6 +156,7 @@
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
     <string name="offerHelp">Need help?</string>
+    <string name="requestFeature">Request feature</string>
 
     <string name="warning_reset_colors_title">Reset colors?</string>
     <string name="warning_reset_colors_message">This will undo all changes you made to the theme. Other settings won\'t be affected.</string>

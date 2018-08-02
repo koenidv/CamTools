@@ -1,7 +1,6 @@
 package com.koenidv.camtools;
 //  Created by koenidv on 19.01.2018.
 
-import android.app.FragmentContainer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SunFragment extends Fragment {
+public class CalculateSkyOverviewFragment extends Fragment {
 
     //Called when Fragment should create its View object hierarchy
     @Override

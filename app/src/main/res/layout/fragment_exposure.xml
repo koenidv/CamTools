@@ -32,7 +32,7 @@
             android:paddingTop="4dp">
 
             <android.support.v7.widget.CardView
-                android:id="@+id/selectHyperCard"
+                android:id="@+id/selectNdCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -56,25 +56,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/selectHyperImage"
+                        android:id="@+id/selectNdImage"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/hyper"/>
+                        android:src="@drawable/nd"/>
 
                     <TextView
-                        android:id="@+id/selectHyperTitle"
+                        android:id="@+id/selectNdTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="@string/select_hyper"
+                        android:text="@string/select_nd"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selectHyperDescription"
+                        android:id="@+id/selectNdDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -83,14 +83,14 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/description_hyper"/>
+                        android:text="@string/description_nd"/>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/selectLimitsCard"
+                android:id="@+id/selectStarsCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -114,25 +114,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/selectLimitsImage"
+                        android:id="@+id/selectStarsImage"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/limits"/>
+                        android:src="@drawable/stars"/>
 
                     <TextView
-                        android:id="@+id/selectLimitsTitle"
+                        android:id="@+id/selectStarsTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="@string/select_limits"
+                        android:text="@string/select_stars"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selectLimitDescription"
+                        android:id="@+id/selectStarsDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -141,14 +141,14 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/description_limits"/>
+                        android:text="@string/description_stars"/>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/selectReverseCard"
+                android:id="@+id/selectStartrailsCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -172,25 +172,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/selectReverseImage"
+                        android:id="@+id/selectStartrailsImage"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/reverse"/>
+                        android:src="@drawable/startrails"/>
 
                     <TextView
-                        android:id="@+id/selectReverseTitle"
+                        android:id="@+id/selectStartrailsTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="@string/select_reverse"
+                        android:text="@string/select_startrails"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selectReverseDescription"
+                        android:id="@+id/selectStartrailsDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -199,7 +199,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/description_reverse"/>
+                        android:text="@string/description_startrails"/>
 
                 </LinearLayout>
 

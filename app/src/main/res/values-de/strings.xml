@@ -2,14 +2,8 @@
 <resources>
     <string name="app_name">CamTools</string>
     <string name="aboutLibraries_description_text">Ein Taschenrechner für Fotografen.</string>
-    <string name="title_sun_short">Sonne</string>
-    <string name="title_sun_long">Sonnenposition</string>
-    <string name="title_stars_short">Sterne</string>
-    <string name="title_stars_long">Sternschweife</string>
     <string name="title_focus_short">Fokus</string>
     <string name="title_focus_long">Fokus</string>
-    <string name="title_nd_short">ND</string>
-    <string name="title_nd_long">Neutraldichtefilter</string>
     <string name="title_timelapse_short">Zeitraffer</string>
     <string name="title_timelapse_long">Zeitraffer</string>
     <string name="title_settings_short">Einstellungen</string>
@@ -124,4 +118,29 @@
     <string name="sun_details_evening_description_astronomical">Nautische Dämmerung endet</string>
     <string name="sun_details_evening_description_night">Astronomische Dämmerung endet</string>
     <string name="sunDayDateFormat">EEEE, d. MMM</string>
+    <string name="select_hyper">Hyperfokal</string>
+    <string name="description_hyper">Fokussiere auf diese Distanz, damit die Tiefenschärfe bis in die Unendlichkeit reicht.</string>
+    <string name="select_limits">Tiefenschärfe</string>
+    <string name="description_limits">Berechne, welcher Bereich bei einem bestimmten Fokuspunkt scharf sein wird.</string>
+    <string name="select_reverse">Rückwärts</string>
+    <string name="description_reverse">Berechne die benötigte Blende für eine bestimmte Tiefenschärfe.</string>
+    <string name="title_sky_short">Himmel</string>
+    <string name="title_sky_long">Himmel</string>
+    <string name="title_exposure_short">Belichtung</string>
+    <string name="title_exposure_long">Belichtungszeit</string>
+    <string name="select_nd">ND-Filter</string>
+    <string name="description_nd">Benutze einen Neutraldichtefilter, um die Belichtungszeit zu verlängern.</string>
+    <string name="select_stars">Sterne</string>
+    <string name="description_stars">Berechne die maximale Belichtungszeit, bei der die Sterne noch als Punkte gezeigt werden.</string>
+    <string name="select_startrails">Sternenschweife</string>
+    <string name="description_startrails">Berechne die Belichtungszeit für eine bestimmte Drehung der Sterne.</string>
+    <string name="select_sky_overview">Übersicht</string>
+    <string name="description_sky_overview">Eine Übersicht über für Mond und Sonne wichtige Zeiten.</string>
+    <string name="select_sky_details">Details</string>
+    <string name="description_sky_details">Alle Einzelheiten über Sonne und Mond.</string>
+    <string name="select_sky_ar">Erweiterte Realität</string>
+    <string name="description_sky_ar">Sehe, wo sich Sonne und Mond in der Realität befinden werden.</string>
+    <string name="select_lightpollution">Lichtverschmutzung</string>
+    <string name="description_lightpollution">Erkunde, wo du die besten Nachtfotos aufnehmen kannst.</string>
+    <string name="requestFeature">Funktion anfragen</string>
 </resources>

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#aaaaaa</color>
-    <color name="colorPrimaryDark">#181818</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#bebebe</color>
     <color name="colorAccent">#aaffaa</color>
     <color name="colorAccentDark">#ffffff</color>
 
-    <color name="tab_sun">#de5540</color> <!-- Theme color for sun tab -->
-    <color name="tab_stars">#33425b</color> <!-- Theme color for stars tab -->
+    <color name="tab_sky">#de5540</color> <!-- Theme color for sun tab -->
+    <color name="tab_exposure">#33425b</color> <!-- Theme color for stars tab -->
     <color name="tab_focus">#3498db</color> <!-- Theme color for focus tab -->
     <color name="tab_nd">#202736</color> <!-- Theme color for nd tab -->
     <color name="tab_settings">#10131b</color> <!-- Theme color for settings tab-->
 
     <color name="background_light_lighter">#ffffff</color> <!-- Cards, Navbar, Actionbar, etc. in light mode -->
-    <color name="background_light_normal">#eeeeee</color>  <!-- Background in dark mode -->
+    <color name="background_light_normal">#eeeeee</color>  <!-- Background in light mode -->
     <color name="background_light_darker">#aaaaaa</color> <!-- No usage yet -->
     <color name="background_dark_lighter">	#363535</color> <!-- Background in dark mode -->
     <color name="background_dark_normal">#252728</color>  <!-- Cards, Navbar, Actionbar, etc. in dark mode -->

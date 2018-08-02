@@ -205,7 +205,7 @@
                             android:layout_weight="1"
                             android:paddingEnd="16dp"
                             android:paddingStart="16dp"
-                            android:text="@string/title_nd_long"
+                            android:text="@string/select_nd"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textColor="@color/text_main_light"/>
 

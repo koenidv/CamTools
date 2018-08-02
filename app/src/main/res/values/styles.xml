@@ -10,6 +10,11 @@
                     in place on devices with and without navbar-->
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:fitsSystemWindows">false</item>
+        <item name="actionOverflowButtonStyle">@style/overflowButtonStyle</item>
+    </style>
+
+    <style name="overflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">#62ff00</item>
     </style>
 
     <style name="darkDialog" parent="Theme.AppCompat.Light.Dialog.Alert">

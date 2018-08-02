@@ -32,7 +32,7 @@
             android:paddingTop="4dp">
 
             <android.support.v7.widget.CardView
-                android:id="@+id/selectHyperCard"
+                android:id="@+id/selectSkyOverviewCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -56,25 +56,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/selectHyperImage"
+                        android:id="@+id/selectSkyOverviewImage"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/hyper"/>
+                        android:src="@drawable/sky_overview"/>
 
                     <TextView
-                        android:id="@+id/selectHyperTitle"
+                        android:id="@+id/selectSkyOverviewTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="@string/select_hyper"
+                        android:text="@string/select_sky_overview"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selectHyperDescription"
+                        android:id="@+id/selectSkyOverviewDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -83,14 +83,14 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/description_hyper"/>
+                        android:text="@string/description_sky_overview"/>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/selectLimitsCard"
+                android:id="@+id/selectSkyDetailsCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -114,25 +114,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/selectLimitsImage"
+                        android:id="@+id/selectSkyDetailsImage"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/limits"/>
+                        android:src="@drawable/sky_details"/>
 
                     <TextView
-                        android:id="@+id/selectLimitsTitle"
+                        android:id="@+id/selectSkyDetailsTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="@string/select_limits"
+                        android:text="@string/select_sky_details"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selectLimitDescription"
+                        android:id="@+id/selectSkyDetailsDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -141,14 +141,14 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/description_limits"/>
+                        android:text="@string/description_sky_details"/>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:id="@+id/selectReverseCard"
+                android:id="@+id/selectSkyArCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -172,25 +172,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/selectReverseImage"
+                        android:id="@+id/selectSkyArImage"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/reverse"/>
+                        android:src="@drawable/sky_ar"/>
 
                     <TextView
-                        android:id="@+id/selectReverseTitle"
+                        android:id="@+id/selectSkyArTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:padding="8dp"
-                        android:text="@string/select_reverse"
+                        android:text="@string/select_sky_ar"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selectReverseDescription"
+                        android:id="@+id/selectSkyArDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -199,7 +199,65 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/description_reverse"/>
+                        android:text="@string/description_sky_ar"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/selectLightpollutionCard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/cardMarginCombined"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                app:cardCornerRadius="@dimen/cardCornerRadius"
+                app:cardElevation="@dimen/cardElevation"
+                app:cardPreventCornerOverlap="false"
+                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/white"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/selectLightpollutionImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="140dp"
+                        android:layout_weight="1"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/lightpollution"/>
+
+                    <TextView
+                        android:id="@+id/selectLightpollutionTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="@string/select_lightpollution"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                    <TextView
+                        android:id="@+id/selectLightpollutionDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingBottom="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:text="@string/description_lightpollution"/>
 
                 </LinearLayout>
 
