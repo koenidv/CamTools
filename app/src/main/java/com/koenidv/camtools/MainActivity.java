@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, FragmentActivity.class));
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this, FragmentActivity.class));
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_switch_advancedSettings:
                 @SuppressLint("CommitPrefEdits") SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE).edit();

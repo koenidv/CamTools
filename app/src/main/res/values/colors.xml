@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#bebebe</color>
-    <color name="colorAccent">#aaffaa</color>
-    <color name="colorAccentDark">#ffffff</color>
+    <color name="colorAccent">#3399FF</color>
+    <color name="colorAccentDark">#0149A7</color>
 
     <color name="tab_sky">#de5540</color> <!-- Theme color for sun tab -->
     <color name="tab_exposure">#33425b</color> <!-- Theme color for stars tab -->
@@ -15,8 +15,8 @@
     <color name="background_light_normal">#eeeeee</color>  <!-- Background in light mode -->
     <color name="background_light_darker">#aaaaaa</color> <!-- No usage yet -->
     <color name="background_dark_lighter">	#363535</color> <!-- Background in dark mode -->
-    <color name="background_dark_normal">#252728</color>  <!-- Cards, Navbar, Actionbar, etc. in dark mode -->
-    <color name="background_dark_darker">#151515</color> <!-- Dialog background -->
+    <color name="background_dark_normal">#131313</color>  <!-- Cards, Navbar, Actionbar, etc. in dark mode -->
+    <color name="background_dark_darker">#090909</color> <!-- Dialog background -->
 
     <color name="text_main_light">#000000</color> <!-- Card titles in light mode -->
     <color name="text_sub_light">#757575</color> <!-- Switchtexts / Icons in light mode -->
@@ -34,4 +34,6 @@
     <color name="sun_night">#091e36</color>
 
     <color name="colorWarning">#f02c2c</color>
+
+    <color name="gray">#a9a9a9</color>
 </resources>

@@ -143,4 +143,18 @@
     <string name="select_lightpollution">Lichtverschmutzung</string>
     <string name="description_lightpollution">Erkunde, wo du die besten Nachtfotos aufnehmen kannst.</string>
     <string name="requestFeature">Funktion anfragen</string>
+    <string name="setting_darkmode_title">Dunkles Design</string>
+    <string name="setting_darkmode_description">Nutze das dunkle Design um deine Augen zu schonen.</string>
+    <string name="setting_enable">Aktivieren</string>
+    <string name="setting_disable">Deaktivieren</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="settings">Einstellungen</string>
+    <string name="setting_change">Ändern</string>
+    <string name="setting_units_title">Einheiten</string>
+    <string name="setting_units_distance">Entfernungen</string>
+    <string name="setting_units_distance_metrical">Metrisch</string>
+    <string name="setting_units_distance_empirical">Empirisch</string>
+    <string name="setting_units_nd">Neutraldichte</string>
+    <string name="setting_units_nd_times">Dichte</string>
+    <string name="setting_units_nd_stops">Blendenstufen</string>
 </resources>

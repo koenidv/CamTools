@@ -3,12 +3,14 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +33,44 @@ public class ExposureFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+
+        CardView mNdCard = view.findViewById(R.id.selectNdCard);
+        CardView mStarsCard = view.findViewById(R.id.selectStarsCard);
+        CardView mTrailsCard = view.findViewById(R.id.selectStartrailsCard);
+
+        mNdCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
+                intent.putExtra("image", "nd")
+                        .putExtra("title", getString(R.string.select_nd))
+                        .putExtra("description", getString(R.string.description_nd))
+                        .putExtra("layout", "fragment_calculate_nd");
+                startActivity(intent);
+            }
+        });
+        mStarsCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
+                intent.putExtra("image", "stars")
+                        .putExtra("title", getString(R.string.select_stars))
+                        .putExtra("description", getString(R.string.description_stars))
+                        .putExtra("layout", "fragment_calculate_stars");
+                startActivity(intent);
+            }
+        });
+        mTrailsCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
+                intent.putExtra("image", "startrails")
+                        .putExtra("title", getString(R.string.select_startrails))
+                        .putExtra("description", getString(R.string.description_startrails))
+                        .putExtra("layout", "fragment_calculate_startrails");
+                startActivity(intent);
+            }
+        });
 
     }
 }

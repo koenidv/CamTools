@@ -33,7 +33,7 @@ public class SunDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calulcate_sky_overview, container, false);
+        return inflater.inflate(R.layout.fragment_calculate_sky_overview, container, false);
     }
 
     //Called after onCreateView(). View setup here.
