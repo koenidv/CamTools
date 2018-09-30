@@ -28,13 +28,13 @@ public class CalculateNdActivity extends AppCompatActivity {
 
         final boolean[] changing = {false};
 
-        final TextView mResultTextView = findViewById(R.id.ndResultTextView);
-        final Button mStartTimerButton = findViewById(R.id.ndStartTimerButton);
-        final SeekBar mTimeSeekbar = findViewById(R.id.ndTimeSeekbar);
-        final EditText mTimeEditText = findViewById(R.id.ndTimeEditText);
-        final SeekBar mStrengthSeekbar = findViewById(R.id.ndStrengthSeekbar);
-        final EditText mStrengthEditText = findViewById(R.id.ndStrengthEditText);
-        final Button mEquationsButton = findViewById(R.id.ndEquationsButton);
+        final TextView mResultTextView = findViewById(R.id.resultTextView);
+        final Button mStartTimerButton = findViewById(R.id.startTimerButton);
+        final SeekBar mTimeSeekbar = findViewById(R.id.exposuretimeSeekbar);
+        final EditText mTimeEditText = findViewById(R.id.exposuretimeEditText);
+        final SeekBar mStrengthSeekbar = findViewById(R.id.densitySeekbar);
+        final EditText mStrengthEditText = findViewById(R.id.densityEditText);
+        final Button mEquationsButton = findViewById(R.id.equationsButton);
 
 
         mTimeEditText.setText(prefs.getString("ndTime", "4"));
@@ -195,10 +195,8 @@ public class CalculateNdActivity extends AppCompatActivity {
             minutes++;
             mCalculated -= 60;
         }
-        if (mCalculated >= 10) {
+        if (mCalculated > 10) {
             mCalculated = Math.round(mCalculated);
-        } else {
-            //mCalculated = Float.valueOf(new DecimalFormat("#").format(mCalculated));
         }
 
         StringBuilder mResult = new StringBuilder();

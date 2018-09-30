@@ -59,16 +59,16 @@ public class NDFragment extends Fragment {
 
         mBackgroundLayout = view.findViewById(R.id.ndLayout);
         mTimeCard = view.findViewById(R.id.ndTimeCard);
-        mTimeSeekbar = view.findViewById(R.id.ndTimeSeekbar);
+        mTimeSeekbar = view.findViewById(R.id.exposuretimeSeekbar);
         mTimeTitleText = view.findViewById(R.id.ndTimeTitleText);
-        mTimeEditText = view.findViewById(R.id.ndTimeEditText);
+        mTimeEditText = view.findViewById(R.id.exposuretimeEditText);
         mTimeIndicatorText = view.findViewById(R.id.ndTimeIndicatorText);
         mStrengthCard = view.findViewById(R.id.ndStrengthCard);
         mStrengthTitleText = view.findViewById(R.id.ndStrengthTitle);
-        mStrengthEditText = view.findViewById(R.id.ndStrengthEditText);
+        mStrengthEditText = view.findViewById(R.id.densityEditText);
         mStrengthIndicatorText = view.findViewById(R.id.ndStrengthIndicatorText);
-        mStrengthSeekbar = view.findViewById(R.id.ndStrengthSeekbar);
-        mResultTextView = view.findViewById(R.id.ndResultTextView);
+        mStrengthSeekbar = view.findViewById(R.id.densitySeekbar);
+        mResultTextView = view.findViewById(R.id.resultTextView);
 
 
         if (prefs.getBoolean("darkmode", false)) {

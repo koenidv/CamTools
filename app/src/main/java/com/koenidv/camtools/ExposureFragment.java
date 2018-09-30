@@ -42,10 +42,10 @@ public class ExposureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CalculateNdActivity.class);
-                intent.putExtra("image", "nd")
-                        .putExtra("title", getString(R.string.select_nd))
-                        .putExtra("description", getString(R.string.description_nd))
-                        .putExtra("layout", "fragment_calculate_nd");
+                //intent.putExtra("image", "nd")
+                //        .putExtra("title", getString(R.string.select_nd))
+                //        .putExtra("description", getString(R.string.description_nd))
+                //        .putExtra("layout", "fragment_calculate_nd");
                 startActivity(intent);
             }
         });

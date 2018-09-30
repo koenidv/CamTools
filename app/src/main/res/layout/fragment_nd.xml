@@ -48,7 +48,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                 <EditText
-                    android:id="@+id/ndTimeEditText"
+                    android:id="@+id/exposuretimeEditText"
                     android:layout_width="120dp"
                     android:layout_height="@dimen/lineHeight"
                     android:layout_weight="1"
@@ -69,7 +69,7 @@
             </LinearLayout>
 
             <SeekBar
-                android:id="@+id/ndTimeSeekbar"
+                android:id="@+id/exposuretimeSeekbar"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -118,7 +118,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                 <EditText
-                    android:id="@+id/ndStrengthEditText"
+                    android:id="@+id/densityEditText"
                     android:layout_width="160dp"
                     android:layout_height="@dimen/lineHeight"
                     android:layout_weight="1"
@@ -147,7 +147,7 @@
             </LinearLayout>
 
             <SeekBar
-                android:id="@+id/ndStrengthSeekbar"
+                android:id="@+id/densitySeekbar"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -160,7 +160,7 @@
     </android.support.v7.widget.CardView>
 
     <TextView
-        android:id="@+id/ndResultTextView"
+        android:id="@+id/resultTextView"
         android:layout_width="wrap_content"
         android:layout_height="63dp"
         android:layout_marginBottom="8dp"
@@ -181,7 +181,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:text="@string/nd_result_indicator"
-        app:layout_constraintBottom_toTopOf="@+id/ndResultTextView"
+        app:layout_constraintBottom_toTopOf="@+id/resultTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -199,7 +199,7 @@
         app:layout_constraintBottom_toTopOf="@+id/ndTimeCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ndResultTextView"
+        app:layout_constraintTop_toBottomOf="@+id/resultTextView"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_countdown_black_24dp" android:focusable="true"/>
 

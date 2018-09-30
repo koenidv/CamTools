@@ -52,6 +52,7 @@
     <string name="setting_units_nd_stops">Stops</string>
 
 
+    <string name="setting_sensor_size">Sensor size</string>
     <string name="settings_cam_title">Camera</string>
     <string name="settings_cam_choose">Choose camera</string>
     <string name="settings_cam_coc">Circle of confusion</string>
@@ -133,9 +134,9 @@
     <string name="focus_mode_hyper">Hyperfocal</string>
     <string name="focus_mode_limits">Limits</string>
     <string name="focus_mode_reverse">Aperture</string>
-    <string name="focus_hyper_near_indicator">From: </string>
-    <string name="focus_hyper_hyper_indicator">Focus: </string>
-    <string name="focus_hyper_far_indicator">To: </string>
+    <string name="focus_hyper_near_indicator">Near limit</string>
+    <string name="focus_hyper_hyper_indicator">Hyperfocal</string>
+    <string name="focus_hyper_far_indicator">Far limit</string>
     <string name="focus_limits_near_indicator">From</string>
     <string name="focus_limits_far_indicator">To</string>
     <string name="focus_reverse_aperture_indicator">Aperture:</string>
@@ -156,7 +157,7 @@
 
     <string name="nd_time_title">Normal exposure:</string>
     <string name="nd_time_hint">Exposure time…</string>
-    <string name="nd_time_indicator_seconds_short" translatable="false">s</string>
+    <string name="nd_time_indicator_seconds_short">s</string>
     <string name="nd_time_indicator_seconds_long">seconds</string>
     <string name="nd_strength_title">Density:</string>
     <string name="nd_strength_hint">Light transmittance…</string>
@@ -171,11 +172,12 @@
     <string name="time_hours">h</string>
     <string name="time_minutes">min</string>
     <string name="time_seconds">s</string>
-
     <string name="meter" translatable="false">m</string>
     <string name="feet" translatable="false">ft</string>
     <string name="millimeter" translatable="false">mm</string>
     <string name="aperture" translatable="false">f/</string>
+    <string name="density_factor" translatable="false">x</string>
+    <string name="density_stops">stops</string>
 
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>

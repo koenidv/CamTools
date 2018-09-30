@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ndResultLayout"
+            android:id="@+id/resultLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccentDark"
@@ -23,7 +23,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/ndResultTextView"
+                android:id="@+id/resultTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -33,14 +33,14 @@
                 android:paddingRight="8dp"
                 android:paddingStart="8dp"
                 android:paddingTop="56dp"
-                android:text="3min 6s"
+                android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
                 android:textIsSelectable="true"/>
 
             <Button
-                android:id="@+id/ndStartTimerButton"
+                android:id="@+id/startTimerButton"
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,8 @@
                 android:paddingLeft="64dp"
                 android:paddingRight="64dp"
                 android:paddingStart="64dp"
-                android:text="Start Timer"/>
+                android:text="@string/calculate_timer_start"
+                tools:targetApi="m"/>
         </LinearLayout>
 
         <android.support.v7.widget.CardView
@@ -80,7 +81,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/nd_time_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_main_light"/>
+                    android:textColor="@color/text_main_light"
+                    android:labelFor="@id/exposuretimeEditText"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,7 +90,7 @@
                     android:orientation="horizontal">
 
                     <SeekBar
-                        android:id="@+id/ndTimeSeekbar"
+                        android:id="@+id/exposuretimeSeekbar"
                         android:layout_width="591dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -98,7 +100,7 @@
                         android:saveEnabled="false"/>
 
                     <EditText
-                        android:id="@+id/ndTimeEditText"
+                        android:id="@+id/exposuretimeEditText"
                         android:layout_width="352dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -108,12 +110,12 @@
                         android:textColor="@color/text_main_light"/>
 
                     <TextView
-                        android:id="@+id/ndTimeIndicator"
+                        android:id="@+id/exposuretimeIndicator"
                         android:layout_width="319dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="s"
+                        android:text="@string/time_seconds"
                         android:textColor="@color/text_main_light"/>
 
                 </LinearLayout>
@@ -145,7 +147,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/nd_strength_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_main_light"/>
+                    android:textColor="@color/text_main_light"
+                    android:labelFor="@id/densityEditText"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -153,7 +156,7 @@
                     android:orientation="horizontal">
 
                     <SeekBar
-                        android:id="@+id/ndStrengthSeekbar"
+                        android:id="@+id/densitySeekbar"
                         android:layout_width="591dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -163,7 +166,7 @@
                         android:saveEnabled="false"/>
 
                     <EditText
-                        android:id="@+id/ndStrengthEditText"
+                        android:id="@+id/densityEditText"
                         android:layout_width="352dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -173,51 +176,19 @@
                         android:textColor="@color/text_main_light"/>
 
                     <TextView
-                        android:id="@+id/ndStrengthIndicator"
+                        android:id="@+id/densityIndicator"
                         android:layout_width="319dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="x"
+                        android:text="@string/density_factor"
                         android:textColor="@color/text_main_light"/>
 
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cardMarginCombined"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/cardMarginTop"
-            app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
-            app:cardElevation="@dimen/cardElevation">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/ndEquationsButton"
-                    style="@style/Widget.AppCompat.Button.Borderless"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="8dp"
-                    android:drawableStart="@drawable/ic_help_outline_black_24dp"
-                    android:paddingEnd="64dp"
-                    android:paddingStart="64dp"
-                    android:text="@string/calculate_equations"
-                    android:textAppearance="@style/TextAppearance.AppCompat"
-                    android:textColor="@color/text_main_light"/>
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
+        <include layout="@layout/include_card_equations"/>
 
     </LinearLayout>
 </ScrollView>

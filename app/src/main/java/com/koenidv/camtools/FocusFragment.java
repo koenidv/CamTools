@@ -41,11 +41,11 @@ public class FocusFragment extends Fragment {
         mHyperCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "hyper")
-                        .putExtra("title", getString(R.string.select_hyper))
-                        .putExtra("description", getString(R.string.description_hyper))
-                        .putExtra("layout", "fragment_calculate_hyper");
+                Intent intent = new Intent(getActivity(), CalculateHyperfocalActivity.class);
+                //intent.putExtra("image", "hyper")
+                //        .putExtra("title", getString(R.string.select_hyper))
+                //        .putExtra("description", getString(R.string.description_hyper))
+                //        .putExtra("layout", "fragment_calculate_hyper");
                 startActivity(intent);
             }
         });

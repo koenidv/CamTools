@@ -42,10 +42,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.koenidv.camtools.MainActivity"/>
         </activity>
-        <activity android:name=".CalculateNdActivity"
-                  android:label="@string/select_nd"
-                  android:parentActivityName=".MainActivity"
-                  android:theme="@style/AppTheme.BlueActionBar">
+        <activity
+            android:name=".CalculateNdActivity"
+            android:label="@string/select_nd"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.BlueActionBar">
+        </activity>
+        <activity
+            android:name=".CalculateHyperfocalActivity"
+            android:label="@string/select_hyper"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.BlueActionBar">
         </activity>
     </application>
 
