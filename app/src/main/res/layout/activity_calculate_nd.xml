@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.koenidv.camtools.CalculateNdActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ndResultLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccentDark"
+            android:elevation="4dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ndResultTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingBottom="40dp"
+                android:paddingEnd="8dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="56dp"
+                android:text="3min 6s"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+                android:textColor="@android:color/white"
+                android:textIsSelectable="true"/>
+
+            <Button
+                android:id="@+id/ndStartTimerButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/ic_countdown_black_24dp"
+                android:drawableTint="@android:color/white"
+                android:paddingEnd="64dp"
+                android:paddingLeft="64dp"
+                android:paddingRight="64dp"
+                android:paddingStart="64dp"
+                android:text="Start Timer"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/cardMarginBottom"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/cardMarginCombined"
+            app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
+            app:cardElevation="@dimen/cardElevation">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nd_time_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/text_main_light"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <SeekBar
+                        android:id="@+id/ndTimeSeekbar"
+                        android:layout_width="591dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hapticFeedbackEnabled="false"
+                        android:max="30"
+                        android:progress="2"
+                        android:saveEnabled="false"/>
+
+                    <EditText
+                        android:id="@+id/ndTimeEditText"
+                        android:layout_width="352dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="none|numberDecimal"
+                        android:textAlignment="center"
+                        android:textColor="@color/text_main_light"/>
+
+                    <TextView
+                        android:id="@+id/ndTimeIndicator"
+                        android:layout_width="319dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="s"
+                        android:textColor="@color/text_main_light"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/cardMarginBottom"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/cardMarginTop"
+            app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
+            app:cardElevation="@dimen/cardElevation">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nd_strength_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/text_main_light"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <SeekBar
+                        android:id="@+id/ndStrengthSeekbar"
+                        android:layout_width="591dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hapticFeedbackEnabled="false"
+                        android:max="11"
+                        android:progress="4"
+                        android:saveEnabled="false"/>
+
+                    <EditText
+                        android:id="@+id/ndStrengthEditText"
+                        android:layout_width="352dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:inputType="none|number|numberDecimal"
+                        android:textAlignment="center"
+                        android:textColor="@color/text_main_light"/>
+
+                    <TextView
+                        android:id="@+id/ndStrengthIndicator"
+                        android:layout_width="319dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="x"
+                        android:textColor="@color/text_main_light"/>
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/cardMarginCombined"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="@dimen/cardMarginTop"
+            app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
+            app:cardElevation="@dimen/cardElevation">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/ndEquationsButton"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    android:drawableStart="@drawable/ic_help_outline_black_24dp"
+                    android:paddingEnd="64dp"
+                    android:paddingStart="64dp"
+                    android:text="@string/calculate_equations"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:textColor="@color/text_main_light"/>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             mNavigation.setAccentColor(getResources().getColor(R.color.background_light_lighter));
         } else {
             mNavigation.setDefaultBackgroundColor(Color.WHITE);
+            mNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
         }
 
         mNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
@@ -126,9 +127,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mFab.setOnClickListener(new View.OnClickListener()
-
-        {
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CustomColorsActivity.class);

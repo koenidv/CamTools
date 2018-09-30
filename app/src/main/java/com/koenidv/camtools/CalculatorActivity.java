@@ -19,7 +19,7 @@ public class CalculatorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculator);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         mImageToolbar = findViewById(R.id.toolbar_layout);
 
@@ -31,6 +31,9 @@ public class CalculatorActivity extends AppCompatActivity {
                 getPackageName()
         );
         mImageToolbar.setBackground(getDrawable(imageId));
+        toolbar.setTitle(mIntent.getStringExtra("title"));
+
+        setSupportActionBar(toolbar);
 
         int fragmentId = getResources().getIdentifier(
                 mIntent.getStringExtra("layout"),

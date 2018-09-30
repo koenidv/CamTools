@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#bebebe</color>
-    <color name="colorAccent">#3399FF</color>
-    <color name="colorAccentDark">#0149A7</color>
+    <color name="colorAccent">#3399ff</color>
+    <color name="colorAccentDark">#3367d6</color>
 
     <color name="tab_sky">#de5540</color> <!-- Theme color for sun tab -->
     <color name="tab_exposure">#33425b</color> <!-- Theme color for stars tab -->

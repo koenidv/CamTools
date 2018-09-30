@@ -41,7 +41,7 @@ public class ExposureFragment extends Fragment {
         mNdCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
+                Intent intent = new Intent(getActivity(), CalculateNdActivity.class);
                 intent.putExtra("image", "nd")
                         .putExtra("title", getString(R.string.select_nd))
                         .putExtra("description", getString(R.string.description_nd))
