@@ -9,7 +9,7 @@
     android:paddingBottom="56dp">
 
     <ScrollView
-        android:id="@+id/focusScrollView"
+        android:id="@+id/skyScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/focusScrollLayout"
+            android:id="@+id/skyScrollLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

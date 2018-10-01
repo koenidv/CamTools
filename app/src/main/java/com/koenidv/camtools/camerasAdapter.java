@@ -13,7 +13,7 @@ import java.util.List;
 public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHolder> {
     private List<cameraCard> mDataset;
 
-    public static class ViewHolder  extends RecyclerView.ViewHolder {
+    static class ViewHolder  extends RecyclerView.ViewHolder {
         TextView mNameTextView, mSensorSizeTextView, mResolutionTextView, mPixelpitchTextView, mConfusionTextView;
 
         ViewHolder(View view) {
