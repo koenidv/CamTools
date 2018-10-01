@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="cameras">
+        <item quantity="zero">no cameras</item>
+        <item quantity="one">one camera</item>
+        <item quantity="two">two cameras</item>
+        <item quantity="few">%d cameras</item>
+        <item quantity="other">%d cameras</item>
+    </plurals>
+</resources>

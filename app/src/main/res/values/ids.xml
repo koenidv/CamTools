@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="add_database" type="id"/>
+    <item name="add_custom" type="id"/>
+</resources>

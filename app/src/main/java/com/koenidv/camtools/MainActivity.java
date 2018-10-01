@@ -191,8 +191,6 @@ public class MainActivity extends AppCompatActivity {
                     return new ExposureFragment();
                 case 2:
                     return new FocusFragment();
-                case 3:
-                    return new SettingsFragment();
                 default:
                     return new SkyFragment();
             }
@@ -244,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_help:
-                startActivity(new Intent(MainActivity.this, FragmentActivity.class));
+                //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));

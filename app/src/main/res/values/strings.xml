@@ -53,8 +53,14 @@
 
 
     <string name="setting_sensor_size">Sensor size</string>
-    <string name="settings_cam_title">Camera</string>
-    <string name="settings_cam_choose">Choose camera</string>
+    <string name="setting_cameras_title">Your cameras</string>
+    <string name="setting_cameras_description">Add your cameras for more precise results.\nYou currently have %s.</string>
+    <string name="setting_cameras_edit">Edit</string>
+    <string name="setting_cameras_new_database">From database</string>
+    <string name="setting_cameras_new_custom">Custom</string>
+    <string name="setting_cameras_sensorsize">Sensor size (mm)</string>
+    <string name="setting_cameras_resolution">Image resolution (px)</string>
+    <string name="setting_cameras_coc">Circle of confusion (mm)</string>
     <string name="settings_cam_coc">Circle of confusion</string>
     <string name="settings_nd_strengthunit">Density unit</string>
     <string name="settings_nd_strengthunit_dialog">Optical density unit</string>
@@ -170,22 +176,32 @@
 
     <string name="time_days">d</string>
     <string name="time_hours">h</string>
-    <string name="time_minutes">min</string>
+    <string name="time_minutes">m</string>
     <string name="time_seconds">s</string>
     <string name="meter" translatable="false">m</string>
     <string name="feet" translatable="false">ft</string>
     <string name="millimeter" translatable="false">mm</string>
+    <string name="micrometer" translatable="false">μm</string>
     <string name="aperture" translatable="false">f/</string>
     <string name="density_factor" translatable="false">x</string>
     <string name="density_stops">stops</string>
+    <string name="megapixel">MP</string>
+    <string name="pixel">px</string>
 
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
     <string name="offerHelp">Need help?</string>
     <string name="requestFeature">Request feature</string>
     <string name="feedback_title">Give feedback</string>
     <string name="feedback_description">Please share your thoughts about this app so that I can make it even better!</string>
     <string name="feedback_action">Send feedback</string>
+
+    <string name="name">Name</string>
+    <string name="sensorsize_indicator">Sensor size: </string>
+    <string name="resolution_indicator">Image resolution: </string>
+    <string name="pixelpitch_indicator">Pixel pitch: </string>
+    <string name="coc_indicator">Circle of confusion: </string>
 
     <string name="warning_reset_colors_title">Reset colors?</string>
     <string name="warning_reset_colors_message">This will undo all changes you made to the theme. Other settings won\'t be affected.</string>
@@ -200,6 +216,5 @@
     <string name="sun_details_morning_astronomical">Astronomical twilight</string>
     <string name="title_activity_settings">Settings</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_calculator">CalculatorActivity</string>
 
 </resources>

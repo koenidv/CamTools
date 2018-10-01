@@ -9,8 +9,6 @@
     <string name="title_settings_short">Einstellungen</string>
     <string name="title_settings_long">Einstellungen</string>
     <string name="overflow_description">Mehr Optionen…</string>
-    <string name="settings_cam_title">Kamera</string>
-    <string name="settings_cam_choose">Kamera wählen</string>
     <string name="settings_cam_coc">Streuungskreis</string>
     <string name="settings_nd_strengthunit">Dichteeinheit</string>
     <string name="settings_nd_strengthunit_dialog">Einheit der optischen Dichte</string>
@@ -166,4 +164,12 @@
     <string name="nd_time_indicator_seconds_short">s</string>
     <string name="calculate_equations">Berechnungen</string>
     <string name="calculate_timer_start">Timer starten</string>
+    <string name="feedback_title">Feedback geben</string>
+    <string name="feedback_description">Bitte teile deine Gedanken, damit ich diese App noch besser machen kann!</string>
+    <string name="feedback_action">Feedback senden</string>
+    <string name="setting_cameras_title">Deine Kameras</string>
+    <string name="setting_cameras_edit">Bearbeiten</string>
+    <string name="setting_cameras_description">Füge deine Kameras für präzisere Ergebnisse hinzu.\nDu hast aktuell %s.</string>
+    <string name="setting_cameras_new_database">Aus Vorgaben</string>
+    <string name="setting_cameras_new_custom">Eigene</string>
 </resources>

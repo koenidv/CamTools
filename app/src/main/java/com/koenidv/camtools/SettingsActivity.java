@@ -3,6 +3,7 @@ package com.koenidv.camtools;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,23 +17,25 @@ import android.widget.TextView;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = SettingsActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
 
         final Button mDarkmodeButton = findViewById(R.id.settingsDarkmodeButton);
+        final TextView mCamerasTextView = findViewById(R.id.selettingsCamerasDescription);
+        final Button mCamerasButton = findViewById(R.id.settingsCamerasButton);
         final LinearLayout mUnitsLayout = findViewById(R.id.settingsUnitsCardLayout);
         final TextView mDistancesTextView = findViewById(R.id.settingsUnitsDistanceTitle);
         final Button mDistancesButton = findViewById(R.id.settingsUnitsDistanceButton);
         final TextView mNdTextView = findViewById(R.id.settingsUnitsNdTitle);
         final Button mNdButton = findViewById(R.id.settingsUnitsNdButton);
 
-        if (prefs.getBoolean("darkmode", true)) {
+        if (prefs.getBoolean("darkmode", false)) {
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_dark_darker)));
             findViewById(R.id.settingsLinearLayout).setBackgroundColor(getResources().getColor(R.color.background_dark_normal));
             mDarkmodeButton.setText(getString(R.string.setting_disable));
@@ -41,6 +44,9 @@ public class SettingsActivity extends AppCompatActivity {
             mDistancesTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
             mNdTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
         }
+
+        mCamerasTextView.setText(getString(R.string.setting_cameras_description).replace("%s",
+                getResources().getQuantityString(R.plurals.cameras, prefs.getInt("cameras_amount", 0), prefs.getInt("cameras_amount", 0))));
 
         String distanceText = getString(R.string.setting_units_distance) + ": ";
         if (prefs.getBoolean("empirical", false)) {
@@ -64,6 +70,13 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 prefsEdit.putBoolean("darkmode", !prefs.getBoolean("darkmode", false)).apply();
                 SettingsActivity.this.recreate();
+            }
+        });
+
+        mCamerasButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this, EditCamerasActivity.class));
             }
         });
 
