@@ -49,10 +49,21 @@
             android:theme="@style/AppTheme.BlueActionBar">
         </activity>
         <activity
-            android:name=".CalculateHyperfocalActivity"
+            android:name=".CalculateHyperFocalActivity"
             android:label="@string/select_hyper"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.BlueActionBar">
+        </activity>
+        <activity
+            android:name=".CalculateFocusLimitsActivity"
+            android:label="@string/select_limits"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.BlueActionBar">
+        </activity>
+        <activity android:name=".CalculateReverseFocusActivity"
+                  android:label="@string/select_reverse"
+                  android:parentActivityName=".MainActivity"
+                  android:theme="@style/AppTheme.BlueActionBar">
         </activity>
     </application>
 

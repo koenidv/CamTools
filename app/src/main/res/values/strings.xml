@@ -183,6 +183,9 @@
     <string name="cancel">Cancel</string>
     <string name="offerHelp">Need help?</string>
     <string name="requestFeature">Request feature</string>
+    <string name="feedback_title">Give feedback</string>
+    <string name="feedback_description">Please share your thoughts about this app so that I can make it even better!</string>
+    <string name="feedback_action">Send feedback</string>
 
     <string name="warning_reset_colors_title">Reset colors?</string>
     <string name="warning_reset_colors_message">This will undo all changes you made to the theme. Other settings won\'t be affected.</string>

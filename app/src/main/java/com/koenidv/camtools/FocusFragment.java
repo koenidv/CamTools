@@ -41,7 +41,7 @@ public class FocusFragment extends Fragment {
         mHyperCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculateHyperfocalActivity.class);
+                Intent intent = new Intent(getActivity(), CalculateHyperFocalActivity.class);
                 //intent.putExtra("image", "hyper")
                 //        .putExtra("title", getString(R.string.select_hyper))
                 //        .putExtra("description", getString(R.string.description_hyper))
@@ -52,22 +52,22 @@ public class FocusFragment extends Fragment {
         mLimitsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "limits")
-                        .putExtra("title", getString(R.string.select_limits))
-                        .putExtra("description", getString(R.string.description_limits))
-                        .putExtra("layout", "fragment_calculate_limits");
+                Intent intent = new Intent(getActivity(), CalculateFocusLimitsActivity.class);
+                //intent.putExtra("image", "limits")
+                //        .putExtra("title", getString(R.string.select_limits))
+                //        .putExtra("description", getString(R.string.description_limits))
+                //        .putExtra("layout", "fragment_calculate_limits");
                 startActivity(intent);
             }
         });
         mReverseCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "reverse")
-                        .putExtra("title", getString(R.string.select_reverse))
-                        .putExtra("description", getString(R.string.description_reverse))
-                        .putExtra("layout", "fragment_calculate_reverse");
+                Intent intent = new Intent(getActivity(), CalculateReverseFocusActivity.class);
+                //intent.putExtra("image", "reverse")
+                //        .putExtra("title", getString(R.string.select_reverse))
+                //        .putExtra("description", getString(R.string.description_reverse))
+                //        .putExtra("layout", "fragment_calculate_reverse");
                 startActivity(intent);
             }
         });

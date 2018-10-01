@@ -24,49 +24,27 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/hyperfocalTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:paddingBottom="80dp"
-                android:paddingTop="48dp"
-                android:text=""
-                android:textAlignment="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                android:textColor="@android:color/white"
-                android:textIsSelectable="true"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
                 android:id="@+id/nearlimitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:paddingBottom="8dp"
+                android:paddingBottom="80dp"
                 android:paddingEnd="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingStart="8dp"
-                android:paddingTop="8dp"
+                android:paddingTop="48dp"
                 android:text=""
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
                 android:textIsSelectable="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/hyperfocalTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.39999998"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/farlimitTextView"
@@ -77,35 +55,21 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
-                android:paddingBottom="8dp"
+                android:paddingBottom="80dp"
                 android:paddingEnd="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingStart="8dp"
-                android:paddingTop="8dp"
+                android:paddingTop="48dp"
                 android:text=""
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
                 android:textIsSelectable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/hyperfocalTextView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.39999998"/>
-
-            <TextView
-                android:id="@+id/hyperfocalIndicatorTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:text="@string/focus_hyper_hyper_indicator"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/hyperfocalTextView"
-                app:layout_constraintStart_toStartOf="@+id/hyperfocalTextView"/>
+                app:layout_constraintHorizontal_bias="0.8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/nearlimitIndicatorTextView"
@@ -116,7 +80,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/focus_hyper_near_indicator"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/nearlimitTextView"
                 app:layout_constraintEnd_toEndOf="@+id/nearlimitTextView"
                 app:layout_constraintStart_toStartOf="@+id/nearlimitTextView"/>
 
@@ -129,7 +93,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/focus_hyper_far_indicator"
                 android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/farlimitTextView"
                 app:layout_constraintEnd_toEndOf="@+id/farlimitTextView"
                 app:layout_constraintStart_toStartOf="@+id/farlimitTextView"/>
 
@@ -140,6 +104,8 @@
         <include layout="@layout/include_card_focallength"/>
 
         <include layout="@layout/include_card_aperture"/>
+
+        <include layout="@layout/include_card_distance"/>
 
         <include layout="@layout/include_card_equations"/>
 

@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
-public class CalculateHyperfocalActivity extends AppCompatActivity {
+public class CalculateHyperFocalActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
