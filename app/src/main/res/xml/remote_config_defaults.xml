@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- STremote_config_defaultsults -->
+<defaultsMap>
+    <!-- App settings -->
+    <entry>
+        <key>config_cache</key>
+        <value>3600</value>
+    </entry>
+
+    <!-- Sky tab -->
+    <entry>
+        <key>show_sky_overview</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_sky_details</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_sky_ar</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_sky_lightpollution</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_sky_more</key>
+        <value>false</value>
+    </entry>
+
+    <!-- Exposure tab -->
+    <entry>
+        <key>show_exposure_nd</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_exposure_spotstars</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_exposure_startrails</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_exposure_more</key>
+        <value>false</value>
+    </entry>
+
+    <!-- Focus tab -->
+    <entry>
+        <key>show_focus_hyper</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_focus_limits</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_focus_reverse</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>show_focus_more</key>
+        <value>false</value>
+    </entry>
+
+    <!-- Settings activity -->
+    <entry>
+        <key>show_sendfeedback</key>
+        <value>true</value>
+    </entry>
+
+</defaultsMap>
+    <!-- remote_config_defaultsults -->

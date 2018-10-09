@@ -134,12 +134,12 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="@dimen/cardMarginBottom">
+            android:paddingTop="4dp">
 
             <include
-                layout="@layout/include_card_sensorsize"/>
+                layout="@layout/include_card_camera"/>
 
             <include
                 layout="@layout/include_card_aperture"/>

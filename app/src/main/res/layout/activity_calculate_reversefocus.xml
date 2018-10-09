@@ -17,7 +17,6 @@
             android:id="@+id/resultLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cardMarginBottom"
             android:background="@color/colorAccentDark"
             android:elevation="4dp"
             android:gravity="center"
@@ -103,7 +102,7 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <include layout="@layout/include_card_sensorsize"/>
+        <include layout="@layout/include_card_camera"/>
 
         <include layout="@layout/include_card_focallength"/>
 
@@ -148,7 +147,8 @@
                         android:hapticFeedbackEnabled="false"
                         android:max="30"
                         android:progress="2"
-                        android:saveEnabled="false"/>
+                        android:saveEnabled="false"
+                        android:importantForAccessibility="no"/>
 
                     <EditText
                         android:id="@+id/nearfocusEditText"
@@ -214,7 +214,8 @@
                         android:hapticFeedbackEnabled="false"
                         android:max="30"
                         android:progress="2"
-                        android:saveEnabled="false"/>
+                        android:saveEnabled="false"
+                        android:importantForAccessibility="no"/>
 
                     <EditText
                         android:id="@+id/farfocusEditText"

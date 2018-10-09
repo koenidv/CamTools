@@ -26,7 +26,7 @@
         app:layout_anchor="@+id/viewPager"
         app:layout_anchorGravity="right|center"
         app:rippleColor="@android:color/white"
-        app:srcCompat="@drawable/ic_countdown_black_24dp"/>
+        app:srcCompat="@drawable/ic_countdown_white"/>
 
     <View
         android:layout_width="match_parent"

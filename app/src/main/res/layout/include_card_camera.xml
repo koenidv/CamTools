@@ -2,6 +2,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cameraCardView"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -9,32 +10,30 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginStart="8dp"
-    android:layout_marginTop="@dimen/cardMarginTop"
+    android:layout_marginTop="@dimen/cardMarginCombined"
     app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
     app:cardElevation="@dimen/cardElevation">
 
     <LinearLayout
+        android:id="@+id/cameraLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">
 
         <TextView
+            android:id="@+id/cameraTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@id/focallengthEditText"
-            android:text="@string/setting_sensor_size"
+            android:text="@string/setting_cameras_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/text_main_light"/>
-
-        <Spinner
-            android:id="@+id/sensorsizeSpinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:entries=" @array/sensorFormats"/>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

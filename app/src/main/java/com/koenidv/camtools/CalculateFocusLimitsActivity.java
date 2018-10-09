@@ -2,21 +2,30 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CalculateFocusLimitsActivity extends AppCompatActivity {
 
@@ -29,10 +38,8 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
 
         final boolean changing[] = {false};
 
-        final TextView mNearTextView = findViewById(R.id.nearlimitTextView);
-        final TextView mHyperTextView = findViewById(R.id.hyperfocalTextView);
-        final TextView mFarTextView = findViewById(R.id.farlimitTextView);
-        final Spinner mSensorSpinner = findViewById(R.id.sensorsizeSpinner);
+        final LinearLayout mCameraLayout = findViewById(R.id.cameraLayout);
+        final TextView mCameraTextView = findViewById(R.id.cameraTextView);
         final SeekBar mLengthSeekbar = findViewById(R.id.focallengthSeekbar);
         final EditText mLengthEditText = findViewById(R.id.focallengthEditText);
         final SeekBar mApertureSeekbar = findViewById(R.id.apertureSeekbar);
@@ -41,20 +48,72 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         final EditText mDistanceEditText = findViewById(R.id.distanceEditText);
         final Button mEquationsButton = findViewById(R.id.equationsButton);
 
+        int lastCamera = prefs.getInt("cameras_last", 0);
+        final float[] coc = {prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f)};
+
+        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
         mDistanceEditText.setText(prefs.getString("distance", "5"));
         mDistanceSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("distance", "5"))));
-        calculate(prefs.getFloat("coc", 0.0029f), Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
+        calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
+
+        if (prefs.getInt("cameras_amount", 0) == 0) {
+            mCameraTextView.setText(getString(R.string.calculate_camera_add));
+        }
 
 
         /*
          *  Equations
          */
 
-        //ToDo: Sensor size
+        mCameraLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (prefs.getInt("cameras_amount", 0) == 0) {
+                    startActivity(new Intent(CalculateFocusLimitsActivity.this, EditCamerasActivity.class));
+                } else {
+                    AlertDialog.Builder mDialog;
+                    if (prefs.getBoolean("darkmode", false)) {
+                        mDialog = new AlertDialog.Builder(CalculateFocusLimitsActivity.this, R.style.darkDialog);
+                    } else {
+                        mDialog = new AlertDialog.Builder(CalculateFocusLimitsActivity.this);
+                    }
+                    List<String> cameras = new ArrayList<>();
+
+                    for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
+                        cameras.add(prefs.getString("camera_" + camera + "_name", getString(R.string.camera_default_name)));
+                    }
+
+                    mDialog.setSingleChoiceItems(cameras.toArray(new String[cameras.size()]), prefs.getInt("cameras_last", 0), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            prefsEditor.putInt("cameras_last", which).apply();
+                            coc[0] = prefs.getFloat("camera_" + which + "_coc", 0.03f);
+                            mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + which + "_name", getString(R.string.camera_default_name))));
+                            calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
+                            dialog.dismiss();
+                        }
+                    });
+                    mDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    mDialog.setNeutralButton(getString(R.string.calculate_camera_manage), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(CalculateFocusLimitsActivity.this, EditCamerasActivity.class));
+                        }
+                    });
+
+                    mDialog.show();
+                }
+            }
+        });
 
         mLengthSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -82,7 +141,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(prefs.getFloat("coc", 0.0029f), Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(mDistanceEditText.getText().toString()));
+                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(mDistanceEditText.getText().toString()));
                 }
             }
 
@@ -118,7 +177,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("aperture", s.toString()).apply();
-                    calculate(prefs.getFloat("coc", 0.0029f), Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()), Float.valueOf(mDistanceEditText.getText().toString()));
+                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()), Float.valueOf(mDistanceEditText.getText().toString()));
                 }
             }
 
@@ -154,7 +213,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("distance", s.toString()).apply();
-                    calculate(prefs.getFloat("coc", 0.0029f), Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(s.toString()));
+                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(s.toString()));
                 }
             }
 
@@ -214,4 +273,39 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             //farIndicatorTextView.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateFocusLimitsActivity.this, "focus_limits").build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateFocusLimitsActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

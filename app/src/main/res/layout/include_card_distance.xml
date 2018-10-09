@@ -40,6 +40,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:hapticFeedbackEnabled="false"
+                android:importantForAccessibility="no"
                 android:max="30"
                 android:progress="2"
                 android:saveEnabled="false"/>

@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,9 +21,14 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,9 +45,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+
+        FirebaseApp.initializeApp(getApplicationContext());
+        final FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+
+        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+        mFirebaseRemoteConfig.fetch(mFirebaseRemoteConfig.getLong("config_cache"))
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this, "Fetch Succeeded",
+                                    Toast.LENGTH_SHORT).show();
+
+                            // After config data is successfully fetched, it must be activated before newly fetched
+                            // values are returned.
+                            mFirebaseRemoteConfig.activateFetched();
+                        } else {
+                            Toast.makeText(MainActivity.this, "Fetch Failed",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
 
         mFab = findViewById(R.id.mainFab);
@@ -69,10 +96,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Navigation - Bottom bar
-        AHBottomNavigationItem nav_sky = new AHBottomNavigationItem(R.string.title_sky_short, R.drawable.ic_sun_black_24dp, R.color.tab_sky);
-        AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_stars_black_24dp, R.color.tab_exposure);
-        AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus_black_24dp, R.color.tab_focus);
-        AHBottomNavigationItem nav_settings = new AHBottomNavigationItem(R.string.title_settings_short, R.drawable.ic_settings_black_24dp, R.color.tab_settings);
+        AHBottomNavigationItem nav_sky = new AHBottomNavigationItem(R.string.title_sky_short, R.drawable.ic_sun, R.color.tab_sky);
+        AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_density, R.color.tab_exposure);
+        AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.tab_focus);
 
         //nav_sky.setColor(getResources().getColor(R.color.tab_sky));
         //nav_exposure.setColor(getResources().getColor(R.color.tab_exposure));
@@ -221,9 +247,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mViewPager = findViewById(R.id.viewPager);
         getMenuInflater().inflate(R.menu.menu_default, menu);
         return true;
+
+        //mViewPager = findViewById(R.id.viewPager);
         //@formatter:off
         /*switch (mViewPager.getCurrentItem()) {
             case 0: getMenuInflater().inflate(R.menu.menu_sun, menu);return true; //Sun tab menu

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cameras>
+
+    <manufacturer>
+        <camera>EOS 1D</camera>
+        <camera>EOS 6D</camera>
+    </manufacturer>
+
+    <!--<manufacturer name="Canon">
+        <name>Canon</name>
+        <camera name="EOS 1DX">
+            <value type="sensorsize_x">36</value>
+            <value type="sensorsize_y">24</value>
+            <value type="resolution_x">5184</value>
+            <value type="resolution_y">3456</value>
+            <value type="confusion">0.03</value>
+        </camera>
+        <camera name="EOS 6D">
+            <value type="sensorsize_x">36</value>
+            <value type="sensorsize_y">24</value>
+            <value type="resolution_x">5472</value>
+            <value type="resolution_y">3648</value>
+            <value type="confusion">0.03</value>
+        </camera>
+    </manufacturer>-->
+
+</cameras>

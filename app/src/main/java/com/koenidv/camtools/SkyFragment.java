@@ -14,6 +14,9 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 public class SkyFragment extends Fragment {
 
@@ -33,21 +36,19 @@ public class SkyFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+        FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         CardView mOverviewCard = view.findViewById(R.id.selectSkyOverviewCard);
         CardView mDetailsCard = view.findViewById(R.id.selectSkyDetailsCard);
         CardView mArCard = view.findViewById(R.id.selectSkyArCard);
         CardView mPollutionCard = view.findViewById(R.id.selectLightpollutionCard);
+        TextView mMoreTextView = view.findViewById(R.id.moreTextView);
 
 
         mOverviewCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "sky_overview")
-                        .putExtra("title", getString(R.string.select_sky_overview))
-                        .putExtra("description", getString(R.string.description_sky_overview))
-                        .putExtra("layout", "fragment_calculate_sky_overview");
+                Intent intent = new Intent(getActivity(), CalculateSunOverviewActivity.class);
                 startActivity(intent);
             }
         });
@@ -84,6 +85,23 @@ public class SkyFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        if (!mFirebaseRemoteConfig.getBoolean("show_sky_overview") || !prefs.getBoolean("show_sky_overview", true)) {
+            mOverviewCard.setVisibility(View.GONE);
+        }
+        if (!mFirebaseRemoteConfig.getBoolean("show_sky_details") || !prefs.getBoolean("show_sky_details", true)) {
+            mDetailsCard.setVisibility(View.GONE);
+        }
+        if (!mFirebaseRemoteConfig.getBoolean("show_sky_ar") || !prefs.getBoolean("show_sky_ar", true)) {
+            mArCard.setVisibility(View.GONE);
+        }
+        if (!mFirebaseRemoteConfig.getBoolean("show_sky_lightpollution") || !prefs.getBoolean("show_sky_lightpollution", true)) {
+            mPollutionCard.setVisibility(View.GONE);
+        }
+        if (mFirebaseRemoteConfig.getBoolean("show_sky_more")) {
+            mMoreTextView.setVisibility(View.VISIBLE);
+        }
+
 
     }
 }

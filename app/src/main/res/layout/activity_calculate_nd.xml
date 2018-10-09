@@ -46,14 +46,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:drawablePadding="8dp"
-                android:drawableStart="@drawable/ic_countdown_black_24dp"
-                android:drawableTint="@android:color/white"
+                android:drawableStart="@drawable/ic_countdown_white"
                 android:paddingEnd="64dp"
                 android:paddingLeft="64dp"
                 android:paddingRight="64dp"
                 android:paddingStart="64dp"
-                android:text="@string/calculate_timer_start"
-                tools:targetApi="m"/>
+                android:text="@string/calculate_timer_start"/>
         </LinearLayout>
 
         <android.support.v7.widget.CardView
@@ -97,7 +95,8 @@
                         android:hapticFeedbackEnabled="false"
                         android:max="30"
                         android:progress="2"
-                        android:saveEnabled="false"/>
+                        android:saveEnabled="false"
+                        android:importantForAccessibility="no"/>
 
                     <EditText
                         android:id="@+id/exposuretimeEditText"
@@ -163,7 +162,8 @@
                         android:hapticFeedbackEnabled="false"
                         android:max="11"
                         android:progress="4"
-                        android:saveEnabled="false"/>
+                        android:saveEnabled="false"
+                        android:importantForAccessibility="no"/>
 
                     <EditText
                         android:id="@+id/densityEditText"

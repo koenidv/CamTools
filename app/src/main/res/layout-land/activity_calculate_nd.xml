@@ -5,98 +5,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccentDark"
     android:orientation="horizontal"
-    tools:context="com.koenidv.camtools.CalculateHyperFocalActivity">
+    android:background="@color/colorAccentDark"
+    tools:context="com.koenidv.camtools.CalculateNdActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/resultLayout"
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/cardMarginBottom"
-        android:background="@color/colorAccentDark"
         android:gravity="center"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/distanceTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:id="@+id/resultTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingEnd="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
             android:text=""
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textColor="@android:color/white"
-            android:textIsSelectable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.19999999"/>
+            android:textIsSelectable="true"/>
 
-        <TextView
-            android:id="@+id/apertureTextView"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/startTimerButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:text=""
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            android:textColor="@android:color/white"
-            android:textIsSelectable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.65"/>
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_countdown_white"
+            android:paddingEnd="32dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:paddingStart="32dp"
+            android:text="@string/calculate_timer_start"/>
 
-        <TextView
-            android:id="@+id/distanceIndicatorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/focus_distance"
-            android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="@+id/distanceTextView"
-            app:layout_constraintStart_toStartOf="@+id/distanceTextView"
-            app:layout_constraintTop_toBottomOf="@+id/distanceTextView"/>
-
-        <TextView
-            android:id="@+id/apertureIndicatorTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/focus_aperture"
-            android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="@+id/apertureTextView"
-            app:layout_constraintHorizontal_bias="0.558"
-            app:layout_constraintStart_toStartOf="@+id/apertureTextView"
-            app:layout_constraintTop_toBottomOf="@+id/apertureTextView"/>
-
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="4dp">
-
-            <include layout="@layout/include_card_camera"/>
-
-            <include layout="@layout/include_card_focallength"/>
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
@@ -106,7 +67,7 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginTop="@dimen/cardMarginCombined"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation">
 
@@ -121,8 +82,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:labelFor="@id/nearfocusEditText"
-                        android:text="@string/focus_limit_near"
+                        android:labelFor="@id/exposuretimeEditText"
+                        android:text="@string/nd_time_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/text_main_light"/>
 
@@ -132,7 +93,7 @@
                         android:orientation="horizontal">
 
                         <SeekBar
-                            android:id="@+id/nearfocusSeekbar"
+                            android:id="@+id/exposuretimeSeekbar"
                             android:layout_width="591dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
@@ -143,7 +104,7 @@
                             android:importantForAccessibility="no"/>
 
                         <EditText
-                            android:id="@+id/nearfocusEditText"
+                            android:id="@+id/exposuretimeEditText"
                             android:layout_width="352dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -153,12 +114,12 @@
                             android:textColor="@color/text_main_light"/>
 
                         <TextView
-                            android:id="@+id/nearfocusIndicator"
+                            android:id="@+id/exposuretimeIndicator"
                             android:layout_width="319dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="@string/meter"
+                            android:text="@string/time_seconds"
                             android:textColor="@color/text_main_light"/>
 
                     </LinearLayout>
@@ -188,8 +149,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:labelFor="@id/farfocusEditText"
-                        android:text="@string/focus_limit_far"
+                        android:labelFor="@id/densityEditText"
+                        android:text="@string/nd_strength_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:textColor="@color/text_main_light"/>
 
@@ -199,33 +160,33 @@
                         android:orientation="horizontal">
 
                         <SeekBar
-                            android:id="@+id/farfocusSeekbar"
+                            android:id="@+id/densitySeekbar"
                             android:layout_width="591dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:hapticFeedbackEnabled="false"
-                            android:max="30"
-                            android:progress="2"
+                            android:max="11"
+                            android:progress="4"
                             android:saveEnabled="false"
                             android:importantForAccessibility="no"/>
 
                         <EditText
-                            android:id="@+id/farfocusEditText"
+                            android:id="@+id/densityEditText"
                             android:layout_width="352dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:ems="10"
-                            android:inputType="none|numberDecimal"
+                            android:inputType="none|number|numberDecimal"
                             android:textAlignment="center"
                             android:textColor="@color/text_main_light"/>
 
                         <TextView
-                            android:id="@+id/farfocusIndicator"
+                            android:id="@+id/densityIndicator"
                             android:layout_width="319dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="@string/meter"
+                            android:text="@string/density_factor"
                             android:textColor="@color/text_main_light"/>
 
                     </LinearLayout>

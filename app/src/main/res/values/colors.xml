@@ -30,7 +30,7 @@
     <color name="sun_sunrise">#ffd86b</color>
     <color name="sun_day">#fff88b</color>
     <color name="sun_noon">#fff69d</color>
-    <color name="sun_sunset">#7b277d</color>
+    <color name="sun_sunset">#F7A325</color>
     <color name="sun_night">#091e36</color>
 
     <color name="colorWarning">#f02c2c</color>

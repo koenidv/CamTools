@@ -23,16 +23,18 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalculateHyperFocalActivity extends AppCompatActivity {
+public class CalculateSpotStarsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calculate_hyperfocal);
+        setContentView(R.layout.activity_calculate_spotstars);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
 
@@ -40,21 +42,24 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
 
         final LinearLayout mCameraLayout = findViewById(R.id.cameraLayout);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
+        final ExpandableLinearLayout mResultExpandLayout = findViewById(R.id.resultExpandableLayout);
         final SeekBar mLengthSeekbar = findViewById(R.id.focallengthSeekbar);
         final EditText mLengthEditText = findViewById(R.id.focallengthEditText);
         final SeekBar mApertureSeekbar = findViewById(R.id.apertureSeekbar);
         final EditText mApertureEditText = findViewById(R.id.apertureEditText);
+        final Button mStartTimerButton = findViewById(R.id.startTimerButton);
+        final Button mExpandButton = findViewById(R.id.expandButton);
         final Button mEquationsButton = findViewById(R.id.equationsButton);
 
-        int lastCamera = prefs.getInt("cameras_last", 0);
-        final float[] coc = {prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f)};
+        int mLastCamera = prefs.getInt("cameras_last", 0);
+        final float[] mPixelpitch = {prefs.getFloat("camera_" + mLastCamera + "_pitch", 6.6f)};
 
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
+        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + mLastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
-        calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
+        calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
         if (prefs.getInt("cameras_amount", 0) == 0) {
             mCameraTextView.setText(getString(R.string.calculate_camera_add));
@@ -69,13 +74,13 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (prefs.getInt("cameras_amount", 0) == 0) {
-                    startActivity(new Intent(CalculateHyperFocalActivity.this, EditCamerasActivity.class));
+                    startActivity(new Intent(CalculateSpotStarsActivity.this, EditCamerasActivity.class));
                 } else {
                     AlertDialog.Builder mDialog;
                     if (prefs.getBoolean("darkmode", false)) {
-                        mDialog = new AlertDialog.Builder(CalculateHyperFocalActivity.this, R.style.darkDialog);
+                        mDialog = new AlertDialog.Builder(CalculateSpotStarsActivity.this, R.style.darkDialog);
                     } else {
-                        mDialog = new AlertDialog.Builder(CalculateHyperFocalActivity.this);
+                        mDialog = new AlertDialog.Builder(CalculateSpotStarsActivity.this);
                     }
                     List<String> cameras = new ArrayList<>();
 
@@ -87,9 +92,9 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             prefsEditor.putInt("cameras_last", which).apply();
-                            coc[0] = prefs.getFloat("camera_" + which + "_coc", 0.03f);
+                            mPixelpitch[0] = prefs.getFloat("camera_" + which + "_pixelpitch", 6.6f);
                             mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + which + "_name", getString(R.string.camera_default_name))));
-                            calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
+                            calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
                             dialog.dismiss();
                         }
                     });
@@ -102,11 +107,26 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                     mDialog.setNeutralButton(getString(R.string.calculate_camera_manage), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(CalculateHyperFocalActivity.this, EditCamerasActivity.class));
+                            startActivity(new Intent(CalculateSpotStarsActivity.this, EditCamerasActivity.class));
                         }
                     });
 
                     mDialog.show();
+                }
+            }
+        });
+
+        mExpandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mResultExpandLayout.toggle();
+                mExpandButton.setCompoundDrawables(null, null, null, null);
+                if (mStartTimerButton.getVisibility() == View.VISIBLE) {
+                    mStartTimerButton.setVisibility(View.GONE);
+                    mExpandButton.setText(getString(R.string.stars_collapse));
+                } else {
+                    mStartTimerButton.setVisibility(View.VISIBLE);
+                    mExpandButton.setText(getString(R.string.stars_expand));
                 }
             }
         });
@@ -137,7 +157,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()));
+                    calculate(mPixelpitch[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()));
                 }
             }
 
@@ -173,7 +193,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("aperture", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()));
+                    calculate(mPixelpitch[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()));
                 }
             }
 
@@ -191,35 +211,22 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         });
     }
 
-    /*
-     *  Calculations
-     */
+    private void calculate(float mPixelpitch, float mLength, float mAperture) {
+        float mNpf = (35 * mAperture + 30 * mPixelpitch) / mLength;
+        float m500 = 500 / mLength;
+        float m600 = 600 / mLength;
 
-    @SuppressLint("DefaultLocale")
-    private void calculate(float mConfusion, float mLength, float mAperture) {
-        float mHyper = mLength * mLength / (mAperture * mConfusion) + mLength;
-        float mNear = mHyper * mHyper / (mHyper + mHyper - mLength);
+        Spanned mNpfSpanned = Html.fromHtml(new DecimalFormat(mNpf > 10 ? "#" : "#.#").format(mNpf) + "<small>" + getString(R.string.time_seconds) + "</small>");
+        Spanned m500Spanned = Html.fromHtml(new DecimalFormat(m500 > 10 ? "#" : "#.#").format(m500) + "<small>" + getString(R.string.time_seconds) + "</small>");
+        Spanned m600Spanned = Html.fromHtml(new DecimalFormat(m600 > 10 ? "#" : "#.#").format(m600) + "<small>" + getString(R.string.time_seconds) + "</small>");
 
-        if (String.valueOf(mNear).equals("NaN")) {
-            mNear = 0;
-        }
+        final TextView mNpfTextView = findViewById(R.id.resultTextView);
+        final TextView m500TextView = findViewById(R.id.result500TextView);
+        final TextView m600TextView = findViewById(R.id.result600TextView);
 
-        Spanned mHyperSpanned = Html.fromHtml(new DecimalFormat(mHyper > 200000 ? "#" : "#.#").format(mHyper / 10000) + "<small>" + getString(R.string.meter) + "</small>");
-        Spanned mNearSpanned = Html.fromHtml(new DecimalFormat(mNear > 200000 ? "#" : "#.#").format(mNear / 10000) + "<small>" + getString(R.string.meter) + "</small>");
-        String mFarString = "∞";
-
-        if (mHyper == Double.POSITIVE_INFINITY || String.valueOf(mHyper).equals("NaN")) {
-            mNearSpanned = Html.fromHtml("∞");
-            mHyperSpanned = Html.fromHtml("∞");
-        }
-
-        final TextView mNearTextView = findViewById(R.id.nearlimitTextView);
-        final TextView mHyperTextView = findViewById(R.id.hyperfocalTextView);
-        final TextView mFarTextView = findViewById(R.id.farlimitTextView);
-
-        mNearTextView.setText(mNearSpanned);
-        mHyperTextView.setText(mHyperSpanned);
-        mFarTextView.setText(mFarString);
+        mNpfTextView.setText(mNpfSpanned);
+        m500TextView.setText(m500Spanned);
+        m600TextView.setText(m600Spanned);
     }
 
     @Override
@@ -239,14 +246,14 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                     if (mShortcutManager.isRequestPinShortcutSupported()) {
 
                         ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateHyperFocalActivity.this, "focus_hyper").build();
+                                new ShortcutInfo.Builder(CalculateSpotStarsActivity.this, "exposure_spotstars").build();
 
                         mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
                     }
                 }
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(CalculateHyperFocalActivity.this, SettingsActivity.class));
+                startActivity(new Intent(CalculateSpotStarsActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_help:
 

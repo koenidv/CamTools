@@ -2,11 +2,16 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -215,4 +220,38 @@ public class CalculateNdActivity extends AppCompatActivity {
 
         return mResult.toString();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateNdActivity.this, "exposure_nd").build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateNdActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

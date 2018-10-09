@@ -42,23 +42,6 @@ public class EditCamerasActivity extends AppCompatActivity {
         final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraCardList);
         mRecyclerView.setAdapter(mAdapter);
 
-        //cameraCard mCameraCard = new cameraCard("Canon EOS 6D", "Vollformat (24x36mm)", "22MP", "Zahl", "0.003");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCard = new cameraCard("Canon EOS 5D Mark 4", "Vollformat (24x36mm)", "35MP", "Zahl", "0.003");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCard = new cameraCard("Canon EOS 30D", "APS-C (16x22mm)", "22MP", "Zahl", "0.01");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCard = new cameraCard("Canon EOS 6D", "Vollformat (24x36mm)", "22MP", "Zahl", "0.003");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCard = new cameraCard("Canon EOS 5D Mark 4", "Vollformat (24x36mm)", "35MP", "Zahl", "0.003");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCard = new cameraCard("Canon EOS 30D", "APS-C (16x22mm)", "22MP", "Zahl", "0.01");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCard = new cameraCard("Canon EOS 6D", "Vollformat (24x36mm)", "22MP", "Zahl", "0.003");
-        //mCameraCardList.add(mCameraCard);
-        //mCameraCardList.add(mCameraCard);
-        //mAdapter.notifyDataSetChanged();
-
         for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
             cameraCard mCameraCard = new cameraCard(
                     prefs.getString("camera_" + i + "_name", "Default camera"),
@@ -75,12 +58,12 @@ public class EditCamerasActivity extends AppCompatActivity {
         mAddDial.setMainFabClosedBackgroundColor(getResources().getColor(R.color.colorAccentDark));
         mAddDial.setMainFabOpenedBackgroundColor(getResources().getColor(R.color.colorAccent));
         mAddDial.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.add_database, R.drawable.ic_search_white_24dp)
+                new SpeedDialActionItem.Builder(R.id.add_database, R.drawable.ic_search_white)
                         .setFabImageTintColor(getResources().getColor(R.color.colorAccent))
                         .setLabel(getString(R.string.setting_cameras_new_database))
                         .create());
         mAddDial.addActionItem(
-                new SpeedDialActionItem.Builder(R.id.add_custom, R.drawable.ic_custom_white_24px)
+                new SpeedDialActionItem.Builder(R.id.add_custom, R.drawable.ic_edit_white)
                         .setFabImageTintColor(getResources().getColor(R.color.colorAccent))
                         .setLabel(getString(R.string.setting_cameras_new_custom))
                         .create());
@@ -93,6 +76,30 @@ public class EditCamerasActivity extends AppCompatActivity {
                     case R.id.add_database:
                         Toast.makeText(EditCamerasActivity.this, "Add from database", Toast.LENGTH_LONG).show();
 
+                        /*XmlResourceParser databaseParser = getResources().getXml(R.xml.cameras);
+
+                        try {
+                            String eventType = databaseParser.getName();
+                            int startTag = XmlResourceParser.START_TAG;
+                            if (databaseParser.getEventType() == XmlResourceParser.START_TAG) {
+                                String s = databaseParser.getName();
+
+                                if (s.equals("manufacturer")) {
+                                    databaseParser.next();   /// moving to the next node
+                                    if(databaseParser.getName() != null && databaseParser.getName().equalsIgnoreCase("camera")){
+                                        String name = databaseParser.getText();  ///to get value getText() method should be used
+                                        databaseParser.next();   ///jumping on to the next node
+                                        String name2 = databaseParser.getText();  ////similar to above
+
+                                        Log.d("TAG", name);
+                                        Log.d("TAG", name2);
+                                    }
+                                }
+                            }
+                        } catch (XmlPullParserException | IOException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }*/
 
                         break;
                     case R.id.add_custom:
@@ -171,6 +178,8 @@ public class EditCamerasActivity extends AppCompatActivity {
                             }
                         });
 
+                        mSaveButton.setEnabled(false);
+                        mSaveButton.setTextColor(getResources().getColor(R.color.gray));
 
                         mDialog.show();
 
