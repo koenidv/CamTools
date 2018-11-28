@@ -6,7 +6,6 @@
     android:id="@+id/settingsLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light_lighter"
     android:orientation="vertical">
 
     <ScrollView
@@ -43,7 +42,7 @@
                     android:id="@+id/settingsDarkmodeCardLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/background_dark_darker"
+                    android:background="@color/settings_darkmodeBackground"
                     android:orientation="vertical">
 
                     <TextView

@@ -197,4 +197,15 @@
     <string name="stars_expand">Mehr</string>
     <string name="stars_collapse">Weniger</string>
     <string name="more_coming_soon">Mehr ist bald verfügbar</string>
+    <string name="shortcut_focus_hyper">Hyperfokale Distanz</string>
+    <string name="shortcut_focus_limits">Tiefenschärfe</string>
+    <string name="shortcut_focus_reverse">Fokus Rückwärts</string>
+    <string name="shortcut_exposure_nd">ND-Belichtungszeit</string>
+    <string name="shortcut_exposure_spotstars">Sternenpunkte</string>
+    <string name="shortcut_exposure_startrails">Sternenspuren</string>
+    <string name="shortcut_sky_overview">Himmelereignisse</string>
+    <string name="shortcut_sky_details">Himmel-Details</string>
+    <string name="shortcut_sky_ar">Himmel-AR</string>
+    <string name="shortcut_sky_lightpollution">Lichtverschmutzung</string>
+    <string name="seeting_cameras_new_accessibilitytext">Neue Kamera oder Menü schließen</string>
 </resources>

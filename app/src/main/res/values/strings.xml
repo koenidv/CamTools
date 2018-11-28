@@ -67,6 +67,7 @@
     <string name="setting_cameras_title">Your cameras</string>
     <string name="setting_cameras_description">Add your cameras for more precise results.\nYou currently have %s.</string>
     <string name="setting_cameras_edit">Edit</string>
+    <string name="seeting_cameras_new_accessibilitytext">Add camera or close menu</string>
     <string name="setting_cameras_new_database">From database</string>
     <string name="setting_cameras_new_custom">Custom</string>
     <string name="setting_cameras_sensorsize">Sensor size (mm)</string>
@@ -199,6 +200,7 @@
     <string name="action_help">Get help</string>
     <string name="action_add_shortcut">Add shortcut</string>
     <string name="action_advancedSettings">Advanced settings</string>
+    <string name="action_show_hidden_cards">Show hidden cards</string>
 
     <string name="time_days">d</string>
     <string name="time_hours">h</string>

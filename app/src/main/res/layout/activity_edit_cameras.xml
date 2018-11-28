@@ -10,7 +10,8 @@
     <com.leinardi.android.speeddial.SpeedDialOverlayLayout
         android:id="@+id/overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/camerasRecyclerView"
@@ -30,7 +31,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:sdMainFabClosedSrc="@drawable/ic_add_white_24dp"
-        app:sdOverlayLayout="@id/overlay"/>
+        app:sdOverlayLayout="@id/overlay"
+        android:contentDescription="@string/seeting_cameras_new_accessibilitytext"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"

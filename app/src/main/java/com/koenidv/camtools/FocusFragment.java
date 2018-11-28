@@ -64,17 +64,19 @@ public class FocusFragment extends Fragment {
             }
         });
 
-        if (!mFirebaseRemoteConfig.getBoolean("show_focus_hyper") || !prefs.getBoolean("show_focus_hyper", true)) {
-            mHyperCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_focus_limits") || !prefs.getBoolean("show_focus_limits", true)) {
-            mLimitsCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_focus_reverse") || !prefs.getBoolean("show_focus_reverse", true)) {
-            mReverseCard.setVisibility(View.GONE);
-        }
-        if (mFirebaseRemoteConfig.getBoolean("show_focus_more")) {
-            mMoreTextView.setVisibility(View.VISIBLE);
+        if (!prefs.getBoolean("show_hidden_cards", false)) {
+            if (!mFirebaseRemoteConfig.getBoolean("show_focus_hyper") || !prefs.getBoolean("show_focus_hyper", true)) {
+                mHyperCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_focus_limits") || !prefs.getBoolean("show_focus_limits", true)) {
+                mLimitsCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_focus_reverse") || !prefs.getBoolean("show_focus_reverse", true)) {
+                mReverseCard.setVisibility(View.GONE);
+            }
+            if (mFirebaseRemoteConfig.getBoolean("show_focus_more")) {
+                mMoreTextView.setVisibility(View.VISIBLE);
+            }
         }
 
     }

@@ -236,6 +236,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                     ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
                     assert mShortcutManager != null;
                     if (mShortcutManager.isRequestPinShortcutSupported()) {
+
                         ShortcutInfo pinShortcutInfo =
                                 new ShortcutInfo.Builder(CalculateNdActivity.this, "exposure_nd").build();
 

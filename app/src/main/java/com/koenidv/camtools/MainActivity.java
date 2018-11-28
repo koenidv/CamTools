@@ -1,27 +1,20 @@
 package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
@@ -34,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private AHBottomNavigation mNavigation;
-    private FloatingActionButton mFab;
 
     protected ActionBar mActionBar;
 
@@ -57,34 +49,21 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Fetch Succeeded",
-                                    Toast.LENGTH_SHORT).show();
-
                             // After config data is successfully fetched, it must be activated before newly fetched
                             // values are returned.
                             mFirebaseRemoteConfig.activateFetched();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Fetch Failed",
-                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
+        if (prefs.getBoolean("system_darkmode", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
-        mFab = findViewById(R.id.mainFab);
         mNavigation = findViewById(R.id.navigation);
         mActionBar = getSupportActionBar();
-
-        //Darkmode
-        if (prefs.getBoolean("darkmode", false)) {
-            mActionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(prefs.getString("custom_dark_darker", getString((int) R.color.background_dark_darker)))));
-            mNavigation.setBackgroundColor(getResources().getColor(R.color.background_dark_darker));
-            mNavigation.setAccentColor(getResources().getColor(R.color.background_light_lighter));
-        } else {
-            mActionBar.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            mActionBar.setTitle(Html.fromHtml("<font color=\"gray\">" + mActionBar.getTitle() + "</font>"));
-            setOverflowButtonColor(this, Color.GREEN);
-        }
 
 
         //ViewPager - Pages
@@ -100,43 +79,18 @@ public class MainActivity extends AppCompatActivity {
         AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_density, R.color.tab_exposure);
         AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.tab_focus);
 
-        //nav_sky.setColor(getResources().getColor(R.color.tab_sky));
-        //nav_exposure.setColor(getResources().getColor(R.color.tab_exposure));
-        //nav_focus.setColor(getResources().getColor(R.color.tab_focus));
-        //nav_settings.setColor(getResources().getColor(R.color.tab_settings));
-
         mNavigation.addItem(nav_sky);
         mNavigation.addItem(nav_exposure);
         mNavigation.addItem(nav_focus);
-        //ToDO: Settings in overflow menu
         // mNavigation.addItem(nav_settings);
 
-        //Default color
-        if (prefs.getBoolean("darkmode", false)) {
-            mNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.background_dark_normal));
-            mNavigation.setAccentColor(getResources().getColor(R.color.background_light_lighter));
-        } else {
-            mNavigation.setDefaultBackgroundColor(Color.WHITE);
-            mNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
-        }
-
+        mNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        mNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
         mNavigation.setTitleState(AHBottomNavigation.TitleState.ALWAYS_SHOW);
         mNavigation.setElevation(10f);
 
-
         mViewPager.setCurrentItem(prefs.getInt("lastTab", 0));
         mNavigation.setCurrentItem(prefs.getInt("lastTab", 0));
-
-        //Runnable r = new Runnable() {
-        //    @Override
-        //    public void run() {
-        //        boolean t = mNavigation.isShown();
-        //        MainActivity.this.refreshFrame();
-        //    }
-        //};
-//
-        //Handler mHandler = new Handler();
-        //mHandler.postDelayed(r, 100);
 
         mNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener()
 
@@ -146,19 +100,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onTabSelected(int position, boolean wasSelected) {
                 if (!noUpdate) {
                     mViewPager.setCurrentItem(position);
-                    //invalidateOptionsMenu();
                 }
                 return true;
-            }
-        });
-
-
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CustomColorsActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.fade_in, R.anim.nothing);
             }
         });
 
@@ -249,18 +192,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_default, menu);
         return true;
-
-        //mViewPager = findViewById(R.id.viewPager);
-        //@formatter:off
-        /*switch (mViewPager.getCurrentItem()) {
-            case 0: getMenuInflater().inflate(R.menu.menu_sun, menu);return true; //Sun tab menu
-            case 1: getMenuInflater().inflate(R.menu.menu_stars, menu);return true; //Stars tab menu
-            case 2: getMenuInflater().inflate(R.menu.menu_focus, menu);return true; //Focus tab menu
-            case 3: getMenuInflater().inflate(R.menu.menu_nd, menu);return true; //ND tab menu
-            case 4: getMenuInflater().inflate(R.menu.menu_settings, menu);return true; //Settings tab menu
-        }*/
-        // Add invalidateOptionsMenu(); in onTabSelected if tab-specific menus are needed again.
-        //@formatter:on
     }
 
     @Override
@@ -268,44 +199,16 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_help:
-                //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
+            case R.id.action_search:
                 break;
             case R.id.action_settings:
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 break;
-            case R.id.action_switch_advancedSettings:
-                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor prefsEditor = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE).edit();
-                prefsEditor.putBoolean("advancedSettings", !getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE).getBoolean("advancedSettings", false)).apply();
-                MainActivity.this.recreate();
-                break;
-            case R.id.action_focus_calculate:
-                Intent fcBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_more_calculate)));
-                startActivity(fcBrowserIntent);
-                break;
-            case R.id.action_focus_help:
-                Intent fhBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_help)));
-                startActivity(fhBrowserIntent);
+            case R.id.action_help:
+                //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
                 break;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public static void setOverflowButtonColor(final Activity activity, final int color) {
-        /*final String overflowDescription = activity.getString(R.string.overflow_description);
-        final ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
-        final ViewTreeObserver viewTreeObserver = decorView.getViewTreeObserver();
-        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                final ArrayList<View> outViews = new ArrayList<>();
-                decorView.findViewsWithText(outViews, overflowDescription, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
-                if (outViews.isEmpty()) {
-                    return;
-                }
-                AppCompatImageView overflow = (AppCompatImageView) outViews.get(0);
-                overflow.setColorFilter(color);
-                */
     }
 }

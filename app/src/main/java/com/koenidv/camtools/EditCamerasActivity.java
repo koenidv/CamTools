@@ -74,7 +74,7 @@ public class EditCamerasActivity extends AppCompatActivity {
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
                 switch (actionItem.getId()) {
                     case R.id.add_database:
-                        Toast.makeText(EditCamerasActivity.this, "Add from database", Toast.LENGTH_LONG).show();
+                        Toast.makeText(EditCamerasActivity.this, "The database will come soon", Toast.LENGTH_LONG).show();
 
                         /*XmlResourceParser databaseParser = getResources().getXml(R.xml.cameras);
 
@@ -103,7 +103,6 @@ public class EditCamerasActivity extends AppCompatActivity {
 
                         break;
                     case R.id.add_custom:
-                        Toast.makeText(EditCamerasActivity.this, "Add custom", Toast.LENGTH_LONG).show();
                         final Dialog mDialog = new Dialog(EditCamerasActivity.this);
                         mDialog.setContentView(R.layout.dialog_camera_add_custom);
 

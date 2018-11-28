@@ -5,11 +5,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -45,6 +49,11 @@ public class SettingsActivity extends AppCompatActivity {
             mNdTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
         }
 
+
+        if (prefs.getBoolean("system_darkmode", false)) {
+            mDarkmodeButton.setText(getString(R.string.setting_disable));
+        }
+
         mCamerasTextView.setText(getString(R.string.setting_cameras_description).replace("%s",
                 getResources().getQuantityString(R.plurals.cameras, prefs.getInt("cameras_amount", 0), prefs.getInt("cameras_amount", 0))));
 
@@ -64,11 +73,18 @@ public class SettingsActivity extends AppCompatActivity {
         }
         mNdTextView.setText(ndText);
 
-
         mDarkmodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                prefsEdit.putBoolean("darkmode", !prefs.getBoolean("darkmode", false)).apply();
+                int currentNightMode = getResources().getConfiguration().uiMode
+                        & Configuration.UI_MODE_NIGHT_MASK;
+                if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    prefsEdit.putBoolean("system_darkmode", false).apply();
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    prefsEdit.putBoolean("system_darkmode", true).apply();
+                }
                 SettingsActivity.this.recreate();
             }
         });
@@ -285,5 +301,33 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });*/
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = SettingsActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+
+        switch (id) {
+            case R.id.action_switch_showAll:
+                prefsEdit.putBoolean("show_hidden_cards", !prefs.getBoolean("show_hidden_cards", false)).apply();
+                break;
+            case R.id.action_reset:
+                prefsEdit.clear().apply();
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            case R.id.action_help:
+                //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

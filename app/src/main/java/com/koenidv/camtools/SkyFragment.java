@@ -86,20 +86,22 @@ public class SkyFragment extends Fragment {
             }
         });
 
-        if (!mFirebaseRemoteConfig.getBoolean("show_sky_overview") || !prefs.getBoolean("show_sky_overview", true)) {
-            mOverviewCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_sky_details") || !prefs.getBoolean("show_sky_details", true)) {
-            mDetailsCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_sky_ar") || !prefs.getBoolean("show_sky_ar", true)) {
-            mArCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_sky_lightpollution") || !prefs.getBoolean("show_sky_lightpollution", true)) {
-            mPollutionCard.setVisibility(View.GONE);
-        }
-        if (mFirebaseRemoteConfig.getBoolean("show_sky_more")) {
-            mMoreTextView.setVisibility(View.VISIBLE);
+        if (!prefs.getBoolean("show_hidden_cards", false)) {
+            if (!mFirebaseRemoteConfig.getBoolean("show_sky_overview") || !prefs.getBoolean("show_sky_overview", true)) {
+                mOverviewCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_sky_details") || !prefs.getBoolean("show_sky_details", true)) {
+                mDetailsCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_sky_ar") || !prefs.getBoolean("show_sky_ar", true)) {
+                mArCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_sky_lightpollution") || !prefs.getBoolean("show_sky_lightpollution", true)) {
+                mPollutionCard.setVisibility(View.GONE);
+            }
+            if (mFirebaseRemoteConfig.getBoolean("show_sky_more")) {
+                mMoreTextView.setVisibility(View.VISIBLE);
+            }
         }
 
 

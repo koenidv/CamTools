@@ -77,17 +77,20 @@ public class ExposureFragment extends Fragment {
             }
         });
 
-        if (!mFirebaseRemoteConfig.getBoolean("show_exposure_nd") || !prefs.getBoolean("show_exposure_nd", true)) {
-            mNdCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_exposure_spotstars") || !prefs.getBoolean("show_exposure_spotstars", true)) {
-            mStarsCard.setVisibility(View.GONE);
-        }
-        if (!mFirebaseRemoteConfig.getBoolean("show_exposure_startrails") || !prefs.getBoolean("show_exposure_startrails", true)) {
-            mTrailsCard.setVisibility(View.GONE);
-        }
-        if (mFirebaseRemoteConfig.getBoolean("show_exposure_more")) {
-            mMoreTextView.setVisibility(View.VISIBLE);
+        if (!prefs.getBoolean("show_hidden_cards", false)) {
+
+            if (!mFirebaseRemoteConfig.getBoolean("show_exposure_nd") || !prefs.getBoolean("show_exposure_nd", true)) {
+                mNdCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_exposure_spotstars") || !prefs.getBoolean("show_exposure_spotstars", true)) {
+                mStarsCard.setVisibility(View.GONE);
+            }
+            if (!mFirebaseRemoteConfig.getBoolean("show_exposure_startrails") || !prefs.getBoolean("show_exposure_startrails", true)) {
+                mTrailsCard.setVisibility(View.GONE);
+            }
+            if (mFirebaseRemoteConfig.getBoolean("show_exposure_more")) {
+                mMoreTextView.setVisibility(View.VISIBLE);
+            }
         }
 
     }

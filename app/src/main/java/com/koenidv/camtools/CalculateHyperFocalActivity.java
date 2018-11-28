@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -249,7 +250,8 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                 startActivity(new Intent(CalculateHyperFocalActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_help:
-
+                Intent fcBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_more_calculate)));
+                startActivity(fcBrowserIntent);
                 break;
         }
 

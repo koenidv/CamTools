@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#bebebe</color>
+    <color name="colorPrimaryDark">#ffffff</color>
     <color name="colorAccent">#3399ff</color>
     <color name="colorAccentDark">#3367d6</color>
 
@@ -10,6 +10,9 @@
     <color name="tab_focus">#3498db</color> <!-- Theme color for focus tab -->
     <color name="tab_nd">#202736</color> <!-- Theme color for nd tab -->
     <color name="tab_settings">#10131b</color> <!-- Theme color for settings tab-->
+
+    <color name="settings_darkmodeBackground">#303030</color>
+    <color name="textColor_normal">#000000</color>
 
     <color name="background_light_lighter">#ffffff</color> <!-- Cards, Navbar, Actionbar, etc. in light mode -->
     <color name="background_light_normal">#eeeeee</color>  <!-- Background in light mode -->
