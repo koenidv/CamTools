@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -30,15 +29,19 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
 
+        final LinearLayout mDarkmodeLayout = findViewById(R.id.darkmodeLayout);
         final Button mDarkmodeButton = findViewById(R.id.settingsDarkmodeButton);
         final TextView mCamerasTextView = findViewById(R.id.selettingsCamerasDescription);
         final Button mCamerasButton = findViewById(R.id.settingsCamerasButton);
         final LinearLayout mUnitsLayout = findViewById(R.id.settingsUnitsCardLayout);
+        final TextView mApertureTextView = findViewById(R.id.settingsUnitsApertureTitle);
+        final Button mApertureButton = findViewById(R.id.settingsUnitsApertureButton);
         final TextView mDistancesTextView = findViewById(R.id.settingsUnitsDistanceTitle);
         final Button mDistancesButton = findViewById(R.id.settingsUnitsDistanceButton);
         final TextView mNdTextView = findViewById(R.id.settingsUnitsNdTitle);
         final Button mNdButton = findViewById(R.id.settingsUnitsNdButton);
 
+        /*
         if (prefs.getBoolean("darkmode", false)) {
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_dark_darker)));
             findViewById(R.id.settingsLinearLayout).setBackgroundColor(getResources().getColor(R.color.background_dark_normal));
@@ -48,10 +51,17 @@ public class SettingsActivity extends AppCompatActivity {
             mDistancesTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
             mNdTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
         }
+        */
 
 
         if (prefs.getBoolean("system_darkmode", false)) {
             mDarkmodeButton.setText(getString(R.string.setting_disable));
+        }
+
+        if (!prefs.getBoolean("used_darkmode", false)) {
+            mDarkmodeLayout.setBackgroundColor(getResources().getColor(R.color.settings_darkmodeBackground));
+            ((TextView) findViewById(R.id.settingsDarkmodeTitle)).setTextColor(getResources().getColor(R.color.background_light_lighter));
+            ((TextView) findViewById(R.id.settingsDarkmodeDescription)).setTextColor(getResources().getColor(R.color.background_light_normal));
         }
 
         mCamerasTextView.setText(getString(R.string.setting_cameras_description).replace("%s",
@@ -84,6 +94,9 @@ public class SettingsActivity extends AppCompatActivity {
                 } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     prefsEdit.putBoolean("system_darkmode", true).apply();
+                    if (!prefs.getBoolean("used_darkmode", false)) {
+                        prefsEdit.putBoolean("used_darkmode", true).apply();
+                    }
                 }
                 SettingsActivity.this.recreate();
             }

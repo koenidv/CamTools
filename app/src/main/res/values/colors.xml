@@ -12,6 +12,7 @@
     <color name="tab_settings">#10131b</color> <!-- Theme color for settings tab-->
 
     <color name="settings_darkmodeBackground">#303030</color>
+    <color name="dial_overlay">#7fffffff</color>
     <color name="textColor_normal">#000000</color>
 
     <color name="background_light_lighter">#ffffff</color> <!-- Cards, Navbar, Actionbar, etc. in light mode -->

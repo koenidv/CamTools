@@ -20,7 +20,7 @@ android {
     //}
     productFlavors {
     }
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
 }
 
 dependencies {
@@ -45,6 +45,8 @@ dependencies {
     }
     implementation 'com.leinardi.android:speed-dial:2.0.1'
     implementation 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
+    //implementation 'com.github.rubensousa:bottomsheetbuilder:1.6.1'
+    //compile 'com.github.michael-rapp:android-bottom-sheet:2.0.0'
     //TODO: Custom About
     implementation 'com.github.jrvansuita:MaterialAbout:0.2.0'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'

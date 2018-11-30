@@ -6,4 +6,5 @@
     <color name="colorAccentDark">#000000</color>
 
     <color name="settings_darkmodeBackground">#424242</color>
+    <color name="dial_overlay">#7f303030</color>
 </resources>

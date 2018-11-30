@@ -55,6 +55,14 @@
     <string name="setting_darkmode_title">Dark theme</string>
     <string name="setting_darkmode_description">Use the dark theme to protect your eyes.</string>
     <string name="setting_units_title">Units</string>
+    <string name="setting_units_aperture">f-stops</string>
+    <string name="setting_units_aperture_short">Aperture</string>
+    <string name="setting_units_aperture_full">Full stops</string>
+    <string name="setting_units_aperture_half">Half stops</string>
+    <string name="setting_units_aperture_third">Third stops</string>
+    <string name="setting_units_aperture_full_short">Full stops</string>
+    <string name="setting_units_aperture_half_short">Halfs</string>
+    <string name="setting_units_aperture_third_short">Thirds</string>
     <string name="setting_units_distance">Distance</string>
     <string name="setting_units_distance_metrical">Metrical</string>
     <string name="setting_units_distance_empirical">Empirical</string>

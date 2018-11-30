@@ -208,4 +208,14 @@
     <string name="shortcut_sky_ar">Himmel-AR</string>
     <string name="shortcut_sky_lightpollution">Lichtverschmutzung</string>
     <string name="seeting_cameras_new_accessibilitytext">Neue Kamera oder Menü schließen</string>
+    <string name="action_add_shortcut">Verknüpfung erstellen</string>
+    <string name="action_show_hidden_cards">Versteckte Karten zeigen</string>
+    <string name="setting_units_aperture_short">Blende</string>
+    <string name="setting_units_aperture">Blendenstufen</string>
+    <string name="setting_units_aperture_full">Ganze Blendenstufen</string>
+    <string name="setting_units_aperture_half">Halbe Blendenstufen</string>
+    <string name="setting_units_aperture_third">Drittel Blendenstufen</string>
+    <string name="setting_units_aperture_full_short">Ganze</string>
+    <string name="setting_units_aperture_half_short">Halbe</string>
+    <string name="setting_units_aperture_third_short">Drittel</string>
 </resources>

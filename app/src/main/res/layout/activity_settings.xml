@@ -35,14 +35,12 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
-                    android:id="@+id/settingsDarkmodeCardLayout"
+                    android:id="@+id/darkmodeLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/settings_darkmodeBackground"
                     android:orientation="vertical">
 
                     <TextView
@@ -53,11 +51,10 @@
                         android:layout_weight="1"
                         android:padding="8dp"
                         android:text="@string/setting_darkmode_title"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/background_light_lighter"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
                     <TextView
-                        android:id="@+id/selettingsDarkmodeDescription"
+                        android:id="@+id/settingsDarkmodeDescription"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -70,8 +67,7 @@
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
                         android:paddingStart="8dp"
-                        android:text="@string/setting_darkmode_description"
-                        android:textColor="@color/background_light_normal"/>
+                        android:text="@string/setting_darkmode_description"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -109,8 +105,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsCamerasCardLayout"
@@ -180,8 +175,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsUnitsCardLayout"
@@ -202,6 +196,36 @@
                         android:padding="8dp"
                         android:text="@string/setting_units_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/settingsUnitsApertureTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:padding="8dp"
+                            android:text="@string/setting_units_aperture_short"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+                        <Button
+                            android:id="@+id/settingsUnitsApertureButton"
+                            style="@style/Widget.AppCompat.Button.Colored"
+                            android:layout_width="160dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:backgroundTint="@color/colorAccent"
+                            android:text="@string/setting_change"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -282,8 +306,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsFeedbackCardLayout"
@@ -384,41 +407,6 @@
                             android:text="@string/appearance_appearance"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textColor="@color/text_main_light"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/darkmodeLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:longClickable="true"
-                        android:orientation="horizontal"
-                        android:padding="8dp">
-
-                        <ImageView
-                            android:id="@+id/darkmodeSymbol"
-                            android:layout_width="56dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:tint="@color/text_sub_light"
-                            app:srcCompat="@drawable/ic_darkmode_black_24dp"
-                            tools:ignore="ContentDescription"/>
-
-                        <Switch
-                            android:id="@+id/darkmodeSwitch"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:clickable="false"
-                            android:focusable="false"
-                            android:paddingStart="16dp"
-                            android:text="@string/appearance_darkmode"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/text_sub_light"
-                            tools:ignore="RtlSymmetry"/>
-
                     </LinearLayout>
 
                     <LinearLayout
