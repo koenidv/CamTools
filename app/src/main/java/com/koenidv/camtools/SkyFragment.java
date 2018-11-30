@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import androidx.annotation.NonNull;
@@ -56,34 +57,34 @@ public class SkyFragment extends Fragment {
         mDetailsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "sky_details")
-                        .putExtra("title", getString(R.string.select_sky_details))
-                        .putExtra("description", getString(R.string.description_sky_details))
-                        .putExtra("layout", "fragment_calculate_sky_details");
-                startActivity(intent);
+                new BottomDialog.Builder(getContext())
+                        .setTitle(R.string.coming_soon_title)
+                        .setContent(R.string.coming_soon_description)
+                        .setPositiveText(R.string.okay)
+                        .setPositiveBackgroundColorResource(R.color.colorAccent)
+                        .show();
             }
         });
         mArCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "sky_ar")
-                        .putExtra("title", getString(R.string.select_sky_ar))
-                        .putExtra("description", getString(R.string.description_sky_ar))
-                        .putExtra("layout", "fragment_calculate_sky_ar");
-                startActivity(intent);
+                new BottomDialog.Builder(getContext())
+                        .setTitle(R.string.coming_soon_title)
+                        .setContent(R.string.coming_soon_description)
+                        .setPositiveText(R.string.okay)
+                        .setPositiveBackgroundColorResource(R.color.colorAccent)
+                        .show();
             }
         });
         mPollutionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "lightpollution")
-                        .putExtra("title", getString(R.string.select_lightpollution))
-                        .putExtra("description", getString(R.string.description_lightpollution))
-                        .putExtra("layout", "fragment_calculate_lightpollution");
-                startActivity(intent);
+                new BottomDialog.Builder(getContext())
+                        .setTitle(R.string.coming_soon_title)
+                        .setContent(R.string.coming_soon_description)
+                        .setPositiveText(R.string.okay)
+                        .setPositiveBackgroundColorResource(R.color.colorAccent)
+                        .show();
             }
         });
 

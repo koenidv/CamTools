@@ -34,6 +34,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculate_spotstars);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+        final ModuleManager mModuleManager = new ModuleManager();
 
         final boolean changing[] = {false};
 
@@ -66,8 +67,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputManager mInputManager = new InputManager();
-                mInputManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch", 6.6f);
+                mModuleManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch", 6.6f);
             }
         });
 
@@ -179,6 +179,10 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
     }
 
     private void calculate(float mPixelpitch, float mLength, float mAperture) {
+        if (mLength == 0) return;
+
+        final ModuleManager mModuleManager = new ModuleManager();
+
         float mNpf = (35 * mAperture + 30 * mPixelpitch) / mLength;
         float m500 = 500 / mLength;
         float m600 = 600 / mLength;
@@ -191,9 +195,9 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final TextView m500TextView = findViewById(R.id.result500TextView);
         final TextView m600TextView = findViewById(R.id.result600TextView);
 
-        mNpfTextView.setText(mNpfSpanned);
-        m500TextView.setText(m500Spanned);
-        m600TextView.setText(m600Spanned);
+        mNpfTextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, mNpf));
+        m500TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m500));
+        m600TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m600));
     }
 
     @Override

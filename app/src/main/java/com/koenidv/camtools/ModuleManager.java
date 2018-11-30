@@ -5,17 +5,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.Html;
 import android.widget.TextView;
 
 import org.michaelbel.bottomsheet.BottomSheet;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 //  Created by koenidv on 30.11.2018.
-class InputManager {
-     public void selectCamera(final Context mContext, final TextView mCameraTextView, final float[] mValue, final String mType, final float mDefault) {
+class ModuleManager {
+
+    /*
+     *  Input
+     */
+
+     void selectCamera(final Context mContext, final TextView mCameraTextView, final float[] mValue, final String mType, final float mDefault) {
         //mContext = mView.getContext();
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
@@ -57,5 +64,50 @@ class InputManager {
                     .setDarkTheme(prefs.getBoolean("system_darkmode", false))
                     .show();
         }
+    }
+
+
+
+    /*
+     * Output
+     */
+
+    String convertTime(Context mContext, float mCalculated) {
+        int days = 0;
+        int hours = 0;
+        int minutes = 0;
+
+        while (mCalculated > 86400) {
+            days++;
+            mCalculated -= 86400;
+        }
+        while (mCalculated > 3600) {
+            hours++;
+            mCalculated -= 3600;
+        }
+        while (mCalculated > 60) {
+            minutes++;
+            mCalculated -= 60;
+        }
+
+        StringBuilder mResult = new StringBuilder();
+        if (days != 0) {
+            mResult.append(String.valueOf(days)).append(Html.fromHtml("<small>" + mContext.getString(R.string.time_days) +"</small>")).append(" ");
+        }
+        if (hours != 0) {
+            mResult.append(String.valueOf(hours)).append(Html.fromHtml("<small>" + mContext.getString(R.string.time_hours) +"</small>")).append(" ");
+        }
+        if (minutes != 0) {
+            mResult.append(String.valueOf(minutes)).append(Html.fromHtml("<small>" + mContext.getString(R.string.time_minutes) +"</small>")).append(" ");
+        }
+        if (mCalculated != 0 || mResult.length() == 0) {
+            mResult.append(new DecimalFormat(mCalculated > 10 ? "#" : "#.#").format(mCalculated)).append(Html.fromHtml("<small>" + mContext.getString(R.string.time_seconds) +"</small>"));
+        }
+
+        return mResult.toString();
+    }
+
+    String convertDistance(Context mContext, float mCalculated) {
+        return "";
     }
 }

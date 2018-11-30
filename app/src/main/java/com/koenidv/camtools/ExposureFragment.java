@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import androidx.annotation.NonNull;
@@ -48,10 +49,6 @@ public class ExposureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CalculateNdActivity.class);
-                //intent.putExtra("image", "nd")
-                //        .putExtra("title", getString(R.string.select_nd))
-                //        .putExtra("description", getString(R.string.description_nd))
-                //        .putExtra("layout", "fragment_calculate_nd");
                 startActivity(intent);
             }
         });
@@ -59,22 +56,18 @@ public class ExposureFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CalculateSpotStarsActivity.class);
-                //intent.putExtra("image", "stars")
-                //        .putExtra("title", getString(R.string.select_stars))
-                //        .putExtra("description", getString(R.string.description_stars))
-                //        .putExtra("layout", "fragment_calculate_stars");
                 startActivity(intent);
             }
         });
         mTrailsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CalculatorActivity.class);
-                intent.putExtra("image", "startrails")
-                        .putExtra("title", getString(R.string.select_startrails))
-                        .putExtra("description", getString(R.string.description_startrails))
-                        .putExtra("layout", "fragment_calculate_startrails");
-                startActivity(intent);
+                new BottomDialog.Builder(getContext())
+                        .setTitle(R.string.coming_soon_title)
+                        .setContent(R.string.coming_soon_description)
+                        .setPositiveText(R.string.okay)
+                        .setPositiveBackgroundColorResource(R.color.colorAccent)
+                        .show();
             }
         });
 

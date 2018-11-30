@@ -14,6 +14,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
 import org.michaelbel.bottomsheet.BottomSheet;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -362,6 +365,10 @@ public class SettingsActivity extends AppCompatActivity {
             case R.id.action_help:
                 //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
                 break;
+            case R.id.action_libraries:
+                new LibsBuilder()
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .start(this);
         }
 
         return super.onOptionsItemSelected(item);

@@ -219,4 +219,8 @@
     <string name="setting_units_aperture_half_short">Halbe</string>
     <string name="setting_units_aperture_third_short">Drittel</string>
     <string name="calculate_camera_choose">Wähle deine Kamera</string>
+    <string name="coming_soon_title">Sorry!</string>
+    <string name="coming_soon_description">Diese Funktion ist noch in der Entwicklung, aber sie wird bald verfügbar sein.</string>
+    <string name="okay">Okay</string>
+    <string name="action_used_libraries">Genutzte Bibliotheken</string>
 </resources>

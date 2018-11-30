@@ -46,11 +46,8 @@ dependencies {
     implementation 'com.leinardi.android:speed-dial:2.0.1'
     implementation 'com.luckycatlabs:SunriseSunsetCalculator:1.2'
     implementation 'org.michaelbel:bottomsheet:1.2.3'
-    //TODO: Custom About
-    implementation 'com.github.jrvansuita:MaterialAbout:0.2.0'
+    implementation 'com.github.javiersantos:BottomDialogs:1.2.1'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'pl.hypeapp:materialtimelineview:1.1'
 }
 

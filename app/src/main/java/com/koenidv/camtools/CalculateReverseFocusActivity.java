@@ -36,6 +36,8 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculate_reversefocus);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+        final ModuleManager mModuleManager = new ModuleManager();
+
 
         final boolean changing[] = {false};
 
@@ -118,8 +120,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InputManager mInputManager = new InputManager();
-                mInputManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc", 0.03f);
+                mModuleManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc", 0.03f);
             }
         });
 

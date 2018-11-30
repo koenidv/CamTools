@@ -18,8 +18,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DecimalFormat;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateNdActivity extends AppCompatActivity {
@@ -30,6 +28,8 @@ public class CalculateNdActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculate_nd);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+        final ModuleManager mModuleManager = new ModuleManager();
+
 
 
         final boolean[] changing = {false};
@@ -56,7 +56,7 @@ public class CalculateNdActivity extends AppCompatActivity {
             mStrengthSeekbar.setProgress(counter);
         }
         if (Float.valueOf(mTimeEditText.getText().toString()) < 36000 && Float.valueOf(mStrengthEditText.getText().toString()) < 60000) {
-            mResultTextView.setText(refactor(calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false))));
+            mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false))));
         }
 
 
@@ -100,7 +100,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                 }
                 if (s.length() > 0 && !s.toString().equals(".")) {
                     prefsEditor.putString("ndTime", s.toString()).apply();
-                    mResultTextView.setText(refactor(calculate(Float.valueOf(s.toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false))));
+                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(s.toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false))));
                 }
             }
 
@@ -157,7 +157,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                 }
                 if (s.length() > 0 && !s.toString().equals(".")) {
                     prefsEditor.putString("ndStrength", s.toString()).apply();
-                    mResultTextView.setText(refactor(calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(s.toString()), prefs.getBoolean("ndstops", false))));
+                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(s.toString()), prefs.getBoolean("ndstops", false))));
                 }
             }
 
@@ -184,7 +184,7 @@ public class CalculateNdActivity extends AppCompatActivity {
         }
     }
 
-    private String refactor(float mCalculated) {
+    /*private String refactor(float mCalculated) {
         int days = 0;
         int hours = 0;
         int minutes = 0;
@@ -220,7 +220,7 @@ public class CalculateNdActivity extends AppCompatActivity {
         }
 
         return mResult.toString();
-    }
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
