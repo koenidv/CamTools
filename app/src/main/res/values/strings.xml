@@ -111,6 +111,7 @@
 
     <string name="calculate_camera">Camera: %s</string>
     <string name="calculate_camera_add">Add your camera</string>
+    <string name="calculate_camera_choose">Choose your camera</string>
     <string name="calculate_camera_manage">Manage</string>
     <string name="calculate_timer_start">Start timer</string>
     <string name="calculate_equations">How to calculate</string>

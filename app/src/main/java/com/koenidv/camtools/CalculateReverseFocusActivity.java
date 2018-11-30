@@ -115,6 +115,24 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
                 }
             }
         });
+        mCameraLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputManager mInputManager = new InputManager();
+                mInputManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc", 0.03f);
+            }
+        });
+
+        mCameraTextView.addTextChangedListener(new TextWatcher() {
+            //f:off
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            //f:on
+            @Override
+            public void afterTextChanged(Editable s) {
+                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")), Float.valueOf(prefs.getString("farfocus", "12")));
+            }
+        });
 
         mLengthSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override

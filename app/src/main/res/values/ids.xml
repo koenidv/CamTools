@@ -2,4 +2,7 @@
 <resources>
     <item name="add_database" type="id"/>
     <item name="add_custom" type="id"/>
+    <item name="full_stops" type="id"/>
+    <item name="half_stops" type="id"/>
+    <item name="third_stops" type="id"/>
 </resources>

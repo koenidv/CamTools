@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
+import org.michaelbel.bottomsheet.BottomSheet;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -68,6 +68,19 @@ public class SettingsActivity extends AppCompatActivity {
         mCamerasTextView.setText(getString(R.string.setting_cameras_description).replace("%s",
                 getResources().getQuantityString(R.plurals.cameras, prefs.getInt("cameras_amount", 0), prefs.getInt("cameras_amount", 0))));
 
+        String apertureText = getString(R.string.setting_units_aperture_short) + ": ";
+        switch (prefs.getInt("aperture_stops", 2)) {
+            case 0:
+                apertureText += getString(R.string.setting_units_aperture_full_short);
+                break;
+            case 1:
+                apertureText += getString(R.string.setting_units_aperture_half_short);
+                break;
+            case 2:
+                apertureText += getString(R.string.setting_units_aperture_third_short);
+        }
+        mApertureTextView.setText(apertureText);
+
         String distanceText = getString(R.string.setting_units_distance) + ": ";
         if (prefs.getBoolean("empirical", false)) {
             distanceText += getString(R.string.setting_units_distance_empirical);
@@ -110,41 +123,62 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        mApertureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] items = new int[]{
+                        R.string.setting_units_aperture_full,
+                        R.string.setting_units_aperture_half,
+                        R.string.setting_units_aperture_third
+                };
+                BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
+                mBuilder.setTitle(getString(R.string.setting_units_aperture))
+                        .setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefsEdit.putInt("aperture_stops", which).apply();
+                                String apertureText = getString(R.string.setting_units_aperture_short) + ": ";
+                                switch (which) {
+                                    case 0:
+                                        apertureText += getString(R.string.setting_units_aperture_full_short);
+                                        break;
+                                    case 1:
+                                        apertureText += getString(R.string.setting_units_aperture_half_short);
+                                        break;
+                                    case 2:
+                                        apertureText += getString(R.string.setting_units_aperture_third_short);
+                                }
+                                mApertureTextView.setText(apertureText);
+                            }
+                        })
+                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                        .show();
+            }
+        });
+
         mDistancesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder dialog;
-                if (prefs.getBoolean("darkmode", false)) {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.darkDialog);
-                } else {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this);
-                }
-                dialog.setTitle(getString(R.string.setting_units_distance))
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                int[] items = new int[]{
+                        R.string.setting_units_distance_metrical,
+                        R.string.setting_units_distance_empirical
+                };
+                BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
+                mBuilder.setTitle(getString(R.string.setting_units_distance))
+                        .setItems(items, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface mDialogInterface, int mI) {
-
-                            }
-                        })
-                        .setSingleChoiceItems(new CharSequence[]{getString(R.string.setting_units_distance_metrical), getString(R.string.setting_units_distance_empirical)}, prefs.getBoolean("empirical", false) ? 1 : 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface mDialogInterface, int mChecked) {
-                                prefsEdit.putBoolean("empirical", mChecked != 0).apply();
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefsEdit.putBoolean("empirical", which != 0).apply();
                                 String distanceText = getString(R.string.setting_units_distance) + ": ";
-                                if (mChecked == 1) {
+                                if (which == 1) {
                                     distanceText += getString(R.string.setting_units_distance_empirical);
                                 } else {
                                     distanceText += getString(R.string.setting_units_distance_metrical);
                                 }
                                 mDistancesTextView.setText(distanceText);
-                                new Handler().postDelayed(new Runnable() { //Post delayed so the user can see what he selected
-                                    @Override
-                                    public void run() {
-                                        mDialogInterface.dismiss();
-                                    }
-                                }, 100);
                             }
                         })
+                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
                         .show();
             }
         });
@@ -152,38 +186,26 @@ public class SettingsActivity extends AppCompatActivity {
         mNdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder dialog;
-                if (prefs.getBoolean("darkmode", false)) {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.darkDialog);
-                } else {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this);
-                }
-                dialog.setTitle(getString(R.string.setting_units_nd))
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                int[] items = new int[]{
+                        R.string.setting_units_nd_stops,
+                        R.string.setting_units_nd_times
+                };
+                BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
+                mBuilder.setTitle(getString(R.string.setting_units_nd))
+                        .setItems(items, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface mDialogInterface, int mI) {
-
-                            }
-                        })
-                        .setSingleChoiceItems(new CharSequence[]{getString(R.string.setting_units_nd_stops), getString(R.string.setting_units_nd_times)}, prefs.getBoolean("ndstops", false) ? 0 : 1, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface mDialogInterface, int mChecked) {
-                                prefsEdit.putBoolean("ndstops", mChecked == 0).apply();
+                            public void onClick(DialogInterface dialog, int which) {
+                                prefsEdit.putBoolean("ndstops", which == 0).apply();
                                 String ndText = getString(R.string.setting_units_nd) + ": ";
-                                if (mChecked == 1) {
+                                if (which == 1) {
                                     ndText += getString(R.string.setting_units_nd_times);
                                 } else {
                                     ndText += getString(R.string.setting_units_nd_stops);
                                 }
                                 mNdTextView.setText(ndText);
-                                new Handler().postDelayed(new Runnable() { //Post delayed so the user can see what he selected
-                                    @Override
-                                    public void run() {
-                                        mDialogInterface.dismiss();
-                                    }
-                                }, 100);
                             }
                         })
+                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
                         .show();
             }
         });

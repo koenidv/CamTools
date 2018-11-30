@@ -2,7 +2,6 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
@@ -23,10 +22,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateHyperFocalActivity extends AppCompatActivity {
@@ -36,7 +32,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calculate_hyperfocal);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
         final boolean changing[] = {false};
 
@@ -70,46 +66,19 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (prefs.getInt("cameras_amount", 0) == 0) {
-                    startActivity(new Intent(CalculateHyperFocalActivity.this, EditCamerasActivity.class));
-                } else {
-                    AlertDialog.Builder mDialog;
-                    if (prefs.getBoolean("darkmode", false)) {
-                        mDialog = new AlertDialog.Builder(CalculateHyperFocalActivity.this, R.style.darkDialog);
-                    } else {
-                        mDialog = new AlertDialog.Builder(CalculateHyperFocalActivity.this);
-                    }
-                    List<String> cameras = new ArrayList<>();
+                InputManager mInputManager = new InputManager();
+                mInputManager.selectCamera(CalculateHyperFocalActivity.this, mCameraTextView, coc, "coc", 0.03f);
+            }
+        });
 
-                    for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
-                        cameras.add(prefs.getString("camera_" + camera + "_name", getString(R.string.camera_default_name)));
-                    }
-
-                    mDialog.setSingleChoiceItems(cameras.toArray(new String[cameras.size()]), prefs.getInt("cameras_last", 0), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            prefsEditor.putInt("cameras_last", which).apply();
-                            coc[0] = prefs.getFloat("camera_" + which + "_coc", 0.03f);
-                            mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + which + "_name", getString(R.string.camera_default_name))));
-                            calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
-                            dialog.dismiss();
-                        }
-                    });
-                    mDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    mDialog.setNeutralButton(getString(R.string.calculate_camera_manage), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(CalculateHyperFocalActivity.this, EditCamerasActivity.class));
-                        }
-                    });
-
-                    mDialog.show();
-                }
+        mCameraTextView.addTextChangedListener(new TextWatcher() {
+            //f:off
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            //f:on
+            @Override
+            public void afterTextChanged(Editable s) {
+                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
             }
         });
 
@@ -138,7 +107,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                         mLengthSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
                         changing[0] = false;
                     }
-                    prefsEditor.putString("focallength", s.toString()).apply();
+                    prefsEdit.putString("focallength", s.toString()).apply();
                     calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()));
                 }
             }
@@ -174,7 +143,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
                         mApertureSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
                         changing[0] = false;
                     }
-                    prefsEditor.putString("aperture", s.toString()).apply();
+                    prefsEdit.putString("aperture", s.toString()).apply();
                     calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()));
                 }
             }

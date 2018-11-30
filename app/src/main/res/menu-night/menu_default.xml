@@ -11,7 +11,7 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings_black"
+        android:icon="@drawable/ic_settings"
         android:title="@string/settings"
         app:showAsAction="ifRoom"/>
     <item
