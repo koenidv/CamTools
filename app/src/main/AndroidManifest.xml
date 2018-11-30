@@ -40,10 +40,6 @@
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name=".CustomColorsActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
-        <activity
             android:name=".CalculatorActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

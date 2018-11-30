@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/resultLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/farlimitTextView"
                 app:layout_constraintStart_toStartOf="@+id/farlimitTextView"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include layout="@layout/include_card_camera"/>
 

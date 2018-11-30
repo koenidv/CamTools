@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/resultLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,13 +100,13 @@
                 app:layout_constraintHorizontal_bias="0.558"
                 app:layout_constraintStart_toStartOf="@+id/apertureTextView"/>
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <include layout="@layout/include_card_camera"/>
 
         <include layout="@layout/include_card_focallength"/>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -171,9 +171,9 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/cardMarginBottom"
@@ -238,7 +238,7 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <include layout="@layout/include_card_equations"/>
 

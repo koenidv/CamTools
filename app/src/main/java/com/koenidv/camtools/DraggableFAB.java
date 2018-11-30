@@ -3,12 +3,11 @@ package com.koenidv.camtools;
 
 
 import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class DraggableFAB extends FloatingActionButton implements View.OnTouchListener {
 

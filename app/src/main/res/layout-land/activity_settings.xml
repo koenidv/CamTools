@@ -28,7 +28,7 @@
             android:paddingTop="4dp"
             android:rowCount="3">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/settingsDarkmodeCard"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
@@ -44,8 +44,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsDarkmodeCardLayout"
@@ -101,9 +100,9 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/settingsCamerasCard"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
@@ -119,8 +118,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsCamerasCardLayout"
@@ -173,9 +171,9 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/settingsUnitsCard"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
@@ -191,8 +189,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsUnitsCardLayout"
@@ -276,9 +273,9 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/settingsFeedbackCard"
                 android:layout_width="350dp"
                 android:layout_height="wrap_content"
@@ -294,8 +291,7 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
                 app:cardElevation="@dimen/cardElevation"
-                app:cardPreventCornerOverlap="false"
-                app:layout_constraintBottom_toTopOf="@+id/focusApertureCard">
+                app:cardPreventCornerOverlap="false">
 
                 <LinearLayout
                     android:id="@+id/settingsFeedbackCardLayout"
@@ -348,7 +344,7 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
         </GridLayout>
     </ScrollView>
