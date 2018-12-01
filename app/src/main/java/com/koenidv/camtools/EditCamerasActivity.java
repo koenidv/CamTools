@@ -3,18 +3,27 @@ package com.koenidv.camtools;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
+
+import org.michaelbel.bottomsheet.BottomSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +54,10 @@ public class EditCamerasActivity extends AppCompatActivity {
 
         for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
             cameraCard mCameraCard = new cameraCard(
-                    prefs.getString("camera_" + i + "_name", "Default camera"),
+                    prefs.getString("camera_" + i + "_name", getString(R.string.camera_default_name)),
                     getString(R.string.sensorsize_indicator) + String.valueOf(prefs.getInt("camera_" + i + "_sensorsize_x", 36)) + "x" + String.valueOf(prefs.getInt("camera_" + i + "_sensorsize_y", 24)) + getString(R.string.millimeter),
                     getString(R.string.resolution_indicator) + String.valueOf(Math.round(prefs.getInt("camera_" + i + "_resolution_x", 5472) * prefs.getInt("camera_" + i + "_resolution_y", 3648) / (float) 1000000)) + getString(R.string.megapixel)
-                    + " (" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_x", 5472)) + "x" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_y", 3648)) + getString(R.string.pixel) + ")",
+                            + " (" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_x", 5472)) + "x" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_y", 3648)) + getString(R.string.pixel) + ")",
                     getString(R.string.pixelpitch_indicator) + String.valueOf(prefs.getFloat("camera_" + i + "_pixelpitch", 6.6f)) + getString(R.string.micrometer),
                     getString(R.string.coc_indicator) + String.valueOf(prefs.getFloat("camera_" + i + "_coc", 0.03f)) + getString(R.string.millimeter));
             mCameraCardList.add(mCameraCard);
@@ -104,11 +113,15 @@ public class EditCamerasActivity extends AppCompatActivity {
 
                         break;
                     case R.id.add_custom:
-                        final Dialog mDialog = new Dialog(EditCamerasActivity.this);
+
+                        final BottomSheetDialog mDialog = new BottomSheetDialog(EditCamerasActivity.this);
                         mDialog.setContentView(R.layout.dialog_camera_add_custom);
+                        mDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE|WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        FrameLayout bottomSheet = (FrameLayout) mDialog.findViewById(R.id.design_bottom_sheet);
+                        BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
 
                         final EditText mNameEditText = mDialog.findViewById(R.id.nameEditText);
-                        Spinner mSizeSpinner = mDialog.findViewById(R.id.sensorsizeSpinner);
+                        TextView mSizePresetTextView = mDialog.findViewById(R.id.sensorsizePresetTextView);
                         final EditText mSizeXEditText = mDialog.findViewById(R.id.sensorsizeXEditText);
                         final EditText mSizeYEditText = mDialog.findViewById(R.id.sensorsizeYEditText);
                         Spinner mResolutionSpinner = mDialog.findViewById(R.id.resolutionSpinner);
@@ -142,6 +155,29 @@ public class EditCamerasActivity extends AppCompatActivity {
                         mResolutionXEditText.addTextChangedListener(checkOnTextChanged);
                         mResolutionYEditText.addTextChangedListener(checkOnTextChanged);
                         mConfusionEditText.addTextChangedListener(checkOnTextChanged);
+
+                        mSizePresetTextView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final List<String> presets = new ArrayList<>();
+                                for (int preset = 0; preset <= getResources().getInteger(R.integer.preset_size_amount); preset++) {
+                                    int resId = getResources().getIdentifier("preset_size_" + String.valueOf(preset), "string", getPackageName());
+                                    Toast.makeText(EditCamerasActivity.this, String.valueOf(resId), Toast.LENGTH_SHORT).show();
+                                    presets.add(getString(resId));
+                                }
+
+                                BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
+                                mBuilder.setTitle(getString(R.string.calculate_camera_choose))
+                                        .setItems(presets.toArray(new String[0]), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                            }
+                                        })
+                                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                                        .show();
+                            }
+                        });
 
                         mCancelButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -179,11 +215,10 @@ public class EditCamerasActivity extends AppCompatActivity {
                         });
 
                         mSaveButton.setEnabled(false);
+                        mSaveButton.getBackground().setAlpha(0);
                         mSaveButton.setTextColor(getResources().getColor(R.color.gray));
 
                         mDialog.show();
-
-
                         break;
                 }
 
@@ -209,9 +244,11 @@ public class EditCamerasActivity extends AppCompatActivity {
                 && !mConfusionEditText.getText().toString().isEmpty()
                 && !mConfusionEditText.getText().toString().equals(".")) {
             mSaveButton.setEnabled(true);
-            mSaveButton.setTextColor(getResources().getColor(R.color.colorAccent));
+            mSaveButton.getBackground().setAlpha(255);
+            mSaveButton.setTextColor(Color.WHITE);
         } else {
             mSaveButton.setEnabled(false);
+            mSaveButton.getBackground().setAlpha(0);
             mSaveButton.setTextColor(getResources().getColor(R.color.gray));
         }
     }

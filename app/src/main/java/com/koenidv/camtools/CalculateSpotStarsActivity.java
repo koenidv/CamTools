@@ -8,8 +8,6 @@ import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,8 +19,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
-
-import java.text.DecimalFormat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -186,10 +182,6 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         float mNpf = (35 * mAperture + 30 * mPixelpitch) / mLength;
         float m500 = 500 / mLength;
         float m600 = 600 / mLength;
-
-        Spanned mNpfSpanned = Html.fromHtml(new DecimalFormat(mNpf > 10 ? "#" : "#.#").format(mNpf) + "<small>" + getString(R.string.time_seconds) + "</small>");
-        Spanned m500Spanned = Html.fromHtml(new DecimalFormat(m500 > 10 ? "#" : "#.#").format(m500) + "<small>" + getString(R.string.time_seconds) + "</small>");
-        Spanned m600Spanned = Html.fromHtml(new DecimalFormat(m600 > 10 ? "#" : "#.#").format(m600) + "<small>" + getString(R.string.time_seconds) + "</small>");
 
         final TextView mNpfTextView = findViewById(R.id.resultTextView);
         final TextView m500TextView = findViewById(R.id.result500TextView);

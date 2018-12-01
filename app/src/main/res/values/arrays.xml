@@ -1,15 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="sensorFormats" translatable="false">
-        <item>Full frame (35mm)</item>
+    <array name="sensorFormats">
+        <item>Select</item>
+        <item>Full frame</item>
         <item>APS-H</item>
         <item>APS-C</item>
-        <item>Four Thirds (Olympus, Panasonic)</item>
-        <item>1\" (Nikon, Sony)</item>
+        <item>Four Thirds</item>
+        <item>1\"</item>
         <item>1/1.7\"</item>
-        <item>Custom</item>
     </array>
-    <string-array name="sensorFormatValues" translatable="false">
+    <string-array name="sensorFormatSizeX">
+        <item/>
+        <item>0.029</item>
+        <item>0.023</item>
+        <item>0.018</item>
+        <item>0.015</item>
+        <item>0.011</item>
+        <item>0.007</item>
+    </string-array>
+    <string-array name="sensorFormatSizeY">
+        <item/>
+        <item>0.029</item>
+        <item>0.023</item>
+        <item>0.018</item>
+        <item>0.015</item>
+        <item>0.011</item>
+        <item>0.007</item>
+    </string-array>
+    <string-array name="sensorFormatCoc" translatable="false">
+        <item/>
         <item>0.029</item>
         <item>0.023</item>
         <item>0.018</item>

@@ -184,44 +184,6 @@ public class CalculateNdActivity extends AppCompatActivity {
         }
     }
 
-    /*private String refactor(float mCalculated) {
-        int days = 0;
-        int hours = 0;
-        int minutes = 0;
-
-        while (mCalculated > 86400) {
-            days++;
-            mCalculated -= 86400;
-        }
-        while (mCalculated > 3600) {
-            hours++;
-            mCalculated -= 3600;
-        }
-        while (mCalculated > 60) {
-            minutes++;
-            mCalculated -= 60;
-        }
-        if (mCalculated > 10) {
-            mCalculated = Math.round(mCalculated);
-        }
-
-        StringBuilder mResult = new StringBuilder();
-        if (days != 0) {
-            mResult.append(String.valueOf(days)).append(getString(R.string.time_days)).append(" ");
-        }
-        if (hours != 0) {
-            mResult.append(String.valueOf(hours)).append(getString(R.string.time_hours)).append(" ");
-        }
-        if (minutes != 0) {
-            mResult.append(String.valueOf(minutes)).append(getString(R.string.time_minutes)).append(" ");
-        }
-        if (mCalculated != 0 || mResult.length() == 0) {
-            mResult.append(new DecimalFormat("#").format(mCalculated)).append(getString(R.string.time_seconds));
-        }
-
-        return mResult.toString();
-    }*/
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_calculator, menu);

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,7 +24,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 public class SettingsActivity extends AppCompatActivity {
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity {
         final Button mDistancesButton = findViewById(R.id.settingsUnitsDistanceButton);
         final TextView mNdTextView = findViewById(R.id.settingsUnitsNdTitle);
         final Button mNdButton = findViewById(R.id.settingsUnitsNdButton);
+        final Button mFeedbackButton = findViewById(R.id.settingsFeedbackButton);
 
         /*
         if (prefs.getBoolean("darkmode", false)) {
@@ -115,6 +116,7 @@ public class SettingsActivity extends AppCompatActivity {
                         prefsEdit.putBoolean("used_darkmode", true).apply();
                     }
                 }
+                prefsEdit.putBoolean("theme_changed", true).apply();
                 SettingsActivity.this.recreate();
             }
         });
@@ -213,106 +215,9 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-
-        /*mChooseCamLayout.setOnClickListener(new View.OnClickListener() {
+        mFeedbackButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View mView) {
-                final AlertDialog.Builder dialog;
-                if (prefs.getBoolean("darkmode", false)) {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.darkDialog);
-                } else {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this);
-                }
-                dialog.setTitle(getString(R.string.settings_cam_choose))
-                        .setNeutralButton(getString(R.string.offerHelp), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface mDialogInterface, int mI) {
-                                //TODO: Help for sensor size
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface mDialogInterface, int mI) {
-
-                            }
-                        })
-                        .setSingleChoiceItems(getResources().getStringArray(R.array.sensorFormats), prefs.getInt("chosenCamera", 0), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface mDialogInterface, int mChecked) {
-                                prefsEdit.putInt("chosenCamera", mChecked);
-                                prefsEdit.putFloat("coc", Float.parseFloat(getResources().getStringArray(R.array.sensorFormatValues)[mChecked])).apply();
-                                new Handler().postDelayed(new Runnable() { //Post delayed so the user can see what he selected
-                                    @Override
-                                    public void run() {
-                                        mDialogInterface.dismiss();
-                                    }
-                                }, 1);
-                                Toast.makeText(SettingsActivity.this, String.valueOf(prefs.getFloat("coc", 0.0029f)), Toast.LENGTH_LONG).show();
-                            }
-                        })
-                        .show();
-            }
-        });*/
-        /*mNdStrengthunitLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View mView) {
-                final AlertDialog.Builder dialog;
-                if (prefs.getBoolean("darkmode", false)) {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this, R.style.darkDialog);
-                } else {
-                    dialog = new AlertDialog.Builder(SettingsActivity.this);
-                }
-                dialog.setTitle(getString(R.string.settings_nd_strengthunit_dialog))
-                        .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface mDialogInterface, int mI) {
-
-                            }
-                        })
-                        .setSingleChoiceItems(new CharSequence[]{getString(R.string.settings_nd_strengthunit_stops), getString(R.string.settings_nd_strengthunit_times)}, prefs.getBoolean("times_instead_stops", false) ? 1 : 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(final DialogInterface mDialogInterface, int mChecked) {
-                                prefsEdit.putBoolean("times_instead_stops", mChecked != 0).apply();
-                                new Handler().postDelayed(new Runnable() { //Post delayed so the user can see what he selected
-                                    @Override
-                                    public void run() {
-                                        mDialogInterface.dismiss();
-                                    }
-                                }, 100);
-                            }
-                        })
-                        .show();
-            }
-        });*/
-        /*mDarkmodeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton mCompoundButton, boolean mB) {
-                prefsEdit.putBoolean("darkmode", mDarkmodeSwitch.isChecked()).apply();
-                //Snackbar.make(SettingsActivity.this.findViewById(R.id.navigation), "Not ready yet", Snackbar.LENGTH_SHORT).show();
-                try {
-                    //new MainActivity().recreate();
-                    new Handler().post(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            Intent intent = SettingsActivity.this.getIntent();
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK
-                                    | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            SettingsActivity.this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            SettingsActivity.this.finish();
-
-                            SettingsActivity.this.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-                            startActivity(intent);
-                        }
-                    });
-                } catch (NullPointerException npe) {
-                    Snackbar.make(SettingsActivity.this.findViewById(R.id.navigation), "ERROR.", Snackbar.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-        /*mRateLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View mView) {
+            public void onClick(View v) {
                 final String appPackageName = SettingsActivity.this.getPackageName(); // getPackageName() from Context or Activity object
                 try {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
@@ -321,24 +226,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-        mAboutmeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View mView) {
-                startActivity(new Intent(SettingsActivity.this, FragmentActivity.class));
-            }
-        });
-        mAboutappLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View mView) {
-                //Intent i = new Intent(MainActivity.this, FragmentActivity.class);
-                //startActivity(i);
-                new LibsBuilder()
-                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
-                        .withActivityStyle(Libs.ActivityStyle.LIGHT)
-                        //start the activity
-                        .start(SettingsActivity.this);
-            }
-        });*/
 
     }
 
@@ -372,5 +259,17 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = SettingsActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+
+        if (prefs.getBoolean("theme_changed", false)) {
+            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+            prefsEdit.putBoolean("theme_changed", false).apply();
+        }
+        super.onBackPressed();
     }
 }

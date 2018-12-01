@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="preset_size_amount">5</integer>
+
+    <string name="preset_size_0">Full frame</string>
+    <string name="preset_size_1">APS-H</string>
+    <string name="preset_size_2">APS-C</string>
+    <string name="preset_size_3">Four Thirds</string>
+    <string name="preset_size_4">1\"</string>
+    <string name="preset_size_5">1/1.7\"</string>
+
+    <string name="preset_size_0_x" translatable="false">36</string>
+    <string name="preset_size_1_x" translatable="false">28.7</string>
+    <string name="preset_size_2_x" translatable="false">22.2</string>
+    <string name="preset_size_3_x" translatable="false">17.3</string>
+    <string name="preset_size_4_x" translatable="false">13.2</string>
+    <string name="preset_size_5_x" translatable="false">7.6</string>
+
+    <string name="preset_size_0_y" translatable="false">24</string>
+    <string name="preset_size_1_y" translatable="false">19</string>
+    <string name="preset_size_2_y" translatable="false">14.8</string>
+    <string name="preset_size_3_y" translatable="false">13</string>
+    <string name="preset_size_4_y" translatable="false">8.8</string>
+    <string name="preset_size_5_y" translatable="false">5.7</string>
+
+    <string name="preset_size_0_coc" translatable="false">0.029</string>
+    <string name="preset_size_1_coc" translatable="false">0.023</string>
+    <string name="preset_size_2_coc" translatable="false">0.018</string>
+    <string name="preset_size_3_coc" translatable="false">0.015</string>
+    <string name="preset_size_4_coc" translatable="false">0.011</string>
+    <string name="preset_size_5_coc" translatable="false">0.007</string>
+
+</resources>

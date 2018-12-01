@@ -78,6 +78,7 @@
     <string name="seeting_cameras_new_accessibilitytext">Add camera or close menu</string>
     <string name="setting_cameras_new_database">From database</string>
     <string name="setting_cameras_new_custom">Custom</string>
+    <string name="setting_cameras_new_custom_title">Add a camera</string>
     <string name="setting_cameras_sensorsize">Sensor size (mm)</string>
     <string name="setting_cameras_resolution">Image resolution (px)</string>
     <string name="setting_cameras_coc">Circle of confusion (mm)</string>
@@ -246,6 +247,7 @@
     <string name="resolution_indicator">Image resolution: </string>
     <string name="pixelpitch_indicator">Pixel pitch: </string>
     <string name="coc_indicator">Circle of confusion: </string>
+    <string name="preset_choose">Choose a preset</string>
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>
