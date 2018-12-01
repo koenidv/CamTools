@@ -186,10 +186,10 @@
     <string name="pixel">px</string>
     <string name="save">Speichern</string>
     <string name="name">Name</string>
-    <string name="sensorsize_indicator">Sensorgröße:</string>
-    <string name="resolution_indicator">Bildauflösung:</string>
-    <string name="pixelpitch_indicator">Pixelpitch:</string>
-    <string name="coc_indicator">Zerstreuungskreis:</string>
+    <string name="sensorsize_indicator">Sensorgröße: </string>
+    <string name="resolution_indicator">Bildauflösung: </string>
+    <string name="pixelpitch_indicator">Pixelpitch: </string>
+    <string name="coc_indicator">Zerstreuungskreis: </string>
     <string name="camera_default_name">Standard</string>
     <string name="calculate_camera">Kamera: %s</string>
     <string name="calculate_camera_add">Füge deine Kamera hinzu</string>

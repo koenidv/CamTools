@@ -227,6 +227,8 @@
     <string name="megapixel">MP</string>
     <string name="pixel">px</string>
 
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
