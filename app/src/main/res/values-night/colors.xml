@@ -7,4 +7,5 @@
 
     <color name="settings_darkmodeBackground">#424242</color>
     <color name="dial_overlay">#7f303030</color>
+    <color name="textColor_normal">#ffffff</color>
 </resources>

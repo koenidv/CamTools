@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:layout_marginBottom="@dimen/cardMarginCombined"
@@ -14,23 +15,27 @@
     app:cardElevation="@dimen/cardElevation">
 
     <LinearLayout
+        android:id="@+id/equationsLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/equationsButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
+        <TextView
+            android:id="@+id/equationsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_help"
+            android:drawableTint="@color/textColor_normal"
             android:drawablePadding="8dp"
-            android:drawableStart="@drawable/ic_help_outline_black_24dp"
-            android:paddingEnd="64dp"
             android:paddingStart="64dp"
+            android:paddingEnd="64dp"
             android:text="@string/calculate_equations"
-            android:textAppearance="@style/TextAppearance.AppCompat"
-            android:textColor="@color/text_main_light"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/textColor_normal"
+            tools:targetApi="m"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

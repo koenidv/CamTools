@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
     app:cardElevation="@dimen/cardElevation"
     android:layout_width="match_parent"
@@ -16,7 +17,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="8dp">
@@ -24,10 +24,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@id/apertureEditText"
             android:text="@string/focus_aperture"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/text_main_light"
-            android:labelFor="@id/apertureEditText"/>
+            android:textColor="@color/textColor_normal"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,33 +36,36 @@
 
             <SeekBar
                 android:id="@+id/apertureSeekbar"
-                android:layout_width="591dp"
+                android:layout_width="580dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:hapticFeedbackEnabled="false"
                 android:importantForAccessibility="no"
                 android:max="32"
                 android:progress="2"
-                android:saveEnabled="false"/>
+                android:saveEnabled="false"
+                android:thumbTint="@color/colorAccent"
+                android:progressTint="@color/colorAccent"/>
 
             <TextView
                 android:id="@+id/apertureIndicator"
-                android:layout_width="319dp"
+                android:layout_width="320dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/aperture"
-                android:textColor="@color/text_main_light"/>
+                android:text="@string/aperture"/>
 
             <EditText
                 android:id="@+id/apertureEditText"
-                android:layout_width="352dp"
+                android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:inputType="none|numberDecimal"
                 android:textAlignment="center"
-                android:textColor="@color/text_main_light"/>
+                android:textColor="@color/textColor_normal"
+                android:importantForAutofill="no"
+                tools:targetApi="o"/>
 
         </LinearLayout>
     </LinearLayout>

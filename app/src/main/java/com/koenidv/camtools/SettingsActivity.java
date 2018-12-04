@@ -35,9 +35,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         final LinearLayout mDarkmodeLayout = findViewById(R.id.darkmodeLayout);
         final Button mDarkmodeButton = findViewById(R.id.settingsDarkmodeButton);
-        final TextView mCamerasTextView = findViewById(R.id.selettingsCamerasDescription);
+        final TextView mCamerasTextView = findViewById(R.id.settingsCamerasDescription);
         final Button mCamerasButton = findViewById(R.id.settingsCamerasButton);
-        final LinearLayout mUnitsLayout = findViewById(R.id.settingsUnitsCardLayout);
         final TextView mApertureTextView = findViewById(R.id.settingsUnitsApertureTitle);
         final Button mApertureButton = findViewById(R.id.settingsUnitsApertureButton);
         final TextView mDistancesTextView = findViewById(R.id.settingsUnitsDistanceTitle);
@@ -45,18 +44,6 @@ public class SettingsActivity extends AppCompatActivity {
         final TextView mNdTextView = findViewById(R.id.settingsUnitsNdTitle);
         final Button mNdButton = findViewById(R.id.settingsUnitsNdButton);
         final Button mFeedbackButton = findViewById(R.id.settingsFeedbackButton);
-
-        /*
-        if (prefs.getBoolean("darkmode", false)) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.background_dark_darker)));
-            findViewById(R.id.settingsLinearLayout).setBackgroundColor(getResources().getColor(R.color.background_dark_normal));
-            mDarkmodeButton.setText(getString(R.string.setting_disable));
-            mUnitsLayout.setBackgroundColor(getResources().getColor(R.color.background_dark_darker));
-            ((TextView) findViewById(R.id.settingsUnitsTitle)).setTextColor(getResources().getColor(R.color.text_main_dark));
-            mDistancesTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
-            mNdTextView.setTextColor(getResources().getColor(R.color.text_sub_dark));
-        }
-        */
 
 
         if (prefs.getBoolean("system_darkmode", false)) {
@@ -101,6 +88,10 @@ public class SettingsActivity extends AppCompatActivity {
         }
         mNdTextView.setText(ndText);
 
+        /*
+         * Listeners
+         */
+
         mDarkmodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,12 +112,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        mCamerasButton.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener camerasClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SettingsActivity.this, EditCamerasActivity.class));
             }
-        });
+        };
+        mCamerasButton.setOnClickListener(camerasClickListener);
+        findViewById(R.id.settingsCamerasCard).setOnClickListener(camerasClickListener);
 
         mApertureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,7 +208,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        mFeedbackButton.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener feedbackClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String appPackageName = SettingsActivity.this.getPackageName(); // getPackageName() from Context or Activity object
@@ -225,7 +218,9 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
                 }
             }
-        });
+        };
+        mFeedbackButton.setOnClickListener(feedbackClickListener);
+        findViewById(R.id.settingsFeedbackCard).setOnClickListener(feedbackClickListener);
 
     }
 
@@ -244,6 +239,9 @@ public class SettingsActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_switch_showAll:
                 prefsEdit.putBoolean("show_hidden_cards", !prefs.getBoolean("show_hidden_cards", false)).apply();
+                break;
+            case R.id.action_delete_history:
+                prefsEdit.remove("history").apply();
                 break;
             case R.id.action_reset:
                 prefsEdit.clear().apply();

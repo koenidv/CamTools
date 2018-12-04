@@ -38,6 +38,7 @@ public class ExposureFragment extends Fragment {
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
+        final ModuleManager mModuleManager = new ModuleManager();
         FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         CardView mNdCard = view.findViewById(R.id.selectNdCard);
@@ -48,6 +49,7 @@ public class ExposureFragment extends Fragment {
         mNdCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mModuleManager.addToHistory(getActivity(), "CalculateNdActivity");
                 Intent intent = new Intent(getActivity(), CalculateNdActivity.class);
                 startActivity(intent);
             }
@@ -55,6 +57,7 @@ public class ExposureFragment extends Fragment {
         mStarsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mModuleManager.addToHistory(getActivity(), "CalculateSpotStarsActivity");
                 Intent intent = new Intent(getActivity(), CalculateSpotStarsActivity.class);
                 startActivity(intent);
             }

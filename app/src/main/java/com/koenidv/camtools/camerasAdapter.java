@@ -9,16 +9,20 @@ import android.widget.TextView;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHolder> {
     private List<cameraCard> mDataset;
 
     static class ViewHolder  extends RecyclerView.ViewHolder {
+        CardView mCardView;
         TextView mNameTextView, mSensorSizeTextView, mResolutionTextView, mPixelpitchTextView, mConfusionTextView;
+        boolean mIsLastUsed;
 
         ViewHolder(View view) {
             super(view);
+            mCardView = view.findViewById(R.id.cameraCardView);
             mNameTextView = view.findViewById(R.id.nameTextView);
             mSensorSizeTextView = view.findViewById(R.id.sensorsizeTextView);
             mResolutionTextView = view.findViewById(R.id.resolutionTextView);
@@ -47,6 +51,11 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
         holder.mResolutionTextView.setText(mCameraCard.getResolution());
         holder.mPixelpitchTextView.setText(mCameraCard.getPixelpitch());
         holder.mConfusionTextView.setText(mCameraCard.getConfusion());
+        if (mCameraCard.getIsLastUsed()) {
+            holder.mNameTextView.setTextColor(holder.mNameTextView.getContext().getResources().getColor(R.color.colorAccent));
+        } else {
+            holder.mNameTextView.setTextColor(holder.mNameTextView.getContext().getResources().getColor(R.color.textColor_normal));
+        }
     }
 
     @Override
@@ -54,5 +63,7 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
         return mDataset.size();
     }
 
-
+    public cameraCard getItem(int position) {
+        return mDataset.get(position);
+    }
 }

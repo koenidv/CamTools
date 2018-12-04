@@ -9,11 +9,13 @@ import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +42,7 @@ public class CalculateNdActivity extends AppCompatActivity {
         final EditText mTimeEditText = findViewById(R.id.exposuretimeEditText);
         final SeekBar mStrengthSeekbar = findViewById(R.id.densitySeekbar);
         final EditText mStrengthEditText = findViewById(R.id.densityEditText);
-        final Button mEquationsButton = findViewById(R.id.equationsButton);
+        final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
 
         mTimeEditText.setText(prefs.getString("ndTime", "4"));
@@ -167,11 +169,10 @@ public class CalculateNdActivity extends AppCompatActivity {
             }
         });
 
-        mEquationsButton.setOnClickListener(new View.OnClickListener() {
+        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModalBottomSheet modalBottomSheet = new ModalBottomSheet();
-                modalBottomSheet.show(getSupportFragmentManager(), "bottom sheet");
+                mModuleManager.showEquations(CalculateNdActivity.this, "nd");
             }
         });
     }
@@ -216,6 +217,16 @@ public class CalculateNdActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateNdActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
     }
 
 }

@@ -9,6 +9,7 @@ import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,17 @@ import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateSpotStarsActivity extends AppCompatActivity {
+
+    final float[] mPixelpitch = {0};
+
+    @Override
+    protected void onResume() {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final TextView mCameraTextView = findViewById(R.id.cameraTextView);
+        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
+        mPixelpitch[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_pixelpitch", 6.6f);
+        super.onResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +55,10 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final EditText mApertureEditText = findViewById(R.id.apertureEditText);
         final Button mStartTimerButton = findViewById(R.id.startTimerButton);
         final Button mExpandButton = findViewById(R.id.expandButton);
-        final Button mEquationsButton = findViewById(R.id.equationsButton);
+        final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
         int mLastCamera = prefs.getInt("cameras_last", 0);
-        final float[] mPixelpitch = {prefs.getFloat("camera_" + mLastCamera + "_pixelpitch", 6.6f)};
+        mPixelpitch[0] = prefs.getFloat("camera_" + mLastCamera + "_pixelpitch", 6.6f);
 
         mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + mLastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
@@ -166,10 +178,10 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsButton.setOnClickListener(new View.OnClickListener() {
+        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ToDo: Equations as bottom sheet
+                mModuleManager.showEquations(CalculateSpotStarsActivity.this, "spotstars");
             }
         });
     }
@@ -224,6 +236,16 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateSpotStarsActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
     }
 
 }

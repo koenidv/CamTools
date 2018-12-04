@@ -5,9 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:theme="@style/AppTheme"
+    android:background="@drawable/rounded_dialog">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/setting_cameras_new_custom_title"/>
@@ -21,7 +24,8 @@
         android:inputType="text|textAutoComplete"
         android:singleLine="true"
         android:text=""
-        tools:ignore="Autofill"/>
+        android:importantForAutofill="no"
+        tools:targetApi="o"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +61,9 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="number"
-            android:text=""/>
+            android:text=""
+            android:importantForAutofill="no"
+            tools:targetApi="o"/>
 
         <TextView
             android:layout_width="64dp"
@@ -73,7 +79,9 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="number"
-            android:text=""/>
+            android:text=""
+            android:importantForAutofill="no"
+            tools:targetApi="o"/>
     </LinearLayout>
 
     <LinearLayout
@@ -111,7 +119,9 @@
             android:ems="10"
             android:inputType="number"
             android:singleLine="true"
-            android:text=""/>
+            android:text=""
+            android:importantForAutofill="no"
+            tools:targetApi="o"/>
 
         <TextView
             android:layout_width="64dp"
@@ -128,15 +138,17 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="number"
-            android:text=""/>
+            android:text=""
+            android:importantForAutofill="no"
+            tools:targetApi="o"/>
     </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/setting_cameras_coc"
-        android:labelFor="@id/cocEditText"/>
+        android:labelFor="@id/cocEditText"
+        android:text="@string/setting_cameras_coc"/>
 
     <EditText
         android:id="@+id/cocEditText"
@@ -144,7 +156,9 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:text=""/>
+        android:text=""
+        android:importantForAutofill="no"
+        tools:targetApi="o"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -172,7 +186,7 @@
             style="@android:style/Widget.Material.Button.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/save"
             android:textAllCaps="false"

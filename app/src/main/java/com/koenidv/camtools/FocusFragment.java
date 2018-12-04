@@ -35,6 +35,7 @@ public class FocusFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final ModuleManager mModuleManager = new ModuleManager();
         FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
 
@@ -46,6 +47,7 @@ public class FocusFragment extends Fragment {
         mHyperCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mModuleManager.addToHistory(getActivity(), "CalculateHyperFocalActivity");
                 Intent intent = new Intent(getActivity(), CalculateHyperFocalActivity.class);
                 startActivity(intent);
             }
@@ -53,6 +55,7 @@ public class FocusFragment extends Fragment {
         mLimitsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mModuleManager.addToHistory(getActivity(), "CalculateFocusLimitsActivity");
                 Intent intent = new Intent(getActivity(), CalculateFocusLimitsActivity.class);
                 startActivity(intent);
             }
@@ -60,6 +63,7 @@ public class FocusFragment extends Fragment {
         mReverseCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mModuleManager.addToHistory(getActivity(), "CalculateReverseFocusActivity");
                 Intent intent = new Intent(getActivity(), CalculateReverseFocusActivity.class);
                 startActivity(intent);
             }

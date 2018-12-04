@@ -2,12 +2,12 @@
 <resources>
     <integer name="preset_size_amount">5</integer>
 
-    <string name="preset_size_0">Full frame</string>
-    <string name="preset_size_1">APS-H</string>
-    <string name="preset_size_2">APS-C</string>
-    <string name="preset_size_3">Four Thirds</string>
-    <string name="preset_size_4">1\"</string>
-    <string name="preset_size_5">1/1.7\"</string>
+    <string name="preset_size_0" translatable="false">Full frame</string>
+    <string name="preset_size_1" translatable="false">APS-H</string>
+    <string name="preset_size_2" translatable="false">APS-C</string>
+    <string name="preset_size_3" translatable="false">Four Thirds</string>
+    <string name="preset_size_4" translatable="false">1\"</string>
+    <string name="preset_size_5" translatable="false">1/1.7\"</string>
 
     <string name="preset_size_0_x" translatable="false">36</string>
     <string name="preset_size_1_x" translatable="false">28.7</string>
@@ -33,34 +33,34 @@
 
     <integer name="preset_res_amount">8</integer>
 
-    <string name="preset_res_0" translatable="false">3:2 12MP</string>
-    <string name="preset_res_1" translatable="false">3:2 16MP</string>
-    <string name="preset_res_2" translatable="false">3:2 18MP</string>
-    <string name="preset_res_3" translatable="false">3:2 20MP</string>
-    <string name="preset_res_4" translatable="false">3:2 22MP</string>
-    <string name="preset_res_5" translatable="false">3:2 24MP</string>
-    <string name="preset_res_6" translatable="false">16:9 Full HD</string>
+    <string name="preset_res_0" translatable="false">3:2 24MP</string>
+    <string name="preset_res_1" translatable="false">3:2 22MP</string>
+    <string name="preset_res_2" translatable="false">3:2 20MP</string>
+    <string name="preset_res_3" translatable="false">3:2 18MP</string>
+    <string name="preset_res_4" translatable="false">3:2 16MP</string>
+    <string name="preset_res_5" translatable="false">3:2 12MP</string>
+    <string name="preset_res_6" translatable="false">16:9 UHDV-2</string>
     <string name="preset_res_7" translatable="false">16:9 UHDV-1</string>
-    <string name="preset_res_8" translatable="false">16:9 UHDV-2</string>
+    <string name="preset_res_8" translatable="false">16:9 Full HD</string>
 
-    <string name="preset_res_0_x" translatable="false">4242</string>
-    <string name="preset_res_1_x" translatable="false">4898</string>
-    <string name="preset_res_2_x" translatable="false">5196</string>
-    <string name="preset_res_3_x" translatable="false">5477</string>
-    <string name="preset_res_4_x" translatable="false">5744</string>
-    <string name="preset_res_5_x" translatable="false">6000</string>
-    <string name="preset_res_6_x" translatable="false">1920</string>
+    <string name="preset_res_0_x" translatable="false">6000</string>
+    <string name="preset_res_1_x" translatable="false">5744</string>
+    <string name="preset_res_2_x" translatable="false">5477</string>
+    <string name="preset_res_3_x" translatable="false">5196</string>
+    <string name="preset_res_4_x" translatable="false">4898</string>
+    <string name="preset_res_5_x" translatable="false">4242</string>
+    <string name="preset_res_6_x" translatable="false">7680</string>
     <string name="preset_res_7_x" translatable="false">3840</string>
-    <string name="preset_res_8_x" translatable="false">7680</string>
+    <string name="preset_res_8_x" translatable="false">1920</string>
 
-    <string name="preset_res_0_y" translatable="false">2828</string>
-    <string name="preset_res_1_y" translatable="false">3265</string>
-    <string name="preset_res_2_y" translatable="false">3464</string>
-    <string name="preset_res_3_y" translatable="false">3651</string>
-    <string name="preset_res_4_y" translatable="false">3830</string>
-    <string name="preset_res_5_y" translatable="false">4000</string>
-    <string name="preset_res_6_y" translatable="false">1080</string>
+    <string name="preset_res_0_y" translatable="false">4000</string>
+    <string name="preset_res_1_y" translatable="false">3830</string>
+    <string name="preset_res_2_y" translatable="false">3651</string>
+    <string name="preset_res_3_y" translatable="false">3464</string>
+    <string name="preset_res_4_y" translatable="false">3265</string>
+    <string name="preset_res_5_y" translatable="false">2828</string>
+    <string name="preset_res_6_y" translatable="false">4320</string>
     <string name="preset_res_7_y" translatable="false">2160</string>
-    <string name="preset_res_8_y" translatable="false">4320</string>
+    <string name="preset_res_8_y" translatable="false">1080</string>
 
 </resources>

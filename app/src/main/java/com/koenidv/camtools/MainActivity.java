@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+
 
         FirebaseApp.initializeApp(getApplicationContext());
         final FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         mNavigation.addItem(nav_sky);
         mNavigation.addItem(nav_exposure);
         mNavigation.addItem(nav_focus);
-        // mNavigation.addItem(nav_settings);
 
         mNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
@@ -211,5 +212,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(MainActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
     }
 }

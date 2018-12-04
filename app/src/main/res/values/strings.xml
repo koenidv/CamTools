@@ -79,6 +79,7 @@
     <string name="setting_cameras_new_database">From database</string>
     <string name="setting_cameras_new_custom">Custom</string>
     <string name="setting_cameras_new_custom_title">Add a camera</string>
+    <string name="setting_cameras_edit_custom_title">Edit this camera</string>
     <string name="setting_cameras_sensorsize">Sensor size (mm)</string>
     <string name="setting_cameras_resolution">Image resolution (px)</string>
     <string name="setting_cameras_coc">Circle of confusion (mm)</string>
@@ -229,11 +230,15 @@
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="use_next">Use</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="okay">Okay</string>
     <string name="offerHelp">Need help?</string>
+    <string name="delete_history">Delete history</string>
     <string name="requestFeature">Request feature</string>
     <string name="feedback_title">Give feedback</string>
     <string name="feedback_description">Please share your thoughts about this app so that I can make it even better!</string>
@@ -245,14 +250,64 @@
     <string name="coming_soon_description">This feature is still under development. It will be available </string>
 
     <string name="name">Name</string>
-    <string name="sensorsize_indicator">Sensor size: </string>
-    <string name="resolution_indicator">Image resolution: </string>
-    <string name="pixelpitch_indicator">Pixel pitch: </string>
-    <string name="coc_indicator">Circle of confusion: </string>
+    <string name="sensorsize_indicator">"Sensor size: "</string>
+    <string name="resolution_indicator">"Image resolution: "</string>
+    <string name="pixelpitch_indicator">"Pixel pitch: "</string>
+    <string name="coc_indicator">"Circle of confusion: "</string>
     <string name="preset_choose">Choose a preset</string>
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>
+
+    <string name="equation_hyperfocal">
+        Hyperfocal distance \\(d_h\\):
+        $$d_h = \\frac{f^2}{k + c} + f$$
+        Near limit \\(d_n\\):
+        $$d_n = \\frac{d_h^2}{2 * d_h - f}$$
+    </string>
+    <string name="equation_hyperfocal_description">
+        f = Focal length\nk = Aperture\nc = Circle of confusion
+    </string>
+    <string name="equation_focuslimits">
+        Hyperfocal distance \\(d_h\\):
+        $$d_h = \\frac{f^2}{k + c} + f$$
+        Near limit \\(d_n\\):
+        $$d_n = \\frac{d_h * d}{d_h + d - f}$$
+        Far limit \\(d_f\\):
+        $$d_f = \\frac{d_h * d}{d_h - d - f}$$
+    </string>
+    <string name="equation_focuslimits_description">
+        f = Focal length\nk = Aperture\nc = Circle of confusion\nd = Object distance
+    </string>
+    <string name="equation_reversefocus">
+        Interim result \\(i\\):
+        $$i = \\frac{ \\frac{f}{d_n} + \\frac{f}{d_f} - 2 }{ \\frac{1}{d_f} - \\frac{1}{d_n} }$$
+        Focus distance \\(d\\):
+        $$d = \\frac{ i - f }{ \\frac{i}{d_n} - 1 }$$
+        Aperture \\(k\\):
+        $$k = \\frac{f^2}{i * c}$$
+    </string>
+    <string name="equation_reversefocus_description">
+        f = Focal length\ndn = Near limit\ndf = Far limit\nc = Circle of confusion
+    </string>
+    <string name="equation_nd">
+        Long exposure \\(t_l\\):
+        $$t_l = t_i * k^2$$
+    </string>
+    <string name="equation_nd_description">
+        ti = Initial exposure time\nk = Filter strength (stops)
+    </string>
+    <string name="equation_spotstars">
+        NPF rule \\(t_n\\):
+        $$t_n = \\frac{ 35 * k + 30 * p }{ f }$$
+        500 rule \\(t_5\\):
+        $$t_5 = \\frac{ 500 }{ f }$$
+        600 rule \\(t_6\\):
+        $$t_6 = \\frac{ 600 }{ f }$$
+    </string>
+    <string name="equation_spotstars_description">
+        k = Aperture\np = Pixel pitch\nf = Focal length
+    </string>
 
     <!-- Functional -->
     <string name="sunDayDateFormat">EEEE, MMM d</string>

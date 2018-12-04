@@ -11,20 +11,29 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateFocusLimitsActivity extends AppCompatActivity {
+
+    final float[] coc = {0};
+
+    @Override
+    protected void onResume() {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final TextView mCameraTextView = findViewById(R.id.cameraTextView);
+        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
+        coc[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_coc", 0.03f);
+        super.onResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +54,11 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         final EditText mApertureEditText = findViewById(R.id.apertureEditText);
         final SeekBar mDistanceSeekbar = findViewById(R.id.distanceSeekbar);
         final EditText mDistanceEditText = findViewById(R.id.distanceEditText);
-        final Button mEquationsButton = findViewById(R.id.equationsButton);
+        TextView mDistanceIndicatorTextView = findViewById(R.id.distanceIndicatorTextView);
+        final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
         int lastCamera = prefs.getInt("cameras_last", 0);
-        final float[] coc = {prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f)};
+        coc[0] = prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f);
 
         mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
@@ -63,9 +73,11 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             mCameraTextView.setText(getString(R.string.calculate_camera_add));
         }
 
+        final float conversionfactor = prefs.getBoolean("empirical", false) ? 3.281f : 1f;
+        if (prefs.getBoolean("empirical", false)) mDistanceEditText.setText(R.string.feet);
 
         /*
-         *  Equations
+         *  Listeners
          */
 
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +94,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             //f:on
             @Override
             public void afterTextChanged(Editable s) {
-                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
+                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")) / conversionfactor);
             }
         });
 
@@ -112,7 +124,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(mDistanceEditText.getText().toString()));
+                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(mDistanceEditText.getText().toString()) / conversionfactor);
                 }
             }
 
@@ -148,7 +160,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("aperture", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()), Float.valueOf(mDistanceEditText.getText().toString()));
+                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()), Float.valueOf(mDistanceEditText.getText().toString()) / conversionfactor);
                 }
             }
 
@@ -184,7 +196,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("distance", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(s.toString()));
+                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(s.toString()) / conversionfactor);
                 }
             }
 
@@ -194,32 +206,26 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsButton.setOnClickListener(new View.OnClickListener() {
+        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ToDo: Equations as bottom sheet
+                mModuleManager.showEquations(CalculateFocusLimitsActivity.this, "focuslimits");
             }
         });
     }
 
     private void calculate(float mConfusion, float mLength, float mAperture, float mDistance) {
+        ModuleManager mModuleManager = new ModuleManager();
         mDistance *= 10000;
         float mHyper = (mLength * mLength) / (mAperture * mConfusion);
         float mNear = (mHyper * mDistance) / (mHyper + (mDistance - mLength));
         float mFar = (mHyper * mDistance) / (mHyper - (mDistance - mLength));
-        float mDepth = mFar - mNear;
 
-        Spanned mNearSpanned = Html.fromHtml(new DecimalFormat(mNear > 200000 ? "#" : "#.#").format(mNear / 10000) + "<small>" + getString(R.string.meter) + "</small>");
-        Spanned mFarSpanned = Html.fromHtml(new DecimalFormat(mFar > 200000 ? "#" : "#.#").format(mFar / 10000) + "<small>" + getString(R.string.meter) + "</small>");
-        //Spanned depthSpanned = Html.fromHtml(getString(R.string.focus_depth_indicator) + " <b>" + String.format("%.2f", mDepth / 1000) + "</b>");
-
-        //if (mDepth < 0) {
-        //    depthSpanned = Html.fromHtml(getString(R.string.focus_depth_indicator) + " <b>∞</b>");
-        //}
+        Spanned mNearSpanned = mModuleManager.convertDistance(CalculateFocusLimitsActivity.this, mNear / 10000);
+        Spanned mFarSpanned = mModuleManager.convertDistance(CalculateFocusLimitsActivity.this, mFar / 10000);
 
         final TextView mNearTextView = findViewById(R.id.nearlimitTextView);
         final TextView mFarTextView = findViewById(R.id.farlimitTextView);
-        //final TextView mDepthTextView = findViewById(R.id.);
 
         if (mFar < 0) {
             mFarSpanned = Html.fromHtml("∞");
@@ -227,21 +233,16 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
 
         mNearTextView.setText(mNearSpanned);
         mFarTextView.setText(mFarSpanned);
-        //depthTextView.setText(depthSpanned);
 
         if (mNear == 0 || String.valueOf(mNear).equals("NaN")) {
             mNearTextView.setVisibility(View.INVISIBLE);
-            //nearIndicatorTextView.setVisibility(View.INVISIBLE);
         } else {
             mNearTextView.setVisibility(View.VISIBLE);
-            //nearIndicatorTextView.setVisibility(View.VISIBLE);
         }
         if (mFar == 0 || String.valueOf(mFar).equals("NaN")) {
             mFarTextView.setVisibility(View.INVISIBLE);
-            //farIndicatorTextView.setVisibility(View.INVISIBLE);
         } else {
             mFarTextView.setVisibility(View.VISIBLE);
-            //farIndicatorTextView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -277,6 +278,16 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateFocusLimitsActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
     }
 
 }

@@ -1,32 +1,21 @@
 package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
 import org.michaelbel.bottomsheet.BottomSheet;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,12 +23,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class EditCamerasActivity extends AppCompatActivity {
 
+    final List<cameraCard> mCameraCardList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_cameras);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+        final ModuleManager mModuleManager = new ModuleManager();
 
         RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
         SpeedDialView mAddDial = findViewById(R.id.addSpeedDial);
@@ -48,22 +40,22 @@ public class EditCamerasActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        final List<cameraCard> mCameraCardList = new ArrayList<>();
         final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraCardList);
         mRecyclerView.setAdapter(mAdapter);
+
 
         for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
             cameraCard mCameraCard = new cameraCard(
                     prefs.getString("camera_" + i + "_name", getString(R.string.camera_default_name)),
-                    getString(R.string.sensorsize_indicator) + String.valueOf(prefs.getFloat("camera_" + i + "_sensorsize_x", 36)) + "x" + String.valueOf(prefs.getFloat("camera_" + i + "_sensorsize_y", 24)) + getString(R.string.millimeter),
+                    getString(R.string.sensorsize_indicator) + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_sensorsize_x", 36)) + "x" + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_sensorsize_y", 24)) + getString(R.string.millimeter),
                     getString(R.string.resolution_indicator) + String.valueOf(Math.round(prefs.getInt("camera_" + i + "_resolution_x", 5472) * prefs.getInt("camera_" + i + "_resolution_y", 3648) / (float) 1000000)) + getString(R.string.megapixel)
                             + " (" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_x", 5472)) + "x" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_y", 3648)) + getString(R.string.pixel) + ")",
-                    getString(R.string.pixelpitch_indicator) + String.valueOf(prefs.getFloat("camera_" + i + "_pixelpitch", 6.6f)) + getString(R.string.micrometer),
-                    getString(R.string.coc_indicator) + String.valueOf(prefs.getFloat("camera_" + i + "_coc", 0.03f)) + getString(R.string.millimeter));
+                    getString(R.string.pixelpitch_indicator) + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_pixelpitch", 6.6f)) + getString(R.string.micrometer),
+                    getString(R.string.coc_indicator) + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_coc", 0.03f)) + getString(R.string.millimeter),
+                    (prefs.getInt("cameras_last", -1) == i));
             mCameraCardList.add(mCameraCard);
         }
         mAdapter.notifyDataSetChanged();
-
 
         mAddDial.setMainFabClosedBackgroundColor(getResources().getColor(R.color.colorAccentDark));
         mAddDial.setMainFabOpenedBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -84,7 +76,13 @@ public class EditCamerasActivity extends AppCompatActivity {
             public boolean onActionSelected(SpeedDialActionItem actionItem) {
                 switch (actionItem.getId()) {
                     case R.id.add_database:
-                        Toast.makeText(EditCamerasActivity.this, "The database will come soon", Toast.LENGTH_LONG).show();
+
+                        //SQLiteDatabase mDatabase = new DataBaseHelper(EditCamerasActivity.this).getReadableDatabase();
+
+                        //mDatabase.rawQuery("SELECT * FROM Canon", new String[]{}).close();
+
+
+                        //Toast.makeText(EditCamerasActivity.this, "The database will come soon", Toast.LENGTH_LONG).show();
 
                         /*XmlResourceParser databaseParser = getResources().getXml(R.xml.cameras);
 
@@ -113,136 +111,7 @@ public class EditCamerasActivity extends AppCompatActivity {
 
                         break;
                     case R.id.add_custom:
-
-                        final BottomSheetDialog mDialog = new BottomSheetDialog(EditCamerasActivity.this);
-                        mDialog.setContentView(R.layout.dialog_camera_add_custom);
-                        Objects.requireNonNull(mDialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                        FrameLayout bottomSheet = mDialog.findViewById(R.id.design_bottom_sheet);
-                        BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
-
-                        final EditText mNameEditText = mDialog.findViewById(R.id.nameEditText);
-                        TextView mSizePresetTextView = mDialog.findViewById(R.id.sensorsizePresetTextView);
-                        final EditText mSizeXEditText = mDialog.findViewById(R.id.sensorsizeXEditText);
-                        final EditText mSizeYEditText = mDialog.findViewById(R.id.sensorsizeYEditText);
-                        TextView mResolutionPresetTextView = mDialog.findViewById(R.id.resolutionPresetTextView);
-                        final EditText mResolutionXEditText = mDialog.findViewById(R.id.resolutionXEditText);
-                        final EditText mResolutionYEditText = mDialog.findViewById(R.id.resolutionYEditText);
-                        final EditText mConfusionEditText = mDialog.findViewById(R.id.cocEditText);
-                        Button mCancelButton = mDialog.findViewById(R.id.cancelButton);
-                        final Button mSaveButton = mDialog.findViewById(R.id.saveButton);
-
-                        TextWatcher checkOnTextChanged = new TextWatcher() {
-                            //f:off
-                            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                            @Override public void afterTextChanged(Editable s) {}
-                            //f:on
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                checkAllFilled(mDialog);
-                            }
-                        };
-
-                        mNameEditText.addTextChangedListener(checkOnTextChanged);
-                        mSizeXEditText.addTextChangedListener(checkOnTextChanged);
-                        mSizeYEditText.addTextChangedListener(checkOnTextChanged);
-                        mResolutionXEditText.addTextChangedListener(checkOnTextChanged);
-                        mResolutionYEditText.addTextChangedListener(checkOnTextChanged);
-                        mConfusionEditText.addTextChangedListener(checkOnTextChanged);
-
-                        mResolutionPresetTextView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final List<String> presets = new ArrayList<>();
-                                for (int preset = 0; preset <= getResources().getInteger(R.integer.preset_res_amount); preset++) {
-                                    int resId = getResources().getIdentifier("preset_res_" + String.valueOf(preset), "string", getPackageName());
-                                    presets.add(getString(resId));
-                                }
-
-                                BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
-                                mBuilder.setTitle(getString(R.string.preset_choose))
-                                        .setItems(presets.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                int resXid = getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_x", "string", getPackageName());
-                                                int resYid = getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_y", "string", getPackageName());
-
-                                                mResolutionXEditText.setText(getString(resXid));
-                                                mResolutionYEditText.setText(getString(resYid));
-                                            }
-                                        })
-                                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                                        .show();
-                            }
-                        });
-
-                        mSizePresetTextView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final List<String> presets = new ArrayList<>();
-                                for (int preset = 0; preset <= getResources().getInteger(R.integer.preset_size_amount); preset++) {
-                                    int resId = getResources().getIdentifier("preset_size_" + String.valueOf(preset), "string", getPackageName());
-                                    presets.add(getString(resId));
-                                }
-
-                                BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
-                                mBuilder.setTitle(getString(R.string.preset_choose))
-                                        .setItems(presets.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                int sizeXid = getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_x", "string", getPackageName());
-                                                int sizeYid = getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_y", "string", getPackageName());
-                                                int cocid = getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_coc", "string", getPackageName());
-
-                                                mSizeXEditText.setText(getString(sizeXid));
-                                                mSizeYEditText.setText(getString(sizeYid));
-                                                mConfusionEditText.setText(getString(cocid));
-                                            }
-                                        })
-                                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                                        .show();
-                            }
-                        });
-
-                        mCancelButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mDialog.cancel();
-                            }
-                        });
-
-                        mSaveButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String index = "camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1) + "_";
-                                float pixelpitch = Float.valueOf(mSizeXEditText.getText().toString()) / Float.valueOf(mResolutionXEditText.getText().toString()) * 1000;
-                                prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
-                                        .putString(index + "name", mNameEditText.getText().toString())
-                                        .putFloat(index + "sensorsize_x", Float.valueOf(mSizeXEditText.getText().toString()))
-                                        .putFloat(index + "sensorsize_y", Float.valueOf(mSizeYEditText.getText().toString()))
-                                        .putInt(index + "resolution_x", Integer.valueOf(mResolutionXEditText.getText().toString()))
-                                        .putInt(index + "resolution_y", Integer.valueOf(mResolutionYEditText.getText().toString()))
-                                        .putFloat(index + "coc", Float.valueOf(mConfusionEditText.getText().toString()))
-                                        .putFloat(index + "pixelpitch", pixelpitch)
-                                        .apply();
-
-                                cameraCard mCameraCard = new cameraCard(
-                                        mNameEditText.getText().toString(),
-                                        getString(R.string.sensorsize_indicator) + mSizeXEditText.getText().toString() + "x" + mSizeYEditText.getText().toString() + getString(R.string.millimeter),
-                                        getString(R.string.resolution_indicator) + String.valueOf(Integer.valueOf(mResolutionXEditText.getText().toString()) * Integer.valueOf(mResolutionYEditText.getText().toString()) / 1000000) + getString(R.string.megapixel),
-                                        getString(R.string.pixelpitch_indicator) + String.valueOf(pixelpitch) + String.valueOf(R.string.micrometer),
-                                        getString(R.string.coc_indicator) + mConfusionEditText.getText().toString() + getString(R.string.millimeter));
-                                mCameraCardList.add(mCameraCard);
-                                mAdapter.notifyDataSetChanged();
-
-                                mDialog.dismiss();
-                            }
-                        });
-
-                        mSaveButton.setEnabled(false);
-                        mSaveButton.getBackground().setAlpha(0);
-                        mSaveButton.setTextColor(getResources().getColor(R.color.gray));
-
-                        mDialog.show();
+                        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", 0) + 1, mCameraCardList, mAdapter);
                         break;
                 }
 
@@ -251,63 +120,85 @@ public class EditCamerasActivity extends AppCompatActivity {
         });
     }
 
-    private void checkAllFilled(Dialog mDialog) {
-        EditText mNameEditText = mDialog.findViewById(R.id.nameEditText);
-        EditText mSizeXEditText = mDialog.findViewById(R.id.sensorsizeXEditText);
-        EditText mSizeYEditText = mDialog.findViewById(R.id.sensorsizeYEditText);
-        EditText mResolutionXEditText = mDialog.findViewById(R.id.resolutionXEditText);
-        EditText mResolutionYEditText = mDialog.findViewById(R.id.resolutionYEditText);
-        EditText mConfusionEditText = mDialog.findViewById(R.id.cocEditText);
-        Button mSaveButton = mDialog.findViewById(R.id.saveButton);
-
-        if (!mNameEditText.getText().toString().isEmpty()
-                && !mSizeXEditText.getText().toString().isEmpty()
-                && !mSizeYEditText.getText().toString().isEmpty()
-                && !mResolutionXEditText.getText().toString().isEmpty()
-                && !mResolutionYEditText.getText().toString().isEmpty()
-                && !mConfusionEditText.getText().toString().isEmpty()
-                && !mConfusionEditText.getText().toString().equals(".")) {
-            mSaveButton.setEnabled(true);
-            mSaveButton.getBackground().setAlpha(255);
-            mSaveButton.setTextColor(Color.WHITE);
-        } else {
-            mSaveButton.setEnabled(false);
-            mSaveButton.getBackground().setAlpha(0);
-            mSaveButton.setTextColor(getResources().getColor(R.color.gray));
-        }
-    }
-
-    void cardClicked(View view) {
+    public void cardClicked(final View view) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+        final ModuleManager mModuleManager = new ModuleManager();
 
-        String[] options = {
-                getString(R.string.edit),
-                getString(R.string.delete)
-        };
-        int[] icons = {
-                R.drawable.ic_edit,
-                R.drawable.ic_delete
-        };
+        final RecyclerView rv = findViewById(R.id.camerasRecyclerView);
+        final int position = rv.getChildAdapterPosition(view);
 
+        List<String> options = new ArrayList<>();
+        List<Integer> icons = new ArrayList<>();
+        int counter = -1;
+        int position_up = -1;
+        int position_down = -1;
+        int position_use = 0;
+        final int position_edit;
+        int position_delete = -1;
+
+        if (position != 0) {
+            options.add(getString(R.string.move_up));
+            icons.add(R.drawable.ic_up);
+            position_up = counter + 1;
+            counter++;
+        }
+        if (position != rv.getChildCount() - 1) {
+            options.add(getString(R.string.move_down));
+            icons.add(R.drawable.ic_down);
+            position_down = counter + 1;
+            counter++;
+        }
+        if (rv.getChildCount() > 1 && position != prefs.getInt("cameras_last", 0)) {
+            options.add(getString(R.string.use_next));
+            icons.add(R.drawable.ic_favorite);
+            position_use = counter + 1;
+            counter++;
+        }
+        options.add(getString(R.string.edit));
+        icons.add(R.drawable.ic_edit);
+        position_edit = counter + 1;
+        counter++;
+        if (rv.getChildCount() > 1) {
+            options.add(getString(R.string.delete));
+            icons.add(R.drawable.ic_delete);
+            position_delete = counter + 1;
+        }
+
+        int[] iconlist = new int[icons.size()];
+        Iterator<Integer> iterator = icons.iterator();
+        for (int i = 0; i < iconlist.length; i++) {
+            iconlist[i] = iterator.next();
+        }
+
+        final int finalPosition_up = position_up;
+        final int finalPosition_down = position_down;
+        final int finalPosition_use = position_use;
+        final int finalPosition_delete = position_delete;
         BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
-        mBuilder.setTitle(getString(R.string.preset_choose))
-                .setItems(options, icons, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            final BottomSheetDialog mDialog = new BottomSheetDialog(EditCamerasActivity.this);
-                            mDialog.setContentView(R.layout.dialog_camera_add_custom);
-                            Objects.requireNonNull(mDialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                            FrameLayout bottomSheet = mDialog.findViewById(R.id.design_bottom_sheet);
-                            BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
-
-                            mDialog.show();
-                        } else {
-
-                        }
-                    }
-                })
-                .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+        mBuilder.setItems(options.toArray(new String[0]), iconlist, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                RecyclerView.Adapter adapter = rv.getAdapter();
+                if (which == finalPosition_up) {
+                    mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
+                    Snackbar.make(rv, "Move up", Snackbar.LENGTH_SHORT).show();
+                } else if (which == finalPosition_down) {
+                    mModuleManager.moveCamera(EditCamerasActivity.this, position, position + 1, EditCamerasActivity.this.mCameraCardList, adapter);
+                    Snackbar.make(rv, "Move down", Snackbar.LENGTH_SHORT).show();
+                } else if (which == finalPosition_use) {
+                    mCameraCardList.get(prefs.getInt("cameras_last", 0)).setIsLastUsed(false);
+                    mCameraCardList.get(position).setIsLastUsed(true);
+                    prefsEdit.putInt("cameras_last", position).apply();
+                    adapter.notifyDataSetChanged();
+                } else if (which == position_edit) {
+                    mModuleManager.editCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
+                } else if (which == finalPosition_delete) {
+                    mModuleManager.deleteCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
+                }
+            }
+        });
+        mBuilder.setDarkTheme(prefs.getBoolean("system_darkmode", false))
                 .show();
     }
 

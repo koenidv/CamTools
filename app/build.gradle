@@ -6,9 +6,12 @@ android {
         applicationId "com.koenidv.camtools"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 3
-        versionName '0.3'
+        versionCode 4
+        versionName '0.4'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    dataBinding {
+        enabled = true
     }
     buildTypes {
         release {
@@ -16,11 +19,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    //productFlavors {
-    //}
     productFlavors {
     }
     buildToolsVersion '28.0.3'
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
@@ -49,6 +54,8 @@ dependencies {
     implementation 'com.github.javiersantos:BottomDialogs:1.2.1'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
     implementation 'pl.hypeapp:materialtimelineview:1.1'
+    implementation 'io.github.kexanie.library:MathView:0.0.6'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 apply plugin: 'com.google.gms.google-services'

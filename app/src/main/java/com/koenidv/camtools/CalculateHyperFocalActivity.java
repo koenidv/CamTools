@@ -12,20 +12,29 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateHyperFocalActivity extends AppCompatActivity {
+
+    final float[] coc = {0};
+
+    @Override
+    protected void onResume() {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final TextView mCameraTextView = findViewById(R.id.cameraTextView);
+        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
+        coc[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_coc", 0.03f);
+        super.onResume();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +53,10 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         final EditText mLengthEditText = findViewById(R.id.focallengthEditText);
         final SeekBar mApertureSeekbar = findViewById(R.id.apertureSeekbar);
         final EditText mApertureEditText = findViewById(R.id.apertureEditText);
-        final Button mEquationsButton = findViewById(R.id.equationsButton);
+        final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
         int lastCamera = prefs.getInt("cameras_last", 0);
-        final float[] coc = {prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f)};
+        coc[0] = prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f);
 
         mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
@@ -155,10 +164,10 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsButton.setOnClickListener(new View.OnClickListener() {
+        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ToDo: Equations as bottom sheet
+                mModuleManager.showEquations(CalculateHyperFocalActivity.this, "hyperfocal");
             }
         });
     }
@@ -169,6 +178,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
 
     @SuppressLint("DefaultLocale")
     private void calculate(float mConfusion, float mLength, float mAperture) {
+        ModuleManager mModuleManager = new ModuleManager();
         float mHyper = mLength * mLength / (mAperture * mConfusion) + mLength;
         float mNear = mHyper * mHyper / (mHyper + mHyper - mLength);
 
@@ -176,8 +186,8 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
             mNear = 0;
         }
 
-        Spanned mHyperSpanned = Html.fromHtml(new DecimalFormat(mHyper > 200000 ? "#" : "#.#").format(mHyper / 10000) + "<small>" + getString(R.string.meter) + "</small>");
-        Spanned mNearSpanned = Html.fromHtml(new DecimalFormat(mNear > 200000 ? "#" : "#.#").format(mNear / 10000) + "<small>" + getString(R.string.meter) + "</small>");
+        Spanned mHyperSpanned = mModuleManager.convertDistance(CalculateHyperFocalActivity.this, mHyper / 10000);
+        Spanned mNearSpanned = mModuleManager.convertDistance(CalculateHyperFocalActivity.this, mNear / 10000);
         String mFarString = "∞";
 
         if (mHyper == Double.POSITIVE_INFINITY || String.valueOf(mHyper).equals("NaN")) {
@@ -227,6 +237,16 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateHyperFocalActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
     }
 
 }

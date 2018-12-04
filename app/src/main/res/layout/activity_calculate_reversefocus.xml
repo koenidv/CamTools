@@ -121,7 +121,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp">
@@ -132,7 +131,8 @@
                     android:labelFor="@id/nearfocusEditText"
                     android:text="@string/focus_limit_near"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_main_light"/>
+                    android:textColor="@color/textColor_normal"
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -141,33 +141,36 @@
 
                     <SeekBar
                         android:id="@+id/nearfocusSeekbar"
-                        android:layout_width="591dp"
+                        android:layout_width="580dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:hapticFeedbackEnabled="false"
                         android:max="30"
                         android:progress="2"
                         android:saveEnabled="false"
+                        android:thumbTint="@color/colorAccent"
+                        android:progressTint="@color/colorAccent"
                         android:importantForAccessibility="no"/>
 
                     <EditText
                         android:id="@+id/nearfocusEditText"
-                        android:layout_width="352dp"
+                        android:layout_width="360dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="none|numberDecimal"
                         android:textAlignment="center"
-                        android:textColor="@color/text_main_light"/>
+                        android:textColor="@color/textColor_normal"
+                        android:importantForAutofill="no"
+                        tools:targetApi="o"/>
 
                     <TextView
                         android:id="@+id/nearfocusIndicator"
-                        android:layout_width="319dp"
+                        android:layout_width="360dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/meter"
-                        android:textColor="@color/text_main_light"/>
+                        android:text="@string/meter"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -188,7 +191,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="8dp">
@@ -199,7 +201,7 @@
                     android:labelFor="@id/farfocusEditText"
                     android:text="@string/focus_limit_far"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_main_light"/>
+                    android:textColor="@color/textColor_normal"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -208,33 +210,36 @@
 
                     <SeekBar
                         android:id="@+id/farfocusSeekbar"
-                        android:layout_width="591dp"
+                        android:layout_width="580dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:hapticFeedbackEnabled="false"
                         android:max="30"
                         android:progress="2"
                         android:saveEnabled="false"
+                        android:thumbTint="@color/colorAccent"
+                        android:progressTint="@color/colorAccent"
                         android:importantForAccessibility="no"/>
 
                     <EditText
                         android:id="@+id/farfocusEditText"
-                        android:layout_width="352dp"
+                        android:layout_width="360dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
                         android:inputType="none|numberDecimal"
                         android:textAlignment="center"
-                        android:textColor="@color/text_main_light"/>
+                        android:textColor="@color/textColor_normal"
+                        android:importantForAutofill="no"
+                        tools:targetApi="o"/>
 
                     <TextView
                         android:id="@+id/farfocusIndicator"
-                        android:layout_width="319dp"
+                        android:layout_width="360dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/meter"
-                        android:textColor="@color/text_main_light"/>
+                        android:text="@string/meter"/>
 
                 </LinearLayout>
             </LinearLayout>

@@ -3,16 +3,18 @@ package com.koenidv.camtools;
 
 public class cameraCard {
     private String mName, mSensorSize, mResolution, mPixelpitch, mConfusion;
+    private boolean mIsLastUsed;
 
     public cameraCard() {
     }
 
-    cameraCard(String mName, String mSensorSize, String mResolution, String mPixelpitch, String mConfusion) {
+    cameraCard(String mName, String mSensorSize, String mResolution, String mPixelpitch, String mConfusion, boolean mIsLastUsed) {
         this.mName = mName;
         this.mSensorSize = mSensorSize;
         this.mResolution = mResolution;
         this.mPixelpitch = mPixelpitch;
         this.mConfusion = mConfusion;
+        this.mIsLastUsed = mIsLastUsed;
     }
 
     public String getName() {
@@ -44,5 +46,11 @@ public class cameraCard {
     }
     public void setConfusion(String confusion) {
         this.mConfusion = confusion;
+    }
+    public boolean getIsLastUsed() {
+        return  mIsLastUsed;
+    }
+    public void setIsLastUsed(boolean isLastUsed) {
+        this.mIsLastUsed = isLastUsed;
     }
 }

@@ -2,16 +2,20 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cameraCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="8dp"
-    android:layout_marginLeft="8dp"
-    android:layout_marginRight="8dp"
     android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
     android:layout_marginTop="@dimen/cardMarginCombined"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:onClick="cardClicked"
     app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
-    app:cardElevation="@dimen/cardElevation"
-    android:onClick="cardClicked">
+    app:cardElevation="@dimen/cardElevation">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,31 +29,31 @@
             android:id="@+id/nameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            />
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
         <TextView
             android:id="@+id/sensorsizeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/resolutionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/pixelpitchTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/confusionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:textAlignment="center"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
