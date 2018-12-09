@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,7 +13,6 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 //  Created by koenidv on 30.11.2018.
@@ -52,19 +51,18 @@ class ModuleManager {
      * @param mValue          The list in which either the current cicle of confusion or pixel pitch is saved.
      * @param mType           Defines what should be saved to {@param mValue}.
      *                        Should be "coc" for circle of confusion or "pixelpitch" for pixel pitch.
-     * @param mDefault        The default value to save to {@param mValue} in case nothing is stored in {@param prefs}.
-     *                        Required by {@link SharedPreferences}.
      */
-    void selectCamera(final Context mContext, final TextView mCameraTextView, final float[] mValue, final String mType, final float mDefault) {
+    void selectCamera(final Context mContext, final TextView mCameraTextView, final float[] mValue, final String mType) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+        Gson gson = new Gson();
 
         if (prefs.getInt("cameras_amount", 0) == 0) {
             mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
         } else {
             final List<String> cameras = new ArrayList<>();
             for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
-                cameras.add(prefs.getString("camera_" + camera + "_name", mContext.getString(R.string.camera_default_name)));
+                cameras.add(gson.fromJson(prefs.getString("camera_" + camera, mContext.getString(R.string.camera_default)), camera.class).getName());
             }
             cameras.add(mContext.getString(R.string.calculate_camera_manage));
             ArrayList<Integer> icons = new ArrayList<>();
@@ -80,16 +78,22 @@ class ModuleManager {
 
             BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
             mBuilder.setTitle(mContext.getString(R.string.calculate_camera_choose))
-                    .setItems(cameras.toArray(new String[0]), iconlist, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (which == cameras.size() - 1) {
-                                mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
-                            } else {
-                                prefsEdit.putInt("cameras_last", which).apply();
-                                mValue[0] = prefs.getFloat("camera_" + which + "_" + mType, mDefault);
-                                mCameraTextView.setText(mContext.getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + which + "_name", mContext.getString(R.string.camera_default_name))));
+                    .setItems(cameras.toArray(new String[0]), iconlist, (dialog, which) -> {
+                        if (which == cameras.size() - 1) {
+                            mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
+                        } else {
+                            prefsEdit.putInt("cameras_last", which).apply();
+                            camera mCamera = gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), camera.class);
+                            switch (mType) {
+                                case "coc":
+                                    mValue[0] = mCamera.getConfusion();
+                                    break;
+                                case "pixelpitch":
+                                    mValue[0] = mCamera.getPixelpitch();
+                                    break;
                             }
+                            mCameraTextView.setText(mContext.getString(R.string.calculate_camera)
+                                    .replace("%s", gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), camera.class).getName()));
                         }
                     })
                     .setDarkTheme(prefs.getBoolean("system_darkmode", false))
@@ -130,9 +134,10 @@ class ModuleManager {
      * @see #editCameraCheckAllFilled(Context, Dialog)
      * @see EditCamerasActivity
      */
-    void editCamera(final Context mContext, final int mIndex, final List<cameraCard> mCardList, final RecyclerView.Adapter mAdapter) {
+    void editCamera(final Context mContext, final int mIndex, @Nullable final List<cameraCard> mCardList, @Nullable final RecyclerView.Adapter mAdapter) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+        Gson gson = new Gson();
 
         final BottomSheetDialog mDialog = new BottomSheetDialog(mContext);
         mDialog.setContentView(R.layout.dialog_camera_add_custom);
@@ -152,16 +157,17 @@ class ModuleManager {
         final Button mCancelButton = mDialog.findViewById(R.id.cancelButton);
         final Button mSaveButton = mDialog.findViewById(R.id.saveButton);
 
-        final String prefix = "camera_" + String.valueOf(mIndex) + "_";
+        final String index = "camera_" + String.valueOf(mIndex);
+        camera thisCamera = gson.fromJson(prefs.getString(index, null), camera.class);
 
-        if (!prefs.getString(prefix + "name", "").equals("")) {
+        if (thisCamera != null) {
             mTitleTextView.setText(R.string.setting_cameras_edit_custom_title);
-            mNameEditText.setText(prefs.getString(prefix + "name", ""));
-            mResolutionXEditText.setText(String.valueOf(prefs.getInt(prefix + "resolution_x", 0)));
-            mResolutionYEditText.setText(String.valueOf(prefs.getInt(prefix + "resolution_y", 0)));
-            mSizeXEditText.setText(String.valueOf(prefs.getFloat(prefix + "sensorsize_x", 0)));
-            mSizeYEditText.setText(String.valueOf(prefs.getFloat(prefix + "sensorsize_y", 0)));
-            mConfusionEditText.setText(String.valueOf(prefs.getFloat(prefix + "coc", 0)));
+            mNameEditText.setText(thisCamera.getName());
+            mResolutionXEditText.setText(String.valueOf(thisCamera.getResolutionX()));
+            mResolutionYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
+            mSizeXEditText.setText(String.valueOf(thisCamera.getSensorSizeX()));
+            mSizeYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
+            mConfusionEditText.setText(String.valueOf(thisCamera.getConfusion()));
         } else {
             mSaveButton.setEnabled(false);
             mSaveButton.getBackground().setAlpha(0);
@@ -187,98 +193,86 @@ class ModuleManager {
         mResolutionYEditText.addTextChangedListener(checkOnTextChanged);
         mConfusionEditText.addTextChangedListener(checkOnTextChanged);
 
-        mResolutionPresetTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final List<String> presets = new ArrayList<>();
-                for (int preset = 0; preset <= mContext.getResources().getInteger(R.integer.preset_res_amount); preset++) {
-                    int resId = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(preset), "string", mContext.getPackageName());
-                    presets.add(mContext.getString(resId));
-                }
-
-                BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-                mBuilder.setTitle(mContext.getString(R.string.preset_choose))
-                        .setItems(presets.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                int resXid = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_x", "string", mContext.getPackageName());
-                                int resYid = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_y", "string", mContext.getPackageName());
-
-                                mResolutionXEditText.setText(mContext.getString(resXid));
-                                mResolutionYEditText.setText(mContext.getString(resYid));
-                            }
-                        })
-                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                        .show();
+        mResolutionPresetTextView.setOnClickListener(v -> {
+            final List<String> presets = new ArrayList<>();
+            for (int preset = 0; preset <= mContext.getResources().getInteger(R.integer.preset_res_amount); preset++) {
+                int resId = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(preset), "string", mContext.getPackageName());
+                presets.add(mContext.getString(resId));
             }
+
+            BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
+            mBuilder.setTitle(mContext.getString(R.string.preset_choose))
+                    .setItems(presets.toArray(new String[0]), (dialog, which) -> {
+                        int resXid = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_x", "string", mContext.getPackageName());
+                        int resYid = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_y", "string", mContext.getPackageName());
+
+                        mResolutionXEditText.setText(mContext.getString(resXid));
+                        mResolutionYEditText.setText(mContext.getString(resYid));
+                    })
+                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .show();
         });
 
-        mSizePresetTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final List<String> presets = new ArrayList<>();
-                for (int preset = 0; preset <= mContext.getResources().getInteger(R.integer.preset_size_amount); preset++) {
-                    int resId = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(preset), "string", mContext.getPackageName());
-                    presets.add(mContext.getString(resId));
-                }
-
-                BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-                mBuilder.setTitle(mContext.getString(R.string.preset_choose))
-                        .setItems(presets.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                int sizeXid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_x", "string", mContext.getPackageName());
-                                int sizeYid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_y", "string", mContext.getPackageName());
-                                int cocid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_coc", "string", mContext.getPackageName());
-
-                                mSizeXEditText.setText(mContext.getString(sizeXid));
-                                mSizeYEditText.setText(mContext.getString(sizeYid));
-                                mConfusionEditText.setText(mContext.getString(cocid));
-                            }
-                        })
-                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                        .show();
+        mSizePresetTextView.setOnClickListener(v -> {
+            final List<String> presets = new ArrayList<>();
+            for (int preset = 0; preset <= mContext.getResources().getInteger(R.integer.preset_size_amount); preset++) {
+                int resId = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(preset), "string", mContext.getPackageName());
+                presets.add(mContext.getString(resId));
             }
+
+            BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
+            mBuilder.setTitle(mContext.getString(R.string.preset_choose))
+                    .setItems(presets.toArray(new String[0]), (dialog, which) -> {
+                        int sizeXid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_x", "string", mContext.getPackageName());
+                        int sizeYid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_y", "string", mContext.getPackageName());
+                        int cocid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_coc", "string", mContext.getPackageName());
+
+                        mSizeXEditText.setText(mContext.getString(sizeXid));
+                        mSizeYEditText.setText(mContext.getString(sizeYid));
+                        mConfusionEditText.setText(mContext.getString(cocid));
+                    })
+                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .show();
         });
 
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDialog.dismiss();
-            }
-        });
+        mCancelButton.setOnClickListener(v -> mDialog.dismiss());
 
-        mSaveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                float pixelpitch = Float.valueOf(mSizeXEditText.getText().toString()) / Float.valueOf(mResolutionXEditText.getText().toString()) * 1000;
-                prefsEdit.putString(prefix + "name", mNameEditText.getText().toString())
-                        .putInt(prefix + "resolution_x", Integer.valueOf(mResolutionXEditText.getText().toString()))
-                        .putInt(prefix + "resolution_y", Integer.valueOf(mResolutionYEditText.getText().toString()))
-                        .putFloat(prefix + "sensorsize_x", Float.valueOf(mSizeXEditText.getText().toString()))
-                        .putFloat(prefix + "sensorsize_y", Float.valueOf(mSizeYEditText.getText().toString()))
-                        .putFloat(prefix + "coc", Float.valueOf(mConfusionEditText.getText().toString()))
-                        .putFloat(prefix + "pixelpitch", pixelpitch)
-                        .apply();
+        mSaveButton.setOnClickListener(v -> {
+            camera mCamera = new camera(
+                    mNameEditText.getText().toString(),
+                    Integer.valueOf(mResolutionXEditText.getText().toString()),
+                    Integer.valueOf(mResolutionYEditText.getText().toString()),
+                    Float.valueOf(mSizeXEditText.getText().toString()),
+                    Float.valueOf(mSizeYEditText.getText().toString()),
+                    Float.valueOf(mConfusionEditText.getText().toString())
+                    );
 
+            prefsEdit.putString(index, gson.toJson(mCamera))
+                    .apply();
+
+            if (mCardList != null && mAdapter != null) {
                 cameraCard mCameraCard = new cameraCard(
                         mNameEditText.getText().toString(),
-                        mContext.getString(R.string.sensorsize_indicator) + mSizeXEditText.getText().toString() + "x" + mSizeYEditText.getText().toString() + mContext.getString(R.string.millimeter),
-                        mContext.getString(R.string.resolution_indicator) + String.valueOf(Integer.valueOf(mResolutionXEditText.getText().toString()) * Integer.valueOf(mResolutionYEditText.getText().toString()) / 1000000) + mContext.getString(R.string.megapixel),
-                        mContext.getString(R.string.pixelpitch_indicator) + String.valueOf(pixelpitch) + String.valueOf(R.string.micrometer),
-                        mContext.getString(R.string.coc_indicator) + mConfusionEditText.getText().toString() + mContext.getString(R.string.millimeter),
+                        String.valueOf(Math.round(Integer.valueOf(mResolutionXEditText.getText().toString()) * Integer.valueOf(mResolutionYEditText.getText().toString()) / (float) 1000000))
+                                + mContext.getString(R.string.megapixel)
+                                + mContext.getString(R.string.resolution_size_seperator)
+                                + ModuleManager.truncateNumber(Float.valueOf(mSizeXEditText.getText().toString())) + "x" + ModuleManager.truncateNumber(Float.valueOf(mSizeYEditText.getText().toString()))
+                                + mContext.getString(R.string.millimeter),
                         (prefs.getInt("cameras_last", -1) == mIndex));
 
                 if (mIndex > prefs.getInt("cameras_amount", 0)) {
                     mCardList.add(mCameraCard);
-                    prefsEdit.putInt("cameras_amount", mIndex).apply();
                 } else {
                     mCardList.set(mIndex, mCameraCard);
                 }
                 mAdapter.notifyDataSetChanged();
-
-                mDialog.dismiss();
             }
+
+            if (mIndex > prefs.getInt("cameras_amount", 0)) {
+                prefsEdit.putInt("cameras_amount", mIndex).apply();
+            }
+
+            mDialog.dismiss();
         });
 
         mDialog.show();
@@ -299,28 +293,14 @@ class ModuleManager {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
         for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
-            String prefixLast = "camera_" + String.valueOf(move - 1) + "_";
-            String prefixThis = "camera_" + move + "_";
+            String indexLast = "camera_" + String.valueOf(move - 1);
+            String indexThis = "camera_" + move;
 
-            prefsEdit.putString(prefixLast + "name", prefs.getString(prefixThis + "name", ""))
-                    .putInt(prefixLast + "resolution_x", prefs.getInt(prefixThis + "resolution_x", 0))
-                    .putInt(prefixLast + "resolution_y", prefs.getInt(prefixThis + "resolution_y", 0))
-                    .putFloat(prefixLast + "sensorsize_x", prefs.getFloat(prefixThis + "sensorsize_x", 0))
-                    .putFloat(prefixLast + "sensorsize_y", prefs.getFloat(prefixThis + "sensorsize_y", 0))
-                    .putFloat(prefixLast + "coc", prefs.getFloat(prefixThis + "coc", 0))
-                    .putFloat(prefixLast + "pixelpitch", prefs.getFloat(prefixThis + "pixelpitch", 0))
-                    .apply();
+            prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
         }
 
-        String prefix = "camera_" + prefs.getInt("cameras_amount", 0) + "_";
-        prefsEdit.remove(prefix + "name")
-                .remove(prefix + "resolution_x")
-                .remove(prefix + "resolution_y")
-                .remove(prefix + "sensorsize_x")
-                .remove(prefix + "sensorsize_y")
-                .remove(prefix + "coc")
-                .remove(prefix + "pixelpitch")
-                .apply();
+        String index = "camera_" + prefs.getInt("cameras_amount", 0);
+        prefsEdit.remove(index).apply();
 
         prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).apply();
         mCardList.remove(mIndex);
@@ -341,24 +321,18 @@ class ModuleManager {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
-        String prefixFrom = "camera_" + mFromIndex + "_";
-        String prefixTo = "camera_" + mToIndex + "_";
+        String indexFrom = "camera_" + mFromIndex;
+        String indexTo = "camera_" + mToIndex;
 
-        prefsEdit.putString(prefixFrom + "name", prefs.getString(prefixTo + "name", ""))
-                .putInt(prefixFrom + "resolution_x", prefs.getInt(prefixTo + "resolution_x", 0))
-                .putInt(prefixFrom + "resolution_y", prefs.getInt(prefixTo + "resolution_y", 0))
-                .putFloat(prefixFrom + "sensorsize_x", prefs.getFloat(prefixTo + "sensorsize_x", 0))
-                .putFloat(prefixFrom + "sensorsize_y", prefs.getFloat(prefixTo + "sensorsize_y", 0))
-                .putFloat(prefixFrom + "coc", prefs.getFloat(prefixTo + "coc", 0))
-                .putFloat(prefixFrom + "pixelpitch", prefs.getFloat(prefixFrom + "pixelpitch", 0))
-                .putString(prefixTo + "name", prefs.getString(prefixFrom + "name", ""))
-                .putInt(prefixTo + "resolution_x", prefs.getInt(prefixFrom + "resolution_x", 0))
-                .putInt(prefixTo + "resolution_y", prefs.getInt(prefixFrom + "resolution_y", 0))
-                .putFloat(prefixTo + "sensorsize_x", prefs.getFloat(prefixFrom + "sensorsize_x", 0))
-                .putFloat(prefixTo + "sensorsize_y", prefs.getFloat(prefixFrom + "sensorsize_y", 0))
-                .putFloat(prefixTo + "coc", prefs.getFloat(prefixFrom + "coc", 0))
-                .putFloat(prefixTo + "pixelpitch", prefs.getFloat(prefixFrom + "pixelpitch", 0))
-                .apply();
+        prefsEdit.putString(indexFrom, prefs.getString(indexTo, mContext.getString(R.string.camera_default)))
+                .putString(indexTo, prefs.getString(indexFrom, mContext.getString(R.string.camera_default)));
+        if (prefs.getInt("cameras_last", 0) == mFromIndex) {
+            prefsEdit.putInt("cameras_last", mToIndex);
+        }
+        if (prefs.getInt("cameras_last", 0) == mToIndex) {
+            prefsEdit.putInt("cameras_last", mFromIndex);
+        }
+        prefsEdit.apply();
 
         cameraCard toCard = mCardList.get(mToIndex);
         mCardList.set(mToIndex, mCardList.get(mFromIndex));
@@ -371,7 +345,7 @@ class ModuleManager {
             @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
             Gson gson = new Gson();
 
-            ArrayList<String> historyClasses = gson.fromJson(prefs.getString("history", gson.toJson(new ArrayList<String>())), ArrayList.class);
+            @SuppressWarnings("unchecked") ArrayList<String> historyClasses = gson.fromJson(prefs.getString("history", gson.toJson(new ArrayList<String>())), ArrayList.class);
             ArrayList<String> historyNames = new ArrayList<>();
             for (int i = 0; i < historyClasses.size(); i++) {
                 // Get activity label for each activity
@@ -388,16 +362,13 @@ class ModuleManager {
             }
 
             BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-            mBuilder.setItems(historyNames.toArray(new String[0]), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    try {
-                        Class<?> c = Class.forName(mContext.getPackageName() + "." + historyClasses.get(which));
-                        Intent intent = new Intent(mContext, c);
-                        mContext.startActivity(intent);
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
+            mBuilder.setItems(historyNames.toArray(new String[0]), (dialog, which) -> {
+                try {
+                    Class<?> c = Class.forName(mContext.getPackageName() + "." + historyClasses.get(which));
+                    Intent intent = new Intent(mContext, c);
+                    mContext.startActivity(intent);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
             });
             if (historyClasses.size() > 0) {
@@ -453,6 +424,7 @@ class ModuleManager {
 
             ArrayList<String> currentHistory = new ArrayList<>();
             currentHistory.add("");
+            //noinspection unchecked
             currentHistory.addAll(1, gson.fromJson(prefs.getString("history", gson.toJson(new ArrayList<String>())), ArrayList.class));
             currentHistory.removeIf(element -> element.equals(mName));
             if (currentHistory.size() == 5) {

@@ -75,7 +75,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch", 6.6f);
+                mModuleManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch");
             }
         });
 

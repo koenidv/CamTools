@@ -17,17 +17,13 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
 
     static class ViewHolder  extends RecyclerView.ViewHolder {
         CardView mCardView;
-        TextView mNameTextView, mSensorSizeTextView, mResolutionTextView, mPixelpitchTextView, mConfusionTextView;
-        boolean mIsLastUsed;
+        TextView mNameTextView, mInfoTextView;
 
         ViewHolder(View view) {
             super(view);
             mCardView = view.findViewById(R.id.cameraCardView);
             mNameTextView = view.findViewById(R.id.nameTextView);
-            mSensorSizeTextView = view.findViewById(R.id.sensorsizeTextView);
-            mResolutionTextView = view.findViewById(R.id.resolutionTextView);
-            mPixelpitchTextView = view.findViewById(R.id.pixelpitchTextView);
-            mConfusionTextView = view.findViewById(R.id.confusionTextView);
+            mInfoTextView = view.findViewById(R.id.infoTextView);
         }
 
     }
@@ -47,10 +43,7 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         cameraCard mCameraCard = mDataset.get(position);
         holder.mNameTextView.setText(mCameraCard.getName());
-        holder.mSensorSizeTextView.setText(mCameraCard.getSensorSize());
-        holder.mResolutionTextView.setText(mCameraCard.getResolution());
-        holder.mPixelpitchTextView.setText(mCameraCard.getPixelpitch());
-        holder.mConfusionTextView.setText(mCameraCard.getConfusion());
+        holder.mInfoTextView.setText(mCameraCard.getInfo());
         if (mCameraCard.getIsLastUsed()) {
             holder.mNameTextView.setTextColor(holder.mNameTextView.getContext().getResources().getColor(R.color.colorAccent));
         } else {

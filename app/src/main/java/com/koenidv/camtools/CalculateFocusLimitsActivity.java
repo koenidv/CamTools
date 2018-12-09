@@ -83,7 +83,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateFocusLimitsActivity.this, mCameraTextView, coc, "coc", 0.03f);
+                mModuleManager.selectCamera(CalculateFocusLimitsActivity.this, mCameraTextView, coc, "coc");
             }
         });
 

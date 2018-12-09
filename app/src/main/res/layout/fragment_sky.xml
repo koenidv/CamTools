@@ -90,15 +90,16 @@
                 android:id="@+id/selectSkyDetailsCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/cardMarginBottom"
-                android:layout_marginEnd="@dimen/standardPadding"
-                android:layout_marginLeft="@dimen/standardPadding"
-                android:layout_marginRight="@dimen/standardPadding"
                 android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/cardCornerRadius"
                 app:cardElevation="@dimen/cardElevation"
                 app:cardPreventCornerOverlap="false">
@@ -110,13 +111,13 @@
 
                     <ImageView
                         android:id="@+id/selectSkyDetailsImage"
-                        android:transitionName="image"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/sky_details"/>
+                        android:src="@drawable/sky_details"
+                        android:transitionName="image"/>
 
                     <TextView
                         android:id="@+id/selectSkyDetailsTitle"
@@ -132,11 +133,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/description_sky_details"/>
 
                 </LinearLayout>
@@ -147,15 +148,16 @@
                 android:id="@+id/selectSkyArCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/cardMarginBottom"
-                android:layout_marginEnd="@dimen/standardPadding"
-                android:layout_marginLeft="@dimen/standardPadding"
-                android:layout_marginRight="@dimen/standardPadding"
                 android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/cardCornerRadius"
                 app:cardElevation="@dimen/cardElevation"
                 app:cardPreventCornerOverlap="false">
@@ -188,11 +190,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/description_sky_ar"/>
 
                 </LinearLayout>
@@ -203,15 +205,16 @@
                 android:id="@+id/selectLightpollutionCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/cardMarginCombined"
-                android:layout_marginEnd="@dimen/standardPadding"
-                android:layout_marginLeft="@dimen/standardPadding"
-                android:layout_marginRight="@dimen/standardPadding"
                 android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginBottom="@dimen/cardMarginCombined"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:visibility="gone"
                 app:cardCornerRadius="@dimen/cardCornerRadius"
                 app:cardElevation="@dimen/cardElevation"
                 app:cardPreventCornerOverlap="false">
@@ -244,11 +247,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/description_lightpollution"/>
 
                 </LinearLayout>
@@ -263,7 +266,7 @@
                 android:layout_marginTop="@dimen/cardMarginTop"
                 android:text="@string/more_coming_soon"
                 android:textAlignment="center"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </LinearLayout>
     </ScrollView>

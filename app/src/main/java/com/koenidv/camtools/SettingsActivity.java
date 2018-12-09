@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -47,6 +48,12 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         if (prefs.getBoolean("system_darkmode", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        if (prefs.getBoolean("system_darkmode", false)) {
             mDarkmodeButton.setText(getString(R.string.setting_disable));
         }
 
@@ -54,6 +61,12 @@ public class SettingsActivity extends AppCompatActivity {
             mDarkmodeLayout.setBackgroundColor(getResources().getColor(R.color.settings_darkmodeBackground));
             ((TextView) findViewById(R.id.settingsDarkmodeTitle)).setTextColor(getResources().getColor(R.color.background_light_lighter));
             ((TextView) findViewById(R.id.settingsDarkmodeDescription)).setTextColor(getResources().getColor(R.color.background_light_normal));
+        }
+
+        // Check for old version
+        if (!prefs.getString("camera_1_name", "").equals("")) {
+            prefsEdit.clear().apply();
+            Snackbar.make(findViewById(R.id.rootView), "Es wurde zuvor eine inkompatible Version genutzt. Der Speicher wurde geleert.", Snackbar.LENGTH_INDEFINITE);
         }
 
         mCamerasTextView.setText(getString(R.string.setting_cameras_description).replace("%s",
@@ -237,9 +250,6 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
         switch (id) {
-            case R.id.action_switch_showAll:
-                prefsEdit.putBoolean("show_hidden_cards", !prefs.getBoolean("show_hidden_cards", false)).apply();
-                break;
             case R.id.action_delete_history:
                 prefsEdit.remove("history").apply();
                 break;

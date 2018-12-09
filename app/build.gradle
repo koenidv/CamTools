@@ -6,8 +6,8 @@ android {
         applicationId "com.koenidv.camtools"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName '0.4'
+        versionCode 5
+        versionName '0.5'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     dataBinding {
@@ -34,15 +34,15 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha01'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.annotation:annotation:1.0.0'
+    implementation 'androidx.annotation:annotation:1.0.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //noinspection GradleCompatible
     implementation 'com.google.android.gms:play-services-places:16.0.0'
-    implementation 'com.google.firebase:firebase-config:16.1.0'
+    implementation 'com.google.firebase:firebase-config:16.1.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1-alpha01'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-alpha01'
+    androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
     //3rd party
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation('com.mikepenz:aboutlibraries:6.0.2@aar') {
@@ -56,6 +56,8 @@ dependencies {
     implementation 'pl.hypeapp:materialtimelineview:1.1'
     implementation 'io.github.kexanie.library:MathView:0.0.6'
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.github.enricocid:cbl:1.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-android'

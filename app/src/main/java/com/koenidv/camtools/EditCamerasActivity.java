@@ -2,12 +2,15 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
@@ -18,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,8 +34,15 @@ public class EditCamerasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_cameras);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+        SharedPreferences.Editor prefsEdit = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
+        Gson gson = new Gson();
+
+        if (prefs.getBoolean("system_darkmode", false)) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
         SpeedDialView mAddDial = findViewById(R.id.addSpeedDial);
@@ -44,14 +55,55 @@ public class EditCamerasActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
 
+        /*
+         * Add from URL
+         */
+
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+
+        if (appLinkData != null && !appLinkData.toString().startsWith("%7B")) {
+
+            String data = appLinkData.toString().replace("https://addcam.koenidv.de/", "").replace("%20", " ");
+
+            String name = data.substring(0, data.indexOf(";"));
+            data = data.substring(data.indexOf(";") + 1);
+            String resolution = data.substring(0, data.indexOf(";"));
+            data = data.substring(data.indexOf(";") + 1);
+            String sensorsize = data.substring(0, data.indexOf(";"));
+            data = data.substring(data.indexOf(";") + 1);
+            String confusion = data;
+
+            camera addCamera = new camera(name, resolution, sensorsize, confusion);
+            prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
+                    .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                    .apply();
+
+
+        } else if (appLinkData != null) {
+            String data = appLinkData.toString().replace("https://cam.koenidv.de/add/", "").replace("%7B", "{").replace("%7D", "}").replace("%20", " ");
+            data = Html.fromHtml(data).toString();
+            camera addCamera = gson.fromJson(data, camera.class);
+
+            prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
+                    .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                    .apply();
+
+            Snackbar.make(findViewById(R.id.rootView), "Added camera \"" + addCamera.getName() + "\"", Snackbar.LENGTH_LONG).show();
+        }
+
+
         for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
+            camera mCamera = gson.fromJson(prefs.getString("camera_" + i, getString(R.string.camera_default)), camera.class);
+
             cameraCard mCameraCard = new cameraCard(
-                    prefs.getString("camera_" + i + "_name", getString(R.string.camera_default_name)),
-                    getString(R.string.sensorsize_indicator) + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_sensorsize_x", 36)) + "x" + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_sensorsize_y", 24)) + getString(R.string.millimeter),
-                    getString(R.string.resolution_indicator) + String.valueOf(Math.round(prefs.getInt("camera_" + i + "_resolution_x", 5472) * prefs.getInt("camera_" + i + "_resolution_y", 3648) / (float) 1000000)) + getString(R.string.megapixel)
-                            + " (" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_x", 5472)) + "x" + String.valueOf(prefs.getInt("camera_" + i + "_resolution_y", 3648)) + getString(R.string.pixel) + ")",
-                    getString(R.string.pixelpitch_indicator) + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_pixelpitch", 6.6f)) + getString(R.string.micrometer),
-                    getString(R.string.coc_indicator) + ModuleManager.truncateNumber(prefs.getFloat("camera_" + i + "_coc", 0.03f)) + getString(R.string.millimeter),
+                    mCamera.getName(),
+                    String.valueOf(Math.round(mCamera.getResolutionX() * mCamera.getResolutionY() / (float) 1000000))
+                            + getString(R.string.megapixel)
+                            + getString(R.string.resolution_size_seperator)
+                            + ModuleManager.truncateNumber(mCamera.getSensorSizeX()) + "x" + ModuleManager.truncateNumber(mCamera.getSensorSizeY())
+                            + getString(R.string.millimeter),
                     (prefs.getInt("cameras_last", -1) == i));
             mCameraCardList.add(mCameraCard);
         }
@@ -71,52 +123,19 @@ public class EditCamerasActivity extends AppCompatActivity {
                         .create());
 
 
-        mAddDial.setOnActionSelectedListener(new SpeedDialView.OnActionSelectedListener() {
-            @Override
-            public boolean onActionSelected(SpeedDialActionItem actionItem) {
-                switch (actionItem.getId()) {
-                    case R.id.add_database:
+        mAddDial.setOnActionSelectedListener(actionItem -> {
+            switch (actionItem.getId()) {
+                case R.id.add_database:
 
-                        //SQLiteDatabase mDatabase = new DataBaseHelper(EditCamerasActivity.this).getReadableDatabase();
+                    Snackbar.make(mRecyclerView, "The database will come soon...", Snackbar.LENGTH_LONG).show();
 
-                        //mDatabase.rawQuery("SELECT * FROM Canon", new String[]{}).close();
-
-
-                        //Toast.makeText(EditCamerasActivity.this, "The database will come soon", Toast.LENGTH_LONG).show();
-
-                        /*XmlResourceParser databaseParser = getResources().getXml(R.xml.cameras);
-
-                        try {
-                            String eventType = databaseParser.getName();
-                            int startTag = XmlResourceParser.START_TAG;
-                            if (databaseParser.getEventType() == XmlResourceParser.START_TAG) {
-                                String s = databaseParser.getName();
-
-                                if (s.equals("manufacturer")) {
-                                    databaseParser.next();   /// moving to the next node
-                                    if(databaseParser.getName() != null && databaseParser.getName().equalsIgnoreCase("camera")){
-                                        String name = databaseParser.getText();  ///to get value getText() method should be used
-                                        databaseParser.next();   ///jumping on to the next node
-                                        String name2 = databaseParser.getText();  ////similar to above
-
-                                        Log.d("TAG", name);
-                                        Log.d("TAG", name2);
-                                    }
-                                }
-                            }
-                        } catch (XmlPullParserException | IOException e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }*/
-
-                        break;
-                    case R.id.add_custom:
-                        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", 0) + 1, mCameraCardList, mAdapter);
-                        break;
-                }
-
-                return false;
+                    break;
+                case R.id.add_custom:
+                    mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", 0) + 1, mCameraCardList, mAdapter);
+                    break;
             }
+
+            return false;
         });
     }
 
@@ -131,12 +150,17 @@ public class EditCamerasActivity extends AppCompatActivity {
         List<String> options = new ArrayList<>();
         List<Integer> icons = new ArrayList<>();
         int counter = -1;
+        final int position_details;
         int position_up = -1;
         int position_down = -1;
         int position_use = 0;
         final int position_edit;
         int position_delete = -1;
 
+        options.add(getString(R.string.details));
+        icons.add(R.drawable.ic_info);
+        position_details = counter + 1;
+        counter++;
         if (position != 0) {
             options.add(getString(R.string.move_up));
             icons.add(R.drawable.ic_up);
@@ -176,26 +200,25 @@ public class EditCamerasActivity extends AppCompatActivity {
         final int finalPosition_use = position_use;
         final int finalPosition_delete = position_delete;
         BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
-        mBuilder.setItems(options.toArray(new String[0]), iconlist, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                RecyclerView.Adapter adapter = rv.getAdapter();
-                if (which == finalPosition_up) {
-                    mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
-                    Snackbar.make(rv, "Move up", Snackbar.LENGTH_SHORT).show();
-                } else if (which == finalPosition_down) {
-                    mModuleManager.moveCamera(EditCamerasActivity.this, position, position + 1, EditCamerasActivity.this.mCameraCardList, adapter);
-                    Snackbar.make(rv, "Move down", Snackbar.LENGTH_SHORT).show();
-                } else if (which == finalPosition_use) {
-                    mCameraCardList.get(prefs.getInt("cameras_last", 0)).setIsLastUsed(false);
-                    mCameraCardList.get(position).setIsLastUsed(true);
-                    prefsEdit.putInt("cameras_last", position).apply();
-                    adapter.notifyDataSetChanged();
-                } else if (which == position_edit) {
-                    mModuleManager.editCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
-                } else if (which == finalPosition_delete) {
-                    mModuleManager.deleteCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
-                }
+        mBuilder.setItems(options.toArray(new String[0]), iconlist, (dialog, which) -> {
+            RecyclerView.Adapter adapter = rv.getAdapter();
+            if (which == position_details) {
+                Intent intent = new Intent(EditCamerasActivity.this, CameraDetailsActivity.class)
+                        .putExtra("which", position);
+                startActivity(intent);
+            } else if (which == finalPosition_up) {
+                mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
+            } else if (which == finalPosition_down) {
+                mModuleManager.moveCamera(EditCamerasActivity.this, position, position + 1, EditCamerasActivity.this.mCameraCardList, adapter);
+            } else if (which == finalPosition_use) {
+                mCameraCardList.get(prefs.getInt("cameras_last", 0)).setIsLastUsed(false);
+                mCameraCardList.get(position).setIsLastUsed(true);
+                prefsEdit.putInt("cameras_last", position).apply();
+                adapter.notifyDataSetChanged();
+            } else if (which == position_edit) {
+                mModuleManager.editCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
+            } else if (which == finalPosition_delete) {
+                mModuleManager.deleteCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
             }
         });
         mBuilder.setDarkTheme(prefs.getBoolean("system_darkmode", false))

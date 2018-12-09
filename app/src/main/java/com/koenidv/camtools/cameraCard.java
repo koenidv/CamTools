@@ -1,20 +1,33 @@
 package com.koenidv.camtools;
 //  Created by koenidv on 01.10.2018.
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 public class cameraCard {
-    private String mName, mSensorSize, mResolution, mPixelpitch, mConfusion;
+    private String mName, mInfo;
     private boolean mIsLastUsed;
 
     public cameraCard() {
     }
 
-    cameraCard(String mName, String mSensorSize, String mResolution, String mPixelpitch, String mConfusion, boolean mIsLastUsed) {
+    cameraCard(String mName, String mInfo, boolean mIsLastUsed) {
         this.mName = mName;
-        this.mSensorSize = mSensorSize;
-        this.mResolution = mResolution;
-        this.mPixelpitch = mPixelpitch;
-        this.mConfusion = mConfusion;
+        this.mInfo = mInfo;
         this.mIsLastUsed = mIsLastUsed;
+    }
+
+    cameraCard(camera mCamera, int mIndex, Context mContext) {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
+
+        this.mName = mCamera.getName();
+        this.mInfo = String.valueOf(Math.round(mCamera.getResolutionX() * mCamera.getResolutionY() / (float) 1000000))
+                + mContext.getString(R.string.megapixel)
+                + mContext.getString(R.string.resolution_size_seperator)
+                + ModuleManager.truncateNumber(mCamera.getSensorSizeX()) + "x" + ModuleManager.truncateNumber(mCamera.getSensorSizeY())
+                + mContext.getString(R.string.millimeter);
+        this.mIsLastUsed = mIndex == prefs.getInt("cameras_last", -1);
+
     }
 
     public String getName() {
@@ -23,29 +36,11 @@ public class cameraCard {
     public void setName(String name) {
         this.mName = name;
     }
-    public String getSensorSize() {
-        return mSensorSize;
+    public String getInfo() {
+        return mInfo;
     }
-    public void setSensorSize(String sensorsize) {
-        this.mSensorSize = sensorsize;
-    }
-    public String getResolution() {
-        return mResolution;
-    }
-    public void setResolution(String resolution) {
-        this.mResolution = resolution;
-    }
-    public String getPixelpitch() {
-        return mPixelpitch;
-    }
-    public void setPixelpitch(String pixelpitch) {
-        this.mPixelpitch = pixelpitch;
-    }
-    public String getConfusion() {
-        return mConfusion;
-    }
-    public void setConfusion(String confusion) {
-        this.mConfusion = confusion;
+    public void setInfo(String info) {
+        this.mInfo = info;
     }
     public boolean getIsLastUsed() {
         return  mIsLastUsed;

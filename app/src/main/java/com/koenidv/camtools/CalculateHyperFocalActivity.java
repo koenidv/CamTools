@@ -77,7 +77,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateHyperFocalActivity.this, mCameraTextView, coc, "coc", 0.03f);
+                mModuleManager.selectCamera(CalculateHyperFocalActivity.this, mCameraTextView, coc, "coc");
             }
         });
 

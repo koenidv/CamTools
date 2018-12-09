@@ -9,6 +9,8 @@
     <string name="title_exposure_long">Exposure time</string>
     <string name="title_focus_short">Focus</string>
     <string name="title_focus_long">Focus</string>
+    <string name="title_tools_short">Tools</string>
+    <string name="title_tools_long">Tools</string>
     <string name="title_timelapse_short">Timelapse</string>
     <string name="title_timelapse_long">Timelapse</string>
     <string name="title_settings_short">Settings</string>
@@ -46,6 +48,9 @@
     <string name="select_lightpollution">Light pollution</string>
     <string name="description_lightpollution">Explore where you can take the best night-time images.</string>
     <string name="shortcut_sky_lightpollution">Light pollution</string>
+    <string name="select_contrast">Contrasts</string>
+    <string name="description_contrast">Use contrasting colors to make your images look more interesting.</string>
+    <string name="shortcut_tools_contrast">Contrasts</string>
 
 
     <string name="settings">Settings</string>
@@ -110,6 +115,16 @@
     <string name="fallback_colorparse">Falling back to at least one standard color. Make sure to have entered a valid color code.</string>
 
     <string name="camera_default_name">Default</string>
+    <string name="camera_default">
+        {"mName":"Default",
+        "mResolutionX":6000,
+        "mResolutionY":4000,
+        "mSensorSizeX":36,
+        "mSensorSizeY":24,
+        "mCropfactor":1,
+        "mPixelpitch":6.6,
+        "mConfusion":0.03}
+    </string>
 
     <string name="calculate_camera">Camera: %s</string>
     <string name="calculate_camera_add">Add your camera</string>
@@ -117,6 +132,8 @@
     <string name="calculate_camera_manage">Manage</string>
     <string name="calculate_timer_start">Start timer</string>
     <string name="calculate_equations">How to calculate</string>
+    <string name="calculate_color_choose">Choose a color</string>
+    <string name="calculate_color_mode">Contrast: %s</string>
 
 
     <string name="title_activity_custom">Custom Colors</string>
@@ -226,8 +243,10 @@
     <string name="density_factor" translatable="false">x</string>
     <string name="density_stops">stops</string>
     <string name="megapixel">MP</string>
+    <string name="million">" million"</string>
     <string name="pixel">px</string>
 
+    <string name="details">Details</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="use_next">Use</string>
@@ -250,10 +269,19 @@
     <string name="coming_soon_description">This feature is still under development. It will be available </string>
 
     <string name="name">Name</string>
+    <string name="pixelcount_indicator">"Pixels: "</string>
+    <string name="resolution_indicator">"Maximal resolution: "</string>
     <string name="sensorsize_indicator">"Sensor size: "</string>
-    <string name="resolution_indicator">"Image resolution: "</string>
+    <string name="cropfactor_indicator">"Crop factor: "</string>
     <string name="pixelpitch_indicator">"Pixel pitch: "</string>
     <string name="coc_indicator">"Circle of confusion: "</string>
+    <string name="pixelcount_text">"Pixels: %s million"</string>
+    <string name="resolution_text">"Maximal resolution: %x x %y pixel"</string>
+    <string name="sensorsize_text">"Sensor size: %x x %y mm"</string>
+    <string name="cropfactor_text">"Crop factor: %sx"</string>
+    <string name="pixelpitch_text">"Pixel pitch: %sμm"</string>
+    <string name="coc_text">"Circle of confusion: %smm"</string>
+    <string name="resolution_size_seperator">" at "</string>
     <string name="preset_choose">Choose a preset</string>
 
     <string name="color_palette">Color Palette</string>
@@ -315,5 +343,8 @@
     <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
     <string name="sun_details_morning_astronomical">Astronomical twilight</string>
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

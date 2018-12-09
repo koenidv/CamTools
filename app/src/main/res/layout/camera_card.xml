@@ -22,7 +22,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="8dp">
+        android:padding="16dp">
 
 
         <TextView
@@ -33,27 +33,11 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
         <TextView
-            android:id="@+id/sensorsizeTextView"
+            android:id="@+id/infoTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:textAlignment="center"/>
 
-        <TextView
-            android:id="@+id/resolutionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"/>
-
-        <TextView
-            android:id="@+id/pixelpitchTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"/>
-
-        <TextView
-            android:id="@+id/confusionTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

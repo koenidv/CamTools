@@ -188,7 +188,7 @@
     <string name="name">Name</string>
     <string name="sensorsize_indicator">"Sensorgröße: "</string>
     <string name="resolution_indicator">"Bildauflösung: "</string>
-    <string name="pixelpitch_indicator">"Pixelpitch: "</string>
+    <string name="pixelpitch_indicator">"Pixelabstand: "</string>
     <string name="coc_indicator">"Zerstreuungskreis: "</string>
     <string name="camera_default_name">Standard</string>
     <string name="calculate_camera">Kamera: %s</string>
@@ -282,4 +282,9 @@
         k = Blende\np = Pixelabstand\nf = Brennweite
     </string>
     <string name="delete_history">Verlauf löschen</string>
+    <string name="resolution_size_seperator">" auf "</string>
+    <string name="cropfactor_indicator">"Formatfaktor: "</string>
+    <string name="pixelcount_indicator">"Pixel: "</string>
+    <string name="details">Details</string>
+    <string name="million">" Millionen"</string>
 </resources>

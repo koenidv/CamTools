@@ -139,7 +139,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         mCameraLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc", 0.03f);
+                mModuleManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc");
             }
         });
 

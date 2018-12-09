@@ -11,12 +11,7 @@ import android.view.MenuItem;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -43,22 +38,6 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
 
-        FirebaseApp.initializeApp(getApplicationContext());
-        final FirebaseRemoteConfig mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        mFirebaseRemoteConfig.fetch(mFirebaseRemoteConfig.getLong("config_cache"))
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // After config data is successfully fetched, it must be activated before newly fetched
-                            // values are returned.
-                            mFirebaseRemoteConfig.activateFetched();
-                        }
-                    }
-                });
-
         if (prefs.getBoolean("system_darkmode", false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
@@ -81,10 +60,12 @@ public class MainActivity extends AppCompatActivity {
         AHBottomNavigationItem nav_sky = new AHBottomNavigationItem(R.string.title_sky_short, R.drawable.ic_sun, R.color.tab_sky);
         AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_density, R.color.tab_exposure);
         AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.tab_focus);
+        AHBottomNavigationItem nav_tools = new AHBottomNavigationItem(R.string.title_tools_short, R.drawable.ic_tools, R.color.colorAccent);
 
         mNavigation.addItem(nav_sky);
         mNavigation.addItem(nav_exposure);
         mNavigation.addItem(nav_focus);
+        mNavigation.addItem(nav_tools);
 
         mNavigation.setDefaultBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mNavigation.setAccentColor(getResources().getColor(R.color.colorAccent));
@@ -94,17 +75,11 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(prefs.getInt("lastTab", 0));
         mNavigation.setCurrentItem(prefs.getInt("lastTab", 0));
 
-        mNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener()
-
-        {
-            @SuppressWarnings("RedundantCast")
-            @Override
-            public boolean onTabSelected(int position, boolean wasSelected) {
-                if (!noUpdate) {
-                    mViewPager.setCurrentItem(position);
-                }
-                return true;
+        mNavigation.setOnTabSelectedListener((position, wasSelected) -> {
+            if (!noUpdate) {
+                mViewPager.setCurrentItem(position);
             }
+            return true;
         });
 
 
@@ -162,6 +137,8 @@ public class MainActivity extends AppCompatActivity {
                     return new ExposureFragment();
                 case 2:
                     return new FocusFragment();
+                case 3:
+                    return new ToolsFragment();
                 default:
                     return new SkyFragment();
             }
@@ -170,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -183,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 case 2:
                     return getString(R.string.title_focus_long);
                 case 3:
-                    return getString(R.string.title_settings_long);
+                    return getString(R.string.title_tools_long);
             }
             return null;
         }
