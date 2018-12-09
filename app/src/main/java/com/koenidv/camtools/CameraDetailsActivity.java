@@ -2,13 +2,14 @@ package com.koenidv.camtools;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.nfc.FormatException;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,18 +72,31 @@ public class CameraDetailsActivity extends AppCompatActivity {
         int finalWhich = which;
         mEditFAB.setOnClickListener(v -> mModuleManager.editCamera(CameraDetailsActivity.this, finalWhich, null, null));
 
+        Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
+                .setAction(R.string.okay, v -> {
+
+                })
+                .show();
 
         /*
          * Transfer camera with android beam
          */
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(CameraDetailsActivity.this);
         if (nfcAdapter != null) {
-            NdefMessage message = null;
-            try {
-                message = new NdefMessage(mCamera.getName().getBytes());
-            } catch (FormatException mE) {
-                mE.printStackTrace();
-            }
+            String data =
+                    mCamera.getName().replace(" ", "%20")
+                    + ";"
+                    + mCamera.getResolutionX()
+                    + ":"
+                    + mCamera.getResolutionY()
+                    + ";"
+                    + mCamera.getSensorSizeX()
+                    + ":"
+                    + mCamera.getSensorSizeY()
+                    + ";"
+                    + mCamera.getConfusion();
+            //NdefMessage message = new NdefMessage(NdefRecord.createUri(url));
+            NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
             nfcAdapter.setNdefPushMessage(message, CameraDetailsActivity.this);
         }
 

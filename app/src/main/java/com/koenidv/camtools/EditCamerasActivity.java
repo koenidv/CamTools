@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Html;
 import android.view.View;
 
@@ -19,9 +22,11 @@ import org.michaelbel.bottomsheet.BottomSheet;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,38 +64,70 @@ public class EditCamerasActivity extends AppCompatActivity {
          * Add from URL
          */
 
-        Intent appLinkIntent = getIntent();
-        String appLinkAction = appLinkIntent.getAction();
-        Uri appLinkData = appLinkIntent.getData();
+        Intent startIntent = getIntent();
+        String intentAction = startIntent.getAction();
+        Uri appLinkData = startIntent.getData();
 
-        if (appLinkData != null && !appLinkData.toString().startsWith("%7B")) {
+        if (Objects.equals(intentAction, Intent.ACTION_VIEW)) {
 
-            String data = appLinkData.toString().replace("https://addcam.koenidv.de/", "").replace("%20", " ");
+            if (appLinkData != null && !appLinkData.toString().startsWith("%7B")) {
+                try {
 
-            String name = data.substring(0, data.indexOf(";"));
-            data = data.substring(data.indexOf(";") + 1);
-            String resolution = data.substring(0, data.indexOf(";"));
-            data = data.substring(data.indexOf(";") + 1);
-            String sensorsize = data.substring(0, data.indexOf(";"));
-            data = data.substring(data.indexOf(";") + 1);
-            String confusion = data;
+                    String data = appLinkData.toString().replace("http://addcam.koenidv.de/", "").replace("%20", " ");
 
-            camera addCamera = new camera(name, resolution, sensorsize, confusion);
-            prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
-                    .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
-                    .apply();
+                    String name = data.substring(0, data.indexOf(";"));
+                    data = data.substring(data.indexOf(";") + 1);
+                    String resolution = data.substring(0, data.indexOf(";"));
+                    data = data.substring(data.indexOf(";") + 1);
+                    String sensorsize = data.substring(0, data.indexOf(";"));
+                    data = data.substring(data.indexOf(";") + 1);
+                    String confusion = data;
 
+                    camera addCamera = new camera(name, resolution, sensorsize, confusion);
+                    prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
+                            .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                            .apply();
 
-        } else if (appLinkData != null) {
-            String data = appLinkData.toString().replace("https://cam.koenidv.de/add/", "").replace("%7B", "{").replace("%7D", "}").replace("%20", " ");
-            data = Html.fromHtml(data).toString();
-            camera addCamera = gson.fromJson(data, camera.class);
+                    Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG).show();
+                } catch (IndexOutOfBoundsException ie) {
+                    Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
+                }
+            } else if (appLinkData != null) {
+                String data = appLinkData.toString().replace("http://cam.koenidv.de/add/", "").replace("%7B", "{").replace("%7D", "}").replace("%20", " ");
+                data = Html.fromHtml(data).toString();
+                camera addCamera = gson.fromJson(data, camera.class);
 
-            prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
-                    .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
-                    .apply();
+                prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
+                        .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                        .apply();
 
-            Snackbar.make(findViewById(R.id.rootView), "Added camera \"" + addCamera.getName() + "\"", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG).show();
+            }
+
+        } else if (Objects.equals(intentAction, NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+            Parcelable[] rawMessage = startIntent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            NdefMessage message = (NdefMessage) rawMessage[0];
+            String data = new String(message.getRecords()[0].getPayload());
+            data = data.replace("%20", " ");
+
+            try {
+                String name = data.substring(0, data.indexOf(";"));
+                data = data.substring(data.indexOf(";") + 1);
+                String resolution = data.substring(0, data.indexOf(";"));
+                data = data.substring(data.indexOf(";") + 1);
+                String sensorsize = data.substring(0, data.indexOf(";"));
+                data = data.substring(data.indexOf(";") + 1);
+                String confusion = data;
+
+                camera addCamera = new camera(name, resolution, sensorsize, confusion);
+                prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
+                        .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                        .apply();
+
+                Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG).show();
+            } catch (IndexOutOfBoundsException ie) {
+                Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
+            }
         }
 
 
@@ -127,7 +164,8 @@ public class EditCamerasActivity extends AppCompatActivity {
             switch (actionItem.getId()) {
                 case R.id.add_database:
 
-                    Snackbar.make(mRecyclerView, "The database will come soon...", Snackbar.LENGTH_LONG).show();
+                    CustomTabsIntent intent = new CustomTabsIntent.Builder().build();
+                    intent.launchUrl(this, Uri.parse("https://camtools.koenidv.de/cams"));
 
                     break;
                 case R.id.add_custom:

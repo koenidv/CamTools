@@ -299,6 +299,10 @@ class ModuleManager {
             prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
         }
 
+        if (prefs.getInt("cameras_last", 0) == mIndex) {
+            prefsEdit.putInt("cameras_last", 0);
+        }
+
         String index = "camera_" + prefs.getInt("cameras_amount", 0);
         prefsEdit.remove(index).apply();
 

@@ -191,6 +191,16 @@
     <string name="pixelpitch_indicator">"Pixelabstand: "</string>
     <string name="coc_indicator">"Zerstreuungskreis: "</string>
     <string name="camera_default_name">Standard</string>
+    <string name="camera_default">
+        {"mName":"Standard",
+        "mResolutionX":6000,
+        "mResolutionY":4000,
+        "mSensorSizeX":36,
+        "mSensorSizeY":24,
+        "mCropfactor":1,
+        "mPixelpitch":6.6,
+        "mConfusion":0.03}
+    </string>
     <string name="calculate_camera">Kamera: %s</string>
     <string name="calculate_camera_add">Füge deine Kamera hinzu</string>
     <string name="calculate_camera_manage">Verwalten</string>
@@ -287,4 +297,19 @@
     <string name="pixelcount_indicator">"Pixel: "</string>
     <string name="details">Details</string>
     <string name="million">" Millionen"</string>
+    <string name="title_tools_short">Tools</string>
+    <string name="title_tools_long">Tools</string>
+    <string name="select_contrast">Kontraste</string>
+    <string name="description_contrast">Nutze kontrastierende Farben, um deine Bilder interessanter aussehen zu lassen.</string>
+    <string name="shortcut_tools_contrast">Kontraste</string>
+    <string name="calculate_color_choose">Wähle eine Farbe</string>
+    <string name="calculate_color_mode">Kontrast: %s</string>
+    <string name="pixelcount_text">Pixel: %s Millionen</string>
+    <string name="resolution_text">Maximale Auflösung: %x x %y Pixel</string>
+    <string name="sensorsize_text">Sensorgröße: %x x %y mm</string>
+    <string name="cropfactor_text">Formatfaktor: %s</string>
+    <string name="pixelpitch_text">Pixelabstand: %sμm</string>
+    <string name="coc_text">Zerstreuungskreis: %smm</string>
+    <string name="setting_cameras_added_camera">%s wurde hinzugefügt</string>
+    <string name="setting_cameras_added_error">Kamera konnte nicht hinzugefügt werden</string>
 </resources>

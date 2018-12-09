@@ -88,6 +88,8 @@
     <string name="setting_cameras_sensorsize">Sensor size (mm)</string>
     <string name="setting_cameras_resolution">Image resolution (px)</string>
     <string name="setting_cameras_coc">Circle of confusion (mm)</string>
+    <string name="setting_cameras_added_camera">Added %s</string>
+    <string name="setting_cameras_added_error">Could not add camera</string>
     <string name="settings_cam_coc">Circle of confusion</string>
     <string name="settings_nd_strengthunit">Density unit</string>
     <string name="settings_nd_strengthunit_dialog">Optical density unit</string>
@@ -283,6 +285,7 @@
     <string name="coc_text">"Circle of confusion: %smm"</string>
     <string name="resolution_size_seperator">" at "</string>
     <string name="preset_choose">Choose a preset</string>
+    <string name="tip_share_beam">Tip: You can share this camera with Android Beam</string>
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>
@@ -345,6 +348,5 @@
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
