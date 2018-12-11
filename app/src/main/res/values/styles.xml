@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
     <style name="darkDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -32,6 +33,16 @@
     <style name="AppModalStyle"
            parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/rounded_dialog</item>
+    </style>
+
+    <style name="AppBottomSheetDialogThemeLight"
+           parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyleLight</item>
+    </style>
+
+    <style name="AppModalStyleLight"
+           parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_dialog_light</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>

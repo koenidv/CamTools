@@ -21,6 +21,7 @@ public class CameraDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_details);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEdit = prefs.edit();
         ModuleManager mModuleManager = new ModuleManager();
         Gson gson = new Gson();
 
@@ -72,11 +73,13 @@ public class CameraDetailsActivity extends AppCompatActivity {
         int finalWhich = which;
         mEditFAB.setOnClickListener(v -> mModuleManager.editCamera(CameraDetailsActivity.this, finalWhich, null, null));
 
-        Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.okay, v -> {
-
-                })
-                .show();
+        if (!prefs.getBoolean("has_seen_nfc_tip", false)) {
+            Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.okay, v -> {
+                    })
+                    .show();
+            prefsEdit.putBoolean("has_seen_nfc_tip", true).apply();
+        }
 
         /*
          * Transfer camera with android beam
@@ -85,16 +88,16 @@ public class CameraDetailsActivity extends AppCompatActivity {
         if (nfcAdapter != null) {
             String data =
                     mCamera.getName().replace(" ", "%20")
-                    + ";"
-                    + mCamera.getResolutionX()
-                    + ":"
-                    + mCamera.getResolutionY()
-                    + ";"
-                    + mCamera.getSensorSizeX()
-                    + ":"
-                    + mCamera.getSensorSizeY()
-                    + ";"
-                    + mCamera.getConfusion();
+                            + ";"
+                            + mCamera.getResolutionX()
+                            + ":"
+                            + mCamera.getResolutionY()
+                            + ";"
+                            + mCamera.getSensorSizeX()
+                            + ":"
+                            + mCamera.getSensorSizeY()
+                            + ";"
+                            + mCamera.getConfusion();
             //NdefMessage message = new NdefMessage(NdefRecord.createUri(url));
             NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
             nfcAdapter.setNdefPushMessage(message, CameraDetailsActivity.this);

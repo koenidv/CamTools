@@ -90,6 +90,7 @@
     <string name="setting_cameras_coc">Circle of confusion (mm)</string>
     <string name="setting_cameras_added_camera">Added %s</string>
     <string name="setting_cameras_added_error">Could not add camera</string>
+    <string name="setting_cameras_deleted">Deleted %s</string>
     <string name="settings_cam_coc">Circle of confusion</string>
     <string name="settings_nd_strengthunit">Density unit</string>
     <string name="settings_nd_strengthunit_dialog">Optical density unit</string>
@@ -258,6 +259,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="okay">Okay</string>
+    <string name="undo">Undo</string>
     <string name="offerHelp">Need help?</string>
     <string name="delete_history">Delete history</string>
     <string name="requestFeature">Request feature</string>
@@ -286,6 +288,8 @@
     <string name="resolution_size_seperator">" at "</string>
     <string name="preset_choose">Choose a preset</string>
     <string name="tip_share_beam">Tip: You can share this camera with Android Beam</string>
+    <string name="no_cameras_added">You haven\'t added a camera yet</string>
+    <string name="no_cameras_added_description">Add your camera to get more precise results.</string>
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>

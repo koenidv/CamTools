@@ -6,9 +6,9 @@ android {
         applicationId "com.koenidv.camtools"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 6
-        versionName '0.6'
+        versionName '0.7'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionCode 7
     }
     dataBinding {
         enabled = true
@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.github.enricocid:cbl:1.0.0'
     implementation 'androidx.browser:browser:1.0.0'
+    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

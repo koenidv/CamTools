@@ -312,4 +312,6 @@
     <string name="coc_text">Zerstreuungskreis: %smm</string>
     <string name="setting_cameras_added_camera">%s wurde hinzugefügt</string>
     <string name="setting_cameras_added_error">Kamera konnte nicht hinzugefügt werden</string>
+    <string name="tip_share_beam">Tipp: Du kannst diese Kamera per Android Beam teilen</string>
+    <string name="undo">Rückgängig</string>
 </resources>

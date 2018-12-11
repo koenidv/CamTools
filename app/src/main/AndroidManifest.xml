@@ -105,7 +105,8 @@
         <activity
             android:name=".CameraDetailsActivity"
             android:label="@string/details"
-            android:parentActivityName=".EditCamerasActivity">
+            android:parentActivityName=".EditCamerasActivity"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".CalculateContrastActivity"

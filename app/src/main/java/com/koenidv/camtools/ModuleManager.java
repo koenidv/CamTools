@@ -108,7 +108,7 @@ class ModuleManager {
      * @param mName    The name of the equation as saved in strings.xml
      */
     void showEquations(Context mContext, String mName) {
-        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext);
+        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogThemeLight);
         mDialog.setContentView(R.layout.sheet_equation);
 
         int mathId = mContext.getResources().getIdentifier("equation_" + mName, "string", mContext.getPackageName());
@@ -139,7 +139,7 @@ class ModuleManager {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         Gson gson = new Gson();
 
-        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext);
+        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
         mDialog.setContentView(R.layout.dialog_camera_add_custom);
         Objects.requireNonNull(mDialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         FrameLayout bottomSheet = mDialog.findViewById(R.id.design_bottom_sheet);
@@ -245,7 +245,7 @@ class ModuleManager {
                     Float.valueOf(mSizeXEditText.getText().toString()),
                     Float.valueOf(mSizeYEditText.getText().toString()),
                     Float.valueOf(mConfusionEditText.getText().toString())
-                    );
+            );
 
             prefsEdit.putString(index, gson.toJson(mCamera))
                     .apply();
@@ -292,6 +292,7 @@ class ModuleManager {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
+        // Move every camera with a higher index one down
         for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
             String indexLast = "camera_" + String.valueOf(move - 1);
             String indexThis = "camera_" + move;
@@ -299,16 +300,22 @@ class ModuleManager {
             prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
         }
 
+        // Use the standard camera if the deleted camera was used last
         if (prefs.getInt("cameras_last", 0) == mIndex) {
             prefsEdit.putInt("cameras_last", 0);
         }
 
+        // Remove the last entry (which is now the same as the second-to-last entry
         String index = "camera_" + prefs.getInt("cameras_amount", 0);
         prefsEdit.remove(index).apply();
 
+        // The amount of cameras is now one smaller
         prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).apply();
-        mCardList.remove(mIndex);
-        mAdapter.notifyDataSetChanged();
+
+        if (mCardList != null && mAdapter != null) {
+            mCardList.remove(mIndex);
+            mAdapter.notifyItemRemoved(mIndex);
+        }
     }
 
     /**
@@ -338,10 +345,7 @@ class ModuleManager {
         }
         prefsEdit.apply();
 
-        cameraCard toCard = mCardList.get(mToIndex);
-        mCardList.set(mToIndex, mCardList.get(mFromIndex));
-        mCardList.set(mFromIndex, toCard);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.notifyItemMoved(mFromIndex, mToIndex);
     }
 
     void showHistory(Context mContext) {

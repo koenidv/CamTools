@@ -9,8 +9,9 @@ import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.Html;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -27,12 +28,21 @@ import java.util.Objects;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class EditCamerasActivity extends AppCompatActivity {
 
     final List<cameraCard> mCameraCardList = new ArrayList<>();
+    final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraCardList);
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        //Toast.makeText(EditCamerasActivity.this, "OnResume", Toast.LENGTH_LONG).show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +61,12 @@ public class EditCamerasActivity extends AppCompatActivity {
 
         RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
         SpeedDialView mAddDial = findViewById(R.id.addSpeedDial);
+        CardView mEmptyCardView = findViewById(R.id.emptyCard);
 
 
         mRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraCardList);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -84,24 +94,16 @@ public class EditCamerasActivity extends AppCompatActivity {
                     String confusion = data;
 
                     camera addCamera = new camera(name, resolution, sensorsize, confusion);
-                    prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
-                            .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                    int index = prefs.getInt("cameras_amount", 0) + 1;
+                    prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
+                            .putInt("cameras_amount", index)
                             .apply();
 
-                    Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraCardList, mAdapter)).show();
                 } catch (IndexOutOfBoundsException ie) {
                     Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
                 }
-            } else if (appLinkData != null) {
-                String data = appLinkData.toString().replace("http://cam.koenidv.de/add/", "").replace("%7B", "{").replace("%7D", "}").replace("%20", " ");
-                data = Html.fromHtml(data).toString();
-                camera addCamera = gson.fromJson(data, camera.class);
-
-                prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
-                        .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
-                        .apply();
-
-                Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG).show();
             }
 
         } else if (Objects.equals(intentAction, NfcAdapter.ACTION_NDEF_DISCOVERED)) {
@@ -120,31 +122,39 @@ public class EditCamerasActivity extends AppCompatActivity {
                 String confusion = data;
 
                 camera addCamera = new camera(name, resolution, sensorsize, confusion);
-                prefsEdit.putString("camera_" + String.valueOf(prefs.getInt("cameras_amount", 0) + 1), gson.toJson(addCamera))
-                        .putInt("cameras_amount", prefs.getInt("cameras_amount", 0) + 1)
+                int index = prefs.getInt("cameras_amount", 0) + 1;
+
+                prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
+                        .putInt("cameras_amount", index)
                         .apply();
 
-                Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraCardList, mAdapter)).show();
             } catch (IndexOutOfBoundsException ie) {
                 Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
             }
         }
 
+        if (prefs.getInt("cameras_amount", 0) == 0 && prefs.getString("camera_0", "").equals("")) {
+            mRecyclerView.setVisibility(View.GONE);
+            mEmptyCardView.setVisibility(View.VISIBLE);
 
-        for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
-            camera mCamera = gson.fromJson(prefs.getString("camera_" + i, getString(R.string.camera_default)), camera.class);
+        } else {
+            for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
+                camera mCamera = gson.fromJson(prefs.getString("camera_" + i, getString(R.string.camera_default)), camera.class);
 
-            cameraCard mCameraCard = new cameraCard(
-                    mCamera.getName(),
-                    String.valueOf(Math.round(mCamera.getResolutionX() * mCamera.getResolutionY() / (float) 1000000))
-                            + getString(R.string.megapixel)
-                            + getString(R.string.resolution_size_seperator)
-                            + ModuleManager.truncateNumber(mCamera.getSensorSizeX()) + "x" + ModuleManager.truncateNumber(mCamera.getSensorSizeY())
-                            + getString(R.string.millimeter),
-                    (prefs.getInt("cameras_last", -1) == i));
-            mCameraCardList.add(mCameraCard);
+                cameraCard mCameraCard = new cameraCard(
+                        mCamera.getName(),
+                        String.valueOf(Math.round(mCamera.getResolutionX() * mCamera.getResolutionY() / (float) 1000000))
+                                + getString(R.string.megapixel)
+                                + getString(R.string.resolution_size_seperator)
+                                + ModuleManager.truncateNumber(mCamera.getSensorSizeX()) + "x" + ModuleManager.truncateNumber(mCamera.getSensorSizeY())
+                                + getString(R.string.millimeter),
+                        (prefs.getInt("cameras_last", -1) == i));
+                mCameraCardList.add(mCameraCard);
+            }
+            mAdapter.notifyDataSetChanged();
         }
-        mAdapter.notifyDataSetChanged();
 
         mAddDial.setMainFabClosedBackgroundColor(getResources().getColor(R.color.colorAccentDark));
         mAddDial.setMainFabOpenedBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -241,9 +251,11 @@ public class EditCamerasActivity extends AppCompatActivity {
         mBuilder.setItems(options.toArray(new String[0]), iconlist, (dialog, which) -> {
             RecyclerView.Adapter adapter = rv.getAdapter();
             if (which == position_details) {
-                Intent intent = new Intent(EditCamerasActivity.this, CameraDetailsActivity.class)
+                /*Intent intent = new Intent(EditCamerasActivity.this, CameraDetailsActivity.class)
                         .putExtra("which", position);
-                startActivity(intent);
+                startActivity(intent);*/
+
+
             } else if (which == finalPosition_up) {
                 mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
             } else if (which == finalPosition_down) {
@@ -254,13 +266,44 @@ public class EditCamerasActivity extends AppCompatActivity {
                 prefsEdit.putInt("cameras_last", position).apply();
                 adapter.notifyDataSetChanged();
             } else if (which == position_edit) {
-                mModuleManager.editCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
+                mModuleManager.editCamera(EditCamerasActivity.this, position, EditCamerasActivity.this.mCameraCardList, adapter);
             } else if (which == finalPosition_delete) {
-                mModuleManager.deleteCamera(EditCamerasActivity.this, rv.getChildAdapterPosition(view), EditCamerasActivity.this.mCameraCardList, adapter);
+                cameraCard card = mCameraCardList.get(position);
+                mCameraCardList.remove(position);
+                mAdapter.notifyItemRemoved(position);
+
+                Snackbar undoSnackbar = Snackbar.make(findViewById(R.id.rootView), R.string.undo, Snackbar.LENGTH_LONG);
+                undoSnackbar.setAction(R.string.undo, v -> {
+                    mCameraCardList.add(position, card);
+                    mAdapter.notifyItemInserted(position);
+                });
+                undoSnackbar.addCallback(new Snackbar.Callback() {
+                   @Override
+                   public void onDismissed(Snackbar mSnackbar, int event) {
+                       if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                           mModuleManager.deleteCamera(EditCamerasActivity.this, position, null, null);
+                           Toast.makeText(EditCamerasActivity.this, "DELETED", Toast.LENGTH_LONG).show();
+                       }
+                   }
+                });
+                undoSnackbar.show();
+
             }
         });
         mBuilder.setDarkTheme(prefs.getBoolean("system_darkmode", false))
                 .show();
     }
 
+    public void addCard(View v) {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final ModuleManager mModuleManager = new ModuleManager();
+        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", 0) + 1, mCameraCardList, mAdapter);
+
+        RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
+        CardView mEmptyCardView = findViewById(R.id.emptyCard);
+
+        mRecyclerView.setVisibility(View.VISIBLE);
+        mEmptyCardView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
+        mEmptyCardView.setVisibility(View.GONE);
+    }
 }
