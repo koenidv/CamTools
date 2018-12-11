@@ -307,11 +307,14 @@
     <string name="pixelcount_text">Pixel: %s Millionen</string>
     <string name="resolution_text">Maximale Auflösung: %x x %y Pixel</string>
     <string name="sensorsize_text">Sensorgröße: %x x %y mm</string>
-    <string name="cropfactor_text">Formatfaktor: %s</string>
+    <string name="cropfactor_text">Formatfaktor: %sx</string>
     <string name="pixelpitch_text">Pixelabstand: %sμm</string>
     <string name="coc_text">Zerstreuungskreis: %smm</string>
     <string name="setting_cameras_added_camera">%s wurde hinzugefügt</string>
     <string name="setting_cameras_added_error">Kamera konnte nicht hinzugefügt werden</string>
-    <string name="tip_share_beam">Tipp: Du kannst diese Kamera per Android Beam teilen</string>
+    <string name="tip_share_beam">Tipp: Öffne die Detailansicht, um eine Kamera per Android Beam zu teilen.</string>
     <string name="undo">Rückgängig</string>
+    <string name="setting_cameras_deleted">%s gelöscht</string>
+    <string name="no_cameras_added">Du hast noch keine Kameras hinzugefügt</string>
+    <string name="no_cameras_added_description">Füge deine Kamera hinzu um genauere Ergebnisse zu erhalten.</string>
 </resources>

@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -185,6 +184,13 @@ public class EditCamerasActivity extends AppCompatActivity {
 
             return false;
         });
+        if (!prefs.getBoolean("has_seen_nfc_tip", false)) {
+            Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.okay, v -> {
+                    })
+                    .show();
+            prefsEdit.putBoolean("has_seen_nfc_tip", true).apply();
+        }
     }
 
     public void cardClicked(final View view) {
@@ -250,11 +256,11 @@ public class EditCamerasActivity extends AppCompatActivity {
         BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
         mBuilder.setItems(options.toArray(new String[0]), iconlist, (dialog, which) -> {
             RecyclerView.Adapter adapter = rv.getAdapter();
-            if (which == position_details) {
-                /*Intent intent = new Intent(EditCamerasActivity.this, CameraDetailsActivity.class)
-                        .putExtra("which", position);
-                startActivity(intent);*/
 
+            if (which == position_details) {
+                CameraDetailsSheet sheet = new CameraDetailsSheet();
+                sheet.which = position;
+                sheet.show(getSupportFragmentManager(), "camera_details_sheet");
 
             } else if (which == finalPosition_up) {
                 mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
@@ -272,7 +278,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                 mCameraCardList.remove(position);
                 mAdapter.notifyItemRemoved(position);
 
-                Snackbar undoSnackbar = Snackbar.make(findViewById(R.id.rootView), R.string.undo, Snackbar.LENGTH_LONG);
+                Snackbar undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", card.getName()), Snackbar.LENGTH_LONG);
                 undoSnackbar.setAction(R.string.undo, v -> {
                     mCameraCardList.add(position, card);
                     mAdapter.notifyItemInserted(position);
@@ -282,7 +288,6 @@ public class EditCamerasActivity extends AppCompatActivity {
                    public void onDismissed(Snackbar mSnackbar, int event) {
                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
                            mModuleManager.deleteCamera(EditCamerasActivity.this, position, null, null);
-                           Toast.makeText(EditCamerasActivity.this, "DELETED", Toast.LENGTH_LONG).show();
                        }
                    }
                 });

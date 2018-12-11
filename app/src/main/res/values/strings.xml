@@ -287,7 +287,7 @@
     <string name="coc_text">"Circle of confusion: %smm"</string>
     <string name="resolution_size_seperator">" at "</string>
     <string name="preset_choose">Choose a preset</string>
-    <string name="tip_share_beam">Tip: You can share this camera with Android Beam</string>
+    <string name="tip_share_beam">Tip: Open the details view to share a camera by Android Beam</string>
     <string name="no_cameras_added">You haven\'t added a camera yet</string>
     <string name="no_cameras_added_description">Add your camera to get more precise results.</string>
 
@@ -350,7 +350,4 @@
     <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
     <string name="sun_details_morning_astronomical">Astronomical twilight</string>
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-
 </resources>

@@ -1,54 +1,49 @@
 package com.koenidv.camtools;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.gson.Gson;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 
-public class CameraDetailsActivity extends AppCompatActivity {
+public class CameraDetailsSheet extends BottomSheetDialogFragment {
+
+    int which = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera_details);
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        SharedPreferences.Editor prefsEdit = prefs.edit();
+        setStyle(STYLE_NORMAL, R.style.AppBottomSheetDialogTheme);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.sheet_camera_details, container, false);
+
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         ModuleManager mModuleManager = new ModuleManager();
         Gson gson = new Gson();
 
-        int which = 0;
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                which = 0;
-            } else {
-                which = extras.getInt("which");
-            }
-        } else {
-            try {
-                which = (int) savedInstanceState.getSerializable("which");
-            } catch (NullPointerException npe) {
-                npe.printStackTrace();
-            }
-        }
-
-        TextView mNameTextView = findViewById(R.id.nameTextView);
-        TextView mPixelCountTextView = findViewById(R.id.pixelcountTextView);
-        TextView mResolutionTextView = findViewById(R.id.resolutionTextView);
-        TextView mSensorSizeTextView = findViewById(R.id.sensorsizeTextView);
-        TextView mCropFactorTextView = findViewById(R.id.cropfactorTextView);
-        TextView mPixelPitchTextView = findViewById(R.id.pixelpitchTextView);
-        TextView mCocTextView = findViewById(R.id.confusionTextView);
-        FloatingActionButton mEditFAB = findViewById(R.id.editFAB);
+        TextView mNameTextView = view.findViewById(R.id.nameTextView);
+        TextView mPixelCountTextView = view.findViewById(R.id.pixelcountTextView);
+        TextView mResolutionTextView = view.findViewById(R.id.resolutionTextView);
+        TextView mSensorSizeTextView = view.findViewById(R.id.sensorsizeTextView);
+        TextView mCropFactorTextView = view.findViewById(R.id.cropfactorTextView);
+        TextView mPixelPitchTextView = view.findViewById(R.id.pixelpitchTextView);
+        TextView mCocTextView = view.findViewById(R.id.confusionTextView);
 
 
         camera mCamera = gson.fromJson(prefs.getString("camera_" + which, getString(R.string.camera_default)), camera.class);
@@ -70,21 +65,11 @@ public class CameraDetailsActivity extends AppCompatActivity {
         mCocTextView.setText(getString(R.string.coc_text)
                 .replace("%s", ModuleManager.truncateNumber(mCamera.getConfusion())));
 
-        int finalWhich = which;
-        mEditFAB.setOnClickListener(v -> mModuleManager.editCamera(CameraDetailsActivity.this, finalWhich, null, null));
-
-        if (!prefs.getBoolean("has_seen_nfc_tip", false)) {
-            Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.okay, v -> {
-                    })
-                    .show();
-            prefsEdit.putBoolean("has_seen_nfc_tip", true).apply();
-        }
 
         /*
          * Transfer camera with android beam
          */
-        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(CameraDetailsActivity.this);
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
         if (nfcAdapter != null) {
             String data =
                     mCamera.getName().replace(" ", "%20")
@@ -100,10 +85,10 @@ public class CameraDetailsActivity extends AppCompatActivity {
                             + mCamera.getConfusion();
             //NdefMessage message = new NdefMessage(NdefRecord.createUri(url));
             NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
-            nfcAdapter.setNdefPushMessage(message, CameraDetailsActivity.this);
+            nfcAdapter.setNdefPushMessage(message, getActivity());
         }
 
-
+        return view;
     }
-}
 
+}
