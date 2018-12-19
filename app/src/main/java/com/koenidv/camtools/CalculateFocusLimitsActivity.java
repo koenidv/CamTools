@@ -20,6 +20,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateFocusLimitsActivity extends AppCompatActivity {
@@ -30,8 +32,13 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
     protected void onResume() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
-        coc[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_coc", 0.03f);
+        camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        if (prefs.getInt("cameras_amount", -1) == -1) {
+            mCameraTextView.setText(R.string.calculate_camera_add);
+        } else {
+            mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
+        }
+        coc[0] = lastCamera.getConfusion();
         super.onResume();
     }
 
@@ -42,6 +49,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
+        Gson gson = new Gson();
 
 
         final boolean changing[] = {false};
@@ -57,10 +65,9 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         TextView mDistanceIndicatorTextView = findViewById(R.id.distanceIndicatorTextView);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        int lastCamera = prefs.getInt("cameras_last", 0);
-        coc[0] = prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f);
+        camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        coc[0] = lastCamera.getConfusion();
 
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
@@ -69,9 +76,6 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         mDistanceSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("distance", "5"))));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
 
-        if (prefs.getInt("cameras_amount", 0) == 0) {
-            mCameraTextView.setText(getString(R.string.calculate_camera_add));
-        }
 
         final float conversionfactor = prefs.getBoolean("empirical", false) ? 3.281f : 1f;
         if (prefs.getBoolean("empirical", false)) mDistanceEditText.setText(R.string.feet);
@@ -80,12 +84,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
          *  Listeners
          */
 
-        mCameraLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateFocusLimitsActivity.this, mCameraTextView, coc, "coc");
-            }
-        });
+        mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateFocusLimitsActivity.this, mCameraTextView, coc, "coc"));
 
         mCameraTextView.addTextChangedListener(new TextWatcher() {
             //f:off
@@ -206,12 +205,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.showEquations(CalculateFocusLimitsActivity.this, "focuslimits");
-            }
-        });
+        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateFocusLimitsActivity.this, "focuslimits"));
     }
 
     private void calculate(float mConfusion, float mLength, float mAperture, float mDistance) {

@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateHyperFocalActivity extends AppCompatActivity {
@@ -31,8 +33,13 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
     protected void onResume() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
-        coc[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_coc", 0.03f);
+        camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        if (prefs.getInt("cameras_amount", -1) == -1) {
+            mCameraTextView.setText(R.string.calculate_camera_add);
+        } else {
+            mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
+        }
+        coc[0] = lastCamera.getConfusion();
         super.onResume();
     }
 
@@ -43,10 +50,12 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
+        Gson gson = new Gson();
 
 
         final boolean changing[] = {false};
 
+        final View mResultLayout = findViewById(R.id.resultLayout);
         final LinearLayout mCameraLayout = findViewById(R.id.cameraLayout);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
         final SeekBar mLengthSeekbar = findViewById(R.id.focallengthSeekbar);
@@ -55,31 +64,23 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         final EditText mApertureEditText = findViewById(R.id.apertureEditText);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        int lastCamera = prefs.getInt("cameras_last", 0);
-        coc[0] = prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f);
+        camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        coc[0] = lastCamera.getConfusion();
 
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
-        if (prefs.getInt("cameras_amount", 0) == 0) {
-            mCameraTextView.setText(getString(R.string.calculate_camera_add));
-        }
-
 
         /*
          *  Listeners
          */
 
-        mCameraLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateHyperFocalActivity.this, mCameraTextView, coc, "coc");
-            }
-        });
+        mResultLayout.setOnClickListener(v -> mModuleManager.openArMeasure(this));
+
+        mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateHyperFocalActivity.this, mCameraTextView, coc, "coc"));
 
         mCameraTextView.addTextChangedListener(new TextWatcher() {
             //f:off
@@ -164,12 +165,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.showEquations(CalculateHyperFocalActivity.this, "hyperfocal");
-            }
-        });
+        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateHyperFocalActivity.this, "hyperfocal"));
     }
 
     /*

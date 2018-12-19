@@ -2,7 +2,6 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
@@ -15,17 +14,15 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.Gson;
 
-import androidx.appcompat.app.AlertDialog;
+import java.text.DecimalFormat;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateReverseFocusActivity extends AppCompatActivity {
@@ -36,8 +33,13 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
     protected void onResume() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
-        coc[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_coc", 0.03f);
+        camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        if (prefs.getInt("cameras_amount", -1) == -1) {
+            mCameraTextView.setText(R.string.calculate_camera_add);
+        } else {
+            mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
+        }
+        coc[0] = lastCamera.getConfusion();
         super.onResume();
     }
 
@@ -48,6 +50,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
+        Gson gson = new Gson();
 
 
         final boolean changing[] = {false};
@@ -64,10 +67,9 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         TextView mFarIndicatorTextView = findViewById(R.id.farfocusIndicator);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        int lastCamera = prefs.getInt("cameras_last", 0);
-        coc[0] = prefs.getFloat("camera_" + lastCamera + "_coc", 0.03f);
+        camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        coc[0] = lastCamera.getConfusion();
 
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + lastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mNearEditText.setText(prefs.getString("nearfocus", "4"));
@@ -76,9 +78,6 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         mFarSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("farfocus", "12")) - Float.valueOf(prefs.getString("nearfocus", "4"))));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")), Float.valueOf(prefs.getString("farfocus", "12")));
 
-        if (prefs.getInt("cameras_amount", 0) == 0) {
-            mCameraTextView.setText(getString(R.string.calculate_camera_add));
-        }
 
         final float conversionfactor = prefs.getBoolean("empirical", false) ? 3.281f : 1f;
         if (prefs.getBoolean("empirical", false)) {
@@ -91,57 +90,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
          *  Listeners
          */
 
-        mCameraLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (prefs.getInt("cameras_amount", 0) == 0) {
-                    startActivity(new Intent(CalculateReverseFocusActivity.this, EditCamerasActivity.class));
-                } else {
-                    AlertDialog.Builder mDialog;
-                    if (prefs.getBoolean("darkmode", false)) {
-                        mDialog = new AlertDialog.Builder(CalculateReverseFocusActivity.this, R.style.darkDialog);
-                    } else {
-                        mDialog = new AlertDialog.Builder(CalculateReverseFocusActivity.this);
-                    }
-                    List<String> cameras = new ArrayList<>();
-
-                    for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
-                        cameras.add(prefs.getString("camera_" + camera + "_name", getString(R.string.camera_default_name)));
-                    }
-
-                    mDialog.setSingleChoiceItems(cameras.toArray(new String[cameras.size()]), prefs.getInt("cameras_last", 0), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            prefsEditor.putInt("cameras_last", which).apply();
-                            coc[0] = prefs.getFloat("camera_" + which + "_coc", 0.03f);
-                            mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + which + "_name", getString(R.string.camera_default_name))));
-                            calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")) / conversionfactor, Float.valueOf(prefs.getString("farfocus", "12")) / conversionfactor);
-                            dialog.dismiss();
-                        }
-                    });
-                    mDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    mDialog.setNeutralButton(getString(R.string.calculate_camera_manage), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(CalculateReverseFocusActivity.this, EditCamerasActivity.class));
-                        }
-                    });
-
-                    mDialog.show();
-                }
-            }
-        });
-        mCameraLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc");
-            }
-        });
+        mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc"));
 
         mCameraTextView.addTextChangedListener(new TextWatcher() {
             //f:off
@@ -263,12 +212,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.showEquations(CalculateReverseFocusActivity.this, "reversefocus");
-            }
-        });
+        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateReverseFocusActivity.this, "reversefocus"));
 
     }
 

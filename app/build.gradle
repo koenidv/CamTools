@@ -6,9 +6,9 @@ android {
         applicationId "com.koenidv.camtools"
         minSdkVersion 21
         targetSdkVersion 28
-        versionName '0.7'
+        versionName '0.9'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionCode 7
+        versionCode 9
     }
     dataBinding {
         enabled = true
@@ -39,7 +39,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //noinspection GradleCompatible
     implementation 'com.google.android.gms:play-services-places:16.0.0'
-    implementation 'com.google.firebase:firebase-config:16.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1-beta01'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1-beta01'
@@ -56,10 +55,11 @@ dependencies {
     implementation 'pl.hypeapp:materialtimelineview:1.1'
     implementation 'io.github.kexanie.library:MathView:0.0.6'
     implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.github.enricocid:cbl:1.0.0'
     implementation 'androidx.browser:browser:1.0.0'
     implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+    implementation 'com.github.feeeei:CircleSeekbar:v1.1.2'
+    implementation 'com.github.GrenderG:Color-O-Matic:1.1.5'
+    implementation 'com.azeesoft.lib.colorpicker:colorpicker:1.0.8@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'kotlin-android'

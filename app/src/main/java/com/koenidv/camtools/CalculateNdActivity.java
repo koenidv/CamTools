@@ -1,28 +1,33 @@
 package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CalculateNdActivity extends AppCompatActivity {
+
+    private final static String TAG = "ND Calculator";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,6 @@ public class CalculateNdActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
-
 
 
         final boolean[] changing = {false};
@@ -48,6 +52,7 @@ public class CalculateNdActivity extends AppCompatActivity {
         mTimeEditText.setText(prefs.getString("ndTime", "4"));
         mTimeSeekbar.setProgress(Math.round(Float.valueOf(mTimeEditText.getText().toString())));
         mStrengthEditText.setText(prefs.getString("ndStrength", "10"));
+
         if (prefs.getBoolean("ndstops", false)) {
             mStrengthSeekbar.setProgress(Math.round(Float.valueOf(mStrengthEditText.getText().toString())));
         } else {
@@ -58,15 +63,16 @@ public class CalculateNdActivity extends AppCompatActivity {
             mStrengthSeekbar.setProgress(counter);
         }
         if (Float.valueOf(mTimeEditText.getText().toString()) < 36000 && Float.valueOf(mStrengthEditText.getText().toString()) < 60000) {
-            mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false))));
+            mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false)), true));
         }
 
 
-        mStartTimerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(CalculateNdActivity.this, "This will come later", Toast.LENGTH_LONG).show();
-            }
+        mStartTimerButton.setOnClickListener(v -> {
+            TimerSheet sheet = new TimerSheet();
+            sheet.startTime = calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false));
+            sheet.startService = true;
+            sheet.tagName = getString(R.string.select_nd);
+            sheet.show(getSupportFragmentManager(), "timer");
         });
 
         mTimeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -102,7 +108,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                 }
                 if (s.length() > 0 && !s.toString().equals(".")) {
                     prefsEditor.putString("ndTime", s.toString()).apply();
-                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(s.toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false))));
+                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(s.toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false)), true));
                 }
             }
 
@@ -159,7 +165,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                 }
                 if (s.length() > 0 && !s.toString().equals(".")) {
                     prefsEditor.putString("ndStrength", s.toString()).apply();
-                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(s.toString()), prefs.getBoolean("ndstops", false))));
+                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(s.toString()), prefs.getBoolean("ndstops", false)), true));
                 }
             }
 
@@ -169,12 +175,7 @@ public class CalculateNdActivity extends AppCompatActivity {
             }
         });
 
-        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.showEquations(CalculateNdActivity.this, "nd");
-            }
-        });
+        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateNdActivity.this, "nd"));
     }
 
     private float calculate(float mTime, float mStrength, boolean mStops) {
@@ -227,6 +228,75 @@ public class CalculateNdActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyLongPress(keyCode, event);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
+        Log.i(TAG, "Registered broacast receiver");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
+    }
+
+    Snackbar mTimerSnackBar;
+    TextView mSnackBarText;
+
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            ModuleManager mModuleManager = new ModuleManager();
+            long millisUntilFinished = intent.getLongExtra("remaining", 0);
+            int maxTime = intent.getIntExtra("max", 0);
+            String name = intent.getStringExtra("name");
+
+            if (intent.getBooleanExtra("dismiss", false)) {
+                mTimerSnackBar.dismiss();
+            } else if (millisUntilFinished == 0) {
+                mTimerSnackBar.dismiss();
+                Snackbar.make(findViewById(R.id.rootView), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.okay, v -> mTimerSnackBar.dismiss())
+                        .show();
+            } else {
+                if (mTimerSnackBar == null || !mTimerSnackBar.isShown()) {
+                    mTimerSnackBar = Snackbar.make(findViewById(R.id.rootView),
+                            String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)),
+                            Snackbar.LENGTH_INDEFINITE);
+                    mTimerSnackBar
+                            .setAction(R.string.show, v -> {
+                                TimerSheet sheet = new TimerSheet();
+                                sheet.startTime = maxTime / 1000;
+                                sheet.tagName = name;
+                                sheet.show(getSupportFragmentManager(), "timer");
+                            })
+                            .show();
+                    mSnackBarText = mTimerSnackBar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+                } else {
+                    mSnackBarText.setText(String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)));
+                }
+            }
+        }
     }
 
 }

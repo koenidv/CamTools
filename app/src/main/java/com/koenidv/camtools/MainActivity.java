@@ -1,16 +1,23 @@
 package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected ActionBar mActionBar;
 
     private boolean noUpdate = false;
+
+    private final static String TAG = "MainActivity";
 
     @SuppressWarnings("RedundantCast")
     @Override
@@ -62,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.tab_focus);
         AHBottomNavigationItem nav_tools = new AHBottomNavigationItem(R.string.title_tools_short, R.drawable.ic_tools, R.color.colorAccent);
 
-        mNavigation.addItem(nav_sky);
+        //tmNavigation.addItem(nav_sky);
         mNavigation.addItem(nav_exposure);
         mNavigation.addItem(nav_focus);
         mNavigation.addItem(nav_tools);
@@ -76,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
         mNavigation.setCurrentItem(prefs.getInt("lastTab", 0));
 
         mNavigation.setOnTabSelectedListener((position, wasSelected) -> {
-            if (!noUpdate) {
-                mViewPager.setCurrentItem(position);
-            }
+            mViewPager.setCurrentItem(position);
             return true;
         });
 
@@ -93,22 +100,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(final int position) {
                 prefsEdit.putInt("lastTab", position).apply();
+                mNavigation.setCurrentItem(position);
 
-                Runnable r = new Runnable() {
-                    @SuppressWarnings("RedundantCast")
-                    @Override
-                    public void run() {
-                        if (mNavigation.getCurrentItem() != position) {
-                            noUpdate = true;
-                            mNavigation.setCurrentItem(position);
-                            noUpdate = false;
-                            invalidateOptionsMenu();
-                        }
-                    }
-                };
-
-                Handler mHandler = new Handler();
-                mHandler.postDelayed(r, 1);
             }
 
             @Override
@@ -129,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
             //                   // getItem is called to instantiate the fragment for the given page.
             // default           // Return a PlaceholderFragment (defined as a static inner class below).
             //                   return PlaceholderFragment.newInstance(position + 1);
-            //TODO: Customizability
+            position += 1; //TODO: Remove when skyfragment is available
             switch (position) {
                 case 0:
                     return new SkyFragment();
@@ -147,11 +140,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 4;
+            return 3; //TODO: 4 skyfragment is available
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
+            position += 1; //TODO: Remove when skyfragment is available
             switch (position) {
                 case 0:
                     return getString(R.string.title_sky_long);
@@ -199,5 +193,80 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyLongPress(keyCode, event);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
+        Log.i(TAG, "Registered broacast receiver");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
+    }
+
+    Snackbar mTimerSnackbar;
+    TextView mSnackBarText;
+
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            ModuleManager mModuleManager = new ModuleManager();
+            long millisUntilFinished = intent.getLongExtra("remaining", 0);
+            int maxTime = intent.getIntExtra("max", 0);
+            String name = intent.getStringExtra("name");
+
+            if (intent.getBooleanExtra("dismiss", false)) {
+                mTimerSnackbar.dismiss();
+            } else if (millisUntilFinished == 0) {
+                mTimerSnackbar.dismiss();
+                Snackbar.make(findViewById(R.id.snackbarView), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.okay, v -> mTimerSnackbar.dismiss())
+                        .show();
+            } else {
+                if (mTimerSnackbar == null || !mTimerSnackbar.isShown()) {
+                    mTimerSnackbar = Snackbar.make(findViewById(R.id.snackbarView),
+                            String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)),
+                            Snackbar.LENGTH_INDEFINITE);
+                    mTimerSnackbar
+                            .setAction(R.string.show, v -> {
+                                TimerSheet sheet = new TimerSheet();
+                                sheet.startTime = maxTime / 1000;
+                                sheet.tagName = name;
+                                sheet.show(getSupportFragmentManager(), "timer");
+                            })
+                            .setBehavior(new BaseTransientBottomBar.Behavior() {
+                                @Override
+                                public boolean canSwipeDismissView(View child) {
+                                    return false;
+                                }
+                            })
+                            .show();
+                    mSnackBarText = mTimerSnackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+                } else {
+                    mSnackBarText.setText(String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)));
+                }
+            }
+        }
     }
 }

@@ -17,20 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccentDark"
-            android:elevation="4dp"
             android:gravity="center"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/resultTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingStart="8dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="56dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
@@ -56,13 +55,13 @@
                     android:id="@+id/npfDescriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="40dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="40dp"
                     android:layout_weight="1"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
                     android:text="@string/stars_npf_description"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"/>
@@ -72,11 +71,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
                     android:paddingTop="56dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                     android:textColor="@android:color/white"
@@ -94,13 +93,13 @@
                     android:id="@+id/result500DescriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="40dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginBottom="40dp"
                     android:layout_weight="1"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
                     android:text="@string/stars_500_description"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"/>
@@ -110,11 +109,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
                     android:paddingTop="56dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                     android:textColor="@android:color/white"
@@ -134,10 +133,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:paddingEnd="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
                     android:paddingStart="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingRight="8dp"
                     android:text="@string/stars_600_description"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"/>
@@ -156,12 +155,12 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_timer"
                     android:drawablePadding="8dp"
-                    android:drawableStart="@drawable/ic_countdown_white"
-                    android:paddingEnd="32dp"
-                    android:paddingLeft="32dp"
-                    android:paddingRight="32dp"
                     android:paddingStart="32dp"
+                    android:paddingLeft="32dp"
+                    android:paddingEnd="32dp"
+                    android:paddingRight="32dp"
                     android:text="@string/calculate_timer_start"/>
 
                 <Button
@@ -172,10 +171,10 @@
                     android:layout_weight="1"
                     android:drawableEnd="@drawable/avd_expand"
                     android:drawableTint="@android:color/white"
-                    android:paddingEnd="32dp"
-                    android:paddingLeft="32dp"
-                    android:paddingRight="32dp"
                     android:paddingStart="32dp"
+                    android:paddingLeft="32dp"
+                    android:paddingEnd="32dp"
+                    android:paddingRight="32dp"
                     android:text="@string/stars_more"
                     tools:targetApi="m"/>
 
@@ -183,14 +182,22 @@
 
         </LinearLayout>
 
-        <include layout="@layout/include_card_camera"/>
+        <LinearLayout
+            android:id="@+id/inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_background_input"
+            android:orientation="vertical">
 
-        <include layout="@layout/include_card_focallength"/>
+            <include layout="@layout/include_card_camera"/>
 
-        <include layout="@layout/include_card_aperture"/>
+            <include layout="@layout/include_card_focallength"/>
 
-        <include layout="@layout/include_card_equations"/>
+            <include layout="@layout/include_card_aperture"/>
 
+            <include layout="@layout/include_card_equations"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

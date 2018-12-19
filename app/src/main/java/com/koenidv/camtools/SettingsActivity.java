@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         mCamerasTextView.setText(getString(R.string.setting_cameras_description).replace("%s",
-                getResources().getQuantityString(R.plurals.cameras, prefs.getInt("cameras_amount", 0), prefs.getInt("cameras_amount", 0))));
+                getResources().getQuantityString(R.plurals.cameras, prefs.getInt("cameras_amount", -1) + 1, prefs.getInt("cameras_amount", -1) + 1)));
 
         String apertureText = getString(R.string.setting_units_aperture_short) + ": ";
         switch (prefs.getInt("aperture_stops", 2)) {

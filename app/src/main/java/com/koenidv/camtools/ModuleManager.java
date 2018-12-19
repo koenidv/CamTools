@@ -2,6 +2,7 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +30,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,7 +60,7 @@ class ModuleManager {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         Gson gson = new Gson();
 
-        if (prefs.getInt("cameras_amount", 0) == 0) {
+        if (prefs.getInt("cameras_amount", -1) == -1) {
             mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
         } else {
             final List<String> cameras = new ArrayList<>();
@@ -108,7 +111,7 @@ class ModuleManager {
      * @param mName    The name of the equation as saved in strings.xml
      */
     void showEquations(Context mContext, String mName) {
-        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogThemeLight);
+        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
         mDialog.setContentView(R.layout.sheet_equation);
 
         int mathId = mContext.getResources().getIdentifier("equation_" + mName, "string", mContext.getPackageName());
@@ -140,7 +143,7 @@ class ModuleManager {
         Gson gson = new Gson();
 
         final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
-        mDialog.setContentView(R.layout.dialog_camera_add_custom);
+        mDialog.setContentView(R.layout.sheet_camera_add_custom);
         Objects.requireNonNull(mDialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         FrameLayout bottomSheet = mDialog.findViewById(R.id.design_bottom_sheet);
         BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -260,15 +263,16 @@ class ModuleManager {
                                 + mContext.getString(R.string.millimeter),
                         (prefs.getInt("cameras_last", -1) == mIndex));
 
-                if (mIndex > prefs.getInt("cameras_amount", 0)) {
+                if (mIndex > prefs.getInt("cameras_amount", -1)) {
                     mCardList.add(mCameraCard);
+                    mAdapter.notifyItemInserted(mIndex);
                 } else {
                     mCardList.set(mIndex, mCameraCard);
+                    mAdapter.notifyItemChanged(mIndex);
                 }
-                mAdapter.notifyDataSetChanged();
             }
 
-            if (mIndex > prefs.getInt("cameras_amount", 0)) {
+            if (mIndex > prefs.getInt("cameras_amount", -1)) {
                 prefsEdit.putInt("cameras_amount", mIndex).apply();
             }
 
@@ -345,6 +349,9 @@ class ModuleManager {
         }
         prefsEdit.apply();
 
+        cameraCard toCard = mCardList.get(mToIndex);
+        mCardList.set(mToIndex, mCardList.get(mFromIndex));
+        mCardList.set(mFromIndex, toCard);
         mAdapter.notifyItemMoved(mFromIndex, mToIndex);
     }
 
@@ -381,6 +388,29 @@ class ModuleManager {
             });
             if (historyClasses.size() > 0) {
                 mBuilder.show();
+            }
+        }
+    }
+
+    /**
+     * Opens an app to measure distance,
+     * com.google.tango.measure
+     * or com.grymala.ruler
+     *
+     * @param mContext The apps context
+     */
+    void openArMeasure(Context mContext) {
+        PackageManager manager = mContext.getPackageManager();
+
+        try {
+            Intent intent = manager.getLaunchIntentForPackage("com.google.tango.measure");
+            mContext.startActivity(intent);
+        } catch (ActivityNotFoundException anfe) {
+            try {
+                Intent intent = manager.getLaunchIntentForPackage("com.grymala.ruler");
+                mContext.startActivity(intent);
+            } catch (ActivityNotFoundException anfet) {
+                //
             }
         }
     }
@@ -456,13 +486,28 @@ class ModuleManager {
     }
 
     /**
+     * Shorthand
      * Converts a number of seconds to a Spanned containing hours, minutes, seconds
      *
      * @param mContext    The context to run in.
      * @param mCalculated The number of seconds to calculate with.
      * @return A Spanned formatted as "DD days, HH hours, MM minutes, SS seconds.
+     * @see #convertTime(Context, float, boolean)
      */
+    @Deprecated
     Spanned convertTime(Context mContext, float mCalculated) {
+        return convertTime(mContext, mCalculated, true);
+    }
+
+    /**
+     * Converts a number of seconds to a Spanned containing hours, minutes, seconds
+     *
+     * @param mContext    The context to run in.
+     * @param mCalculated The number of seconds to calculate with.
+     * @param mShortened  Whether to show decimals over 10 seconds
+     * @return A Spanned formatted as "DD days, HH hours, MM minutes, SS seconds.
+     */
+    Spanned convertTime(Context mContext, float mCalculated, boolean mShortened) {
         int days = 0;
         int hours = 0;
         int minutes = 0;
@@ -490,11 +535,24 @@ class ModuleManager {
         if (minutes != 0) {
             mResult.append(String.valueOf(minutes)).append("<small>").append(mContext.getString(R.string.time_minutes)).append("</small>").append(" ");
         }
-        if (mCalculated != 0 || mResult.length() == 0) {
-            mResult.append(new DecimalFormat(mCalculated > 10 ? "#" : "#.#").format(mCalculated)).append("<small>").append(mContext.getString(R.string.time_seconds)).append("</small>");
+        if (Float.compare(mCalculated, 0) != 0) {
+            if (mShortened) {
+                mResult.append(new DecimalFormat(mCalculated > 10 ? "#" : "#.#").format(mCalculated)).append("<small>").append(mContext.getString(R.string.time_seconds)).append("</small>");
+            } else {
+                mResult.append(new DecimalFormat("#0.0#").format(mCalculated)).append("<small>").append(mContext.getString(R.string.time_seconds)).append("</small>");
+            }
+        } else {
+            mResult.append("0<small>").append(mContext.getString(R.string.time_seconds)).append("</small>");
         }
 
         return Html.fromHtml(mResult.toString());
+    }
+
+    String convertMilliseconds(long milliseconds) {
+        return String.format(Locale.getDefault(),
+                "%01d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+                TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
     }
 
     /**

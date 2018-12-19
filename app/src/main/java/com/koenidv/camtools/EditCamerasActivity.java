@@ -93,7 +93,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                     String confusion = data;
 
                     camera addCamera = new camera(name, resolution, sensorsize, confusion);
-                    int index = prefs.getInt("cameras_amount", 0) + 1;
+                    int index = prefs.getInt("cameras_amount", -1) + 1;
                     prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
                             .putInt("cameras_amount", index)
                             .apply();
@@ -121,7 +121,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                 String confusion = data;
 
                 camera addCamera = new camera(name, resolution, sensorsize, confusion);
-                int index = prefs.getInt("cameras_amount", 0) + 1;
+                int index = prefs.getInt("cameras_amount", -1) + 1;
 
                 prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
                         .putInt("cameras_amount", index)
@@ -134,12 +134,11 @@ public class EditCamerasActivity extends AppCompatActivity {
             }
         }
 
-        if (prefs.getInt("cameras_amount", 0) == 0 && prefs.getString("camera_0", "").equals("")) {
+        if (prefs.getInt("cameras_amount", -1) == -1) {
             mRecyclerView.setVisibility(View.GONE);
             mEmptyCardView.setVisibility(View.VISIBLE);
-
         } else {
-            for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
+            for (int i = 0; i <= prefs.getInt("cameras_amount", -1); i++) {
                 camera mCamera = gson.fromJson(prefs.getString("camera_" + i, getString(R.string.camera_default)), camera.class);
 
                 cameraCard mCameraCard = new cameraCard(
@@ -178,13 +177,18 @@ public class EditCamerasActivity extends AppCompatActivity {
 
                     break;
                 case R.id.add_custom:
-                    mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", 0) + 1, mCameraCardList, mAdapter);
+                    if (mEmptyCardView.getVisibility() == View.VISIBLE) {
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        mEmptyCardView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
+                        mEmptyCardView.setVisibility(View.GONE);
+                    }
+                    mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraCardList, mAdapter);
                     break;
             }
 
             return false;
         });
-        if (!prefs.getBoolean("has_seen_nfc_tip", false)) {
+        if (!prefs.getBoolean("has_seen_nfc_tip", false) && prefs.getInt("cameras_amount", -1) != -1) {
             Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.okay, v -> {
                     })
@@ -261,7 +265,6 @@ public class EditCamerasActivity extends AppCompatActivity {
                 CameraDetailsSheet sheet = new CameraDetailsSheet();
                 sheet.which = position;
                 sheet.show(getSupportFragmentManager(), "camera_details_sheet");
-
             } else if (which == finalPosition_up) {
                 mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
             } else if (which == finalPosition_down) {
@@ -302,7 +305,7 @@ public class EditCamerasActivity extends AppCompatActivity {
     public void addCard(View v) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final ModuleManager mModuleManager = new ModuleManager();
-        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", 0) + 1, mCameraCardList, mAdapter);
+        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraCardList, mAdapter);
 
         RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
         CardView mEmptyCardView = findViewById(R.id.emptyCard);

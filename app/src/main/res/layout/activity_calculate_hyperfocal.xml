@@ -18,7 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccentDark"
-            android:elevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -26,11 +27,11 @@
                 android:id="@+id/hyperfocalTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:paddingBottom="80dp"
                 android:paddingTop="48dp"
+                android:paddingBottom="80dp"
                 android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
@@ -46,17 +47,17 @@
                 android:id="@+id/nearlimitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:paddingBottom="8dp"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingStart="8dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="8dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp"
                 android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@android:color/white"
@@ -97,9 +98,9 @@
                 android:id="@+id/hyperfocalIndicatorTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/focus_hyper_hyper_indicator"
                 android:textColor="@android:color/white"
                 android:textSize="16sp"
@@ -111,9 +112,9 @@
                 android:id="@+id/nearlimitIndicatorTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/focus_hyper_near_indicator"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -124,9 +125,9 @@
                 android:id="@+id/farlimitIndicatorTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/focus_hyper_far_indicator"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -135,14 +136,22 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include layout="@layout/include_card_camera"/>
+        <LinearLayout
+            android:id="@+id/inputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_background_input"
+            android:orientation="vertical">
 
-        <include layout="@layout/include_card_focallength"/>
+            <include layout="@layout/include_card_camera"/>
 
-        <include layout="@layout/include_card_aperture"/>
+            <include layout="@layout/include_card_focallength"/>
 
-        <include layout="@layout/include_card_equations"/>
+            <include layout="@layout/include_card_aperture"/>
 
+            <include layout="@layout/include_card_equations"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

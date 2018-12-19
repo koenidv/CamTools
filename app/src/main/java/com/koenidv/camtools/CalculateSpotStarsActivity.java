@@ -20,6 +20,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+import com.google.gson.Gson;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,8 +32,13 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
     protected void onResume() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + prefs.getInt("cameras_last", 0) + "_name", getString(R.string.camera_default_name))));
-        mPixelpitch[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_pixelpitch", 6.6f);
+        camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        if (prefs.getInt("cameras_amount", -1) == -1) {
+            mCameraTextView.setText(R.string.calculate_camera_add);
+        } else {
+            mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
+        }
+        mPixelpitch[0] = lastCamera.getPixelpitch();
         super.onResume();
     }
 
@@ -43,6 +49,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
+        Gson gson = new Gson();
 
         final boolean changing[] = {false};
 
@@ -57,27 +64,16 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final Button mExpandButton = findViewById(R.id.expandButton);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        int mLastCamera = prefs.getInt("cameras_last", 0);
-        mPixelpitch[0] = prefs.getFloat("camera_" + mLastCamera + "_pixelpitch", 6.6f);
+        camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
 
-        mCameraTextView.setText(getString(R.string.calculate_camera).replace("%s", prefs.getString("camera_" + mLastCamera + "_name", getString(R.string.camera_default_name))));
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
         calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
-        if (prefs.getInt("cameras_amount", 0) == 0) {
-            mCameraTextView.setText(getString(R.string.calculate_camera_add));
-        }
 
-
-        mCameraLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch");
-            }
-        });
+        mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch"));
 
         mCameraTextView.addTextChangedListener(new TextWatcher() {
             //f:off
@@ -86,23 +82,19 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
             //f:on
             @Override
             public void afterTextChanged(Editable s) {
-                //mPixelpitch[0] = prefs.getFloat("camera_" + prefs.getInt("cameras_last", 0) + "_pitch", 6.6f);
                 calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
             }
         });
 
-        mExpandButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mResultExpandLayout.toggle();
-                mExpandButton.setCompoundDrawables(null, null, null, null);
-                if (mStartTimerButton.getVisibility() == View.VISIBLE) {
-                    mStartTimerButton.setVisibility(View.GONE);
-                    mExpandButton.setText(getString(R.string.stars_collapse));
-                } else {
-                    mStartTimerButton.setVisibility(View.VISIBLE);
-                    mExpandButton.setText(getString(R.string.stars_expand));
-                }
+        mExpandButton.setOnClickListener(v -> {
+            mResultExpandLayout.toggle();
+            mExpandButton.setCompoundDrawables(null, null, null, null);
+            if (mStartTimerButton.getVisibility() == View.VISIBLE) {
+                mStartTimerButton.setVisibility(View.GONE);
+                mExpandButton.setText(getString(R.string.stars_collapse));
+            } else {
+                mStartTimerButton.setVisibility(View.VISIBLE);
+                mExpandButton.setText(getString(R.string.stars_expand));
             }
         });
 

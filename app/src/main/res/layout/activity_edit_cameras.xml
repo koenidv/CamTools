@@ -88,7 +88,7 @@
         android:layout_gravity="bottom|end"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:sdMainFabClosedSrc="@drawable/ic_add_white_24dp"
+        app:sdMainFabClosedSrc="@drawable/ic_add"
         app:sdOverlayLayout="@id/overlay"
         android:contentDescription="@string/seeting_cameras_new_accessibilitytext"/>
 
@@ -106,5 +106,5 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="@id/rootView"
         app:layout_constraintEnd_toEndOf="@id/rootView"
-        app:srcCompat="@drawable/ic_add_white_24dp"/>
+        app:srcCompat="@drawable/ic_add"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

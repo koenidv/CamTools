@@ -18,26 +18,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccentDark"
-            android:elevation="4dp"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/distanceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:paddingBottom="80dp"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingStart="8dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="48dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="80dp"
                 android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
@@ -52,17 +52,17 @@
                 android:id="@+id/apertureTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-                android:paddingBottom="80dp"
-                android:paddingEnd="8dp"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
                 android:paddingStart="8dp"
+                android:paddingLeft="8dp"
                 android:paddingTop="48dp"
+                android:paddingEnd="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="80dp"
                 android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
@@ -77,9 +77,9 @@
                 android:id="@+id/distanceIndicatorTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/focus_distance"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -90,9 +90,9 @@
                 android:id="@+id/apertureIndicatorTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="48dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="48dp"
                 android:text="@string/focus_aperture"
                 android:textColor="@android:color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -102,151 +102,159 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include layout="@layout/include_card_camera"/>
-
-        <include layout="@layout/include_card_focallength"/>
-
-        <androidx.cardview.widget.CardView
+        <LinearLayout
+            android:id="@+id/inputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cardMarginBottom"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/cardMarginTop"
-            app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
-            app:cardElevation="@dimen/cardElevation">
+            android:background="@drawable/rounded_background_input"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <include layout="@layout/include_card_camera"/>
+
+            <include layout="@layout/include_card_focallength"/>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/nearfocusEditText"
-                    android:text="@string/focus_limit_near"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/textColor_normal"
-                    />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
+                app:cardElevation="@dimen/cardElevation">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <SeekBar
-                        android:id="@+id/nearfocusSeekbar"
-                        android:layout_width="580dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:hapticFeedbackEnabled="false"
-                        android:max="30"
-                        android:progress="2"
-                        android:saveEnabled="false"
-                        android:thumbTint="@color/colorAccent"
-                        android:progressTint="@color/colorAccent"
-                        android:importantForAccessibility="no"/>
-
-                    <EditText
-                        android:id="@+id/nearfocusEditText"
-                        android:layout_width="360dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="none|numberDecimal"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor_normal"
-                        android:importantForAutofill="no"
-                        tools:targetApi="o"/>
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
                     <TextView
-                        android:id="@+id/nearfocusIndicator"
-                        android:layout_width="360dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/nearfocusEditText"
+                        android:text="@string/focus_limit_near"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/textColor_normal"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/meter"/>
+                        android:orientation="horizontal">
 
+                        <SeekBar
+                            android:id="@+id/nearfocusSeekbar"
+                            android:layout_width="580dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:hapticFeedbackEnabled="false"
+                            android:importantForAccessibility="no"
+                            android:max="30"
+                            android:progress="2"
+                            android:progressTint="@color/colorAccent"
+                            android:saveEnabled="false"
+                            android:thumbTint="@color/colorAccent"/>
+
+                        <EditText
+                            android:id="@+id/nearfocusEditText"
+                            android:layout_width="360dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:importantForAutofill="no"
+                            android:inputType="none|numberDecimal"
+                            android:textAlignment="center"
+                            android:textColor="@color/textColor_normal"
+                            tools:targetApi="o"/>
+
+                        <TextView
+                            android:id="@+id/nearfocusIndicator"
+                            android:layout_width="360dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/meter"/>
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/cardMarginBottom"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/cardMarginTop"
-            app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
-            app:cardElevation="@dimen/cardElevation">
-
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:labelFor="@id/farfocusEditText"
-                    android:text="@string/focus_limit_far"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/textColor_normal"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
+                app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
+                app:cardElevation="@dimen/cardElevation">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <SeekBar
-                        android:id="@+id/farfocusSeekbar"
-                        android:layout_width="580dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:hapticFeedbackEnabled="false"
-                        android:max="30"
-                        android:progress="2"
-                        android:saveEnabled="false"
-                        android:thumbTint="@color/colorAccent"
-                        android:progressTint="@color/colorAccent"
-                        android:importantForAccessibility="no"/>
-
-                    <EditText
-                        android:id="@+id/farfocusEditText"
-                        android:layout_width="360dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:inputType="none|numberDecimal"
-                        android:textAlignment="center"
-                        android:textColor="@color/textColor_normal"
-                        android:importantForAutofill="no"
-                        tools:targetApi="o"/>
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
                     <TextView
-                        android:id="@+id/farfocusIndicator"
-                        android:layout_width="360dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:labelFor="@id/farfocusEditText"
+                        android:text="@string/focus_limit_far"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textColor="@color/textColor_normal"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/meter"/>
+                        android:orientation="horizontal">
 
+                        <SeekBar
+                            android:id="@+id/farfocusSeekbar"
+                            android:layout_width="580dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:hapticFeedbackEnabled="false"
+                            android:importantForAccessibility="no"
+                            android:max="30"
+                            android:progress="2"
+                            android:progressTint="@color/colorAccent"
+                            android:saveEnabled="false"
+                            android:thumbTint="@color/colorAccent"/>
+
+                        <EditText
+                            android:id="@+id/farfocusEditText"
+                            android:layout_width="360dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ems="10"
+                            android:importantForAutofill="no"
+                            android:inputType="none|numberDecimal"
+                            android:textAlignment="center"
+                            android:textColor="@color/textColor_normal"
+                            tools:targetApi="o"/>
+
+                        <TextView
+                            android:id="@+id/farfocusIndicator"
+                            android:layout_width="360dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="@string/meter"/>
+
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <include layout="@layout/include_card_equations"/>
+            <include layout="@layout/include_card_equations"/>
 
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

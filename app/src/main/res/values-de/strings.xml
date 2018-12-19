@@ -317,4 +317,16 @@
     <string name="setting_cameras_deleted">%s gelöscht</string>
     <string name="no_cameras_added">Du hast noch keine Kameras hinzugefügt</string>
     <string name="no_cameras_added_description">Füge deine Kamera hinzu um genauere Ergebnisse zu erhalten.</string>
+    <string name="calculate_color_mode_choose">Kontrastmodus</string>
+    <string name="calculate_color_mode_complementary">Komplementär</string>
+    <string name="calculate_color_mode_triadic">Triadisch</string>
+    <string name="calculate_color_mode_warmth">Wärme</string>
+    <string name="calculate_color_mode_brightness">Helligkeit</string>
+    <string name="timer_start">Starten</string>
+    <string name="timer_continue">Fortfahren</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_reset">Zurücksetzen</string>
+    <string name="timer_text">%s: %s verbleibend</string>
+    <string name="timer_finished">%s: Die Zeit ist abgelaufen</string>
+    <string name="show">Öffnen</string>
 </resources>

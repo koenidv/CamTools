@@ -137,6 +137,11 @@
     <string name="calculate_equations">How to calculate</string>
     <string name="calculate_color_choose">Choose a color</string>
     <string name="calculate_color_mode">Contrast: %s</string>
+    <string name="calculate_color_mode_choose">Contrast mode</string>
+    <string name="calculate_color_mode_complementary">Complementary</string>
+    <string name="calculate_color_mode_triadic">Triadic</string>
+    <string name="calculate_color_mode_warmth">Warmth</string>
+    <string name="calculate_color_mode_brightness">Brightness</string>
 
 
     <string name="title_activity_custom">Custom Colors</string>
@@ -234,6 +239,16 @@
     <string name="action_show_hidden_cards">Show hidden cards</string>
     <string name="action_used_libraries">Used libraries</string>
 
+    <string name="timer_start">Start</string>
+    <string name="timer_continue">Resume</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_reset">Reset</string>
+    <string name="timer_text">%s: %s remaining</string>
+    <string name="timer_finished">%s: Finished</string>
+    <string name="timer_cancelled">%s cancelled</string>
+    <string name="timer_override_title">Another timer is already running</string>
+    <string name="timer_override_confirm">Override %s</string>
+
     <string name="time_days">d</string>
     <string name="time_hours">h</string>
     <string name="time_minutes">m</string>
@@ -260,6 +275,7 @@
     <string name="save">Save</string>
     <string name="okay">Okay</string>
     <string name="undo">Undo</string>
+    <string name="show">Show</string>
     <string name="offerHelp">Need help?</string>
     <string name="delete_history">Delete history</string>
     <string name="requestFeature">Request feature</string>
@@ -350,4 +366,7 @@
     <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
     <string name="sun_details_morning_astronomical">Astronomical twilight</string>
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

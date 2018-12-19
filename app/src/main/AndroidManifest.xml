@@ -58,7 +58,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
+
                 <data android:mimeType="application/com.koenidv.camtools"/>
             </intent-filter>
         </activity>
@@ -107,6 +109,12 @@
             android:label="@string/select_contrast"
             android:parentActivityName=".MainActivity">
         </activity>
+
+        <service
+            android:name=".TimerService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/rootView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:background="@color/colorAccentDark"
+    android:saveEnabled="false"
     tools:context="com.koenidv.camtools.CalculateNdActivity">
 
     <LinearLayout
@@ -40,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:drawablePadding="8dp"
-            android:drawableStart="@drawable/ic_countdown_white"
+            android:drawableStart="@drawable/ic_timer"
             android:paddingEnd="32dp"
             android:paddingLeft="32dp"
             android:paddingRight="32dp"
@@ -74,7 +76,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@android:color/white"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -85,7 +86,7 @@
                         android:labelFor="@id/exposuretimeEditText"
                         android:text="@string/nd_time_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/text_main_light"/>
+                        android:textColor="@color/textColor_normal"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -101,6 +102,8 @@
                             android:max="30"
                             android:progress="2"
                             android:saveEnabled="false"
+                            android:thumbTint="@color/colorAccent"
+                            android:progressTint="@color/colorAccent"
                             android:importantForAccessibility="no"/>
 
                         <EditText
@@ -111,7 +114,9 @@
                             android:ems="10"
                             android:inputType="none|numberDecimal"
                             android:textAlignment="center"
-                            android:textColor="@color/text_main_light"/>
+                            android:textColor="@color/textColor_normal"
+                            android:importantForAutofill="no"
+                            tools:targetApi="o"/>
 
                         <TextView
                             android:id="@+id/exposuretimeIndicator"
@@ -120,7 +125,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="@string/time_seconds"
-                            android:textColor="@color/text_main_light"/>
+                            android:textColor="@color/textColor_normal"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -141,7 +146,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@android:color/white"
                     android:gravity="center"
                     android:orientation="vertical"
                     android:padding="8dp">
@@ -152,7 +156,7 @@
                         android:labelFor="@id/densityEditText"
                         android:text="@string/nd_strength_title"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/text_main_light"/>
+                        android:textColor="@color/textColor_normal"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -168,6 +172,8 @@
                             android:max="11"
                             android:progress="4"
                             android:saveEnabled="false"
+                            android:thumbTint="@color/colorAccent"
+                            android:progressTint="@color/colorAccent"
                             android:importantForAccessibility="no"/>
 
                         <EditText
@@ -178,7 +184,9 @@
                             android:ems="10"
                             android:inputType="none|number|numberDecimal"
                             android:textAlignment="center"
-                            android:textColor="@color/text_main_light"/>
+                            android:textColor="@color/textColor_normal"
+                            android:importantForAutofill="no"
+                            tools:targetApi="o"/>
 
                         <TextView
                             android:id="@+id/densityIndicator"
@@ -187,7 +195,7 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:text="@string/density_factor"
-                            android:textColor="@color/text_main_light"/>
+                            android:textColor="@color/textColor_normal"/>
 
                     </LinearLayout>
                 </LinearLayout>
