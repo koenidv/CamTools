@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:saveEnabled="false"
+    android:background="@color/colorPrimary"
     tools:context="com.koenidv.camtools.CalculateNdActivity">
 
     <LinearLayout
@@ -60,6 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_background_input"
+            android:clipChildren="false"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView

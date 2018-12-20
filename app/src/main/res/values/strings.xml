@@ -85,6 +85,11 @@
     <string name="setting_cameras_new_custom">Custom</string>
     <string name="setting_cameras_new_custom_title">Add a camera</string>
     <string name="setting_cameras_edit_custom_title">Edit this camera</string>
+    <string name="setting_cameras_icon_choose">Choose an icon</string>
+    <string name="camera_icon_photo">DSLR</string>
+    <string name="camera_icon_shutter">Shutter</string>
+    <string name="camera_icon_video">Video camera</string>
+    <string name="camera_icon_phone">Phone</string>
     <string name="setting_cameras_sensorsize">Sensor size (mm)</string>
     <string name="setting_cameras_resolution">Image resolution (px)</string>
     <string name="setting_cameras_coc">Circle of confusion (mm)</string>
@@ -244,10 +249,12 @@
     <string name="timer_pause">Pause</string>
     <string name="timer_reset">Reset</string>
     <string name="timer_text">%s: %s remaining</string>
+    <string name="timer_text_short">%s remaining</string>
     <string name="timer_finished">%s: Finished</string>
+    <string name="timer_finished_short">Finished</string>
     <string name="timer_cancelled">%s cancelled</string>
     <string name="timer_override_title">Another timer is already running</string>
-    <string name="timer_override_confirm">Override %s</string>
+    <string name="timer_override_confirm">Cancel %s and start this timer</string>
 
     <string name="time_days">d</string>
     <string name="time_hours">h</string>
@@ -309,6 +316,12 @@
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>
+    
+    <string name="group_timers_name">Timers</string>
+    <string name="channel_timer_name">Timer</string>
+    <string name="channel_timer_description">You will get a notification if you start a timer within the app.</string>
+    <string name="channel_timer_finished_name">Timer expired</string>
+    <string name="channel_timer_finished_description">Notifies you when a timer you set has expired.</string>
 
     <string name="equation_hyperfocal">
         Hyperfocal distance \\(d_h\\):

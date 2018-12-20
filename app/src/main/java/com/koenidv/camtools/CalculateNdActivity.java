@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,10 @@ public class CalculateNdActivity extends AppCompatActivity {
 
     private final static String TAG = "ND Calculator";
 
+    boolean timerRunning;
+    float timerTime;
+    String timerName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +41,6 @@ public class CalculateNdActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
-
 
         final boolean[] changing = {false};
 
@@ -47,7 +51,6 @@ public class CalculateNdActivity extends AppCompatActivity {
         final SeekBar mStrengthSeekbar = findViewById(R.id.densitySeekbar);
         final EditText mStrengthEditText = findViewById(R.id.densityEditText);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
-
 
         mTimeEditText.setText(prefs.getString("ndTime", "4"));
         mTimeSeekbar.setProgress(Math.round(Float.valueOf(mTimeEditText.getText().toString())));
@@ -68,11 +71,32 @@ public class CalculateNdActivity extends AppCompatActivity {
 
 
         mStartTimerButton.setOnClickListener(v -> {
-            TimerSheet sheet = new TimerSheet();
-            sheet.startTime = calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false));
-            sheet.startService = true;
-            sheet.tagName = getString(R.string.select_nd);
-            sheet.show(getSupportFragmentManager(), "timer");
+            float calculated = calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false));
+            if (!timerRunning || (Float.compare(calculated, timerTime) == 0)) {
+                TimerSheet sheet = new TimerSheet();
+                sheet.startTime = calculated;
+                sheet.startService = true;
+                sheet.tagName = getString(R.string.select_nd);
+                sheet.show(getSupportFragmentManager(), "timer");
+            } else {
+                BottomSheetDialog mSheet = new BottomSheetDialog(CalculateNdActivity.this, R.style.AppBottomSheetDialogTheme);
+                mSheet.setContentView(R.layout.sheet_timer_confirm);
+
+                Button confirmButton = mSheet.findViewById(R.id.confirmButton);
+
+                confirmButton.setText(String.format(getString(R.string.timer_override_confirm), timerName));
+                confirmButton.setOnClickListener(v1 -> {
+                    mSheet.dismiss();
+                    TimerSheet sheet = new TimerSheet();
+                    sheet.startTime = calculated;
+                    sheet.startService = true;
+                    sheet.tagName = getString(R.string.select_nd);
+                    sheet.show(getSupportFragmentManager(), "timer");
+                });
+
+                mSheet.show();
+
+            }
         });
 
         mTimeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -273,12 +297,17 @@ public class CalculateNdActivity extends AppCompatActivity {
 
             if (intent.getBooleanExtra("dismiss", false)) {
                 mTimerSnackBar.dismiss();
+                timerRunning = false;
             } else if (millisUntilFinished == 0) {
                 mTimerSnackBar.dismiss();
+                timerRunning = false;
                 Snackbar.make(findViewById(R.id.rootView), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
                         .setAction(R.string.okay, v -> mTimerSnackBar.dismiss())
                         .show();
             } else {
+                timerRunning = true;
+                timerTime = maxTime / 1000;
+                timerName = name;
                 if (mTimerSnackBar == null || !mTimerSnackBar.isShown()) {
                     mTimerSnackBar = Snackbar.make(findViewById(R.id.rootView),
                             String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)),

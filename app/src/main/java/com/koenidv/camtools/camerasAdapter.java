@@ -42,6 +42,7 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         cameraCard mCameraCard = mDataset.get(position);
+
         holder.mNameTextView.setText(mCameraCard.getName());
         holder.mInfoTextView.setText(mCameraCard.getInfo());
         if (mCameraCard.getIsLastUsed()) {

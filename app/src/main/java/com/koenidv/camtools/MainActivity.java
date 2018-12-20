@@ -1,11 +1,15 @@
 package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Navigation - Bottom bar
         AHBottomNavigationItem nav_sky = new AHBottomNavigationItem(R.string.title_sky_short, R.drawable.ic_sun, R.color.tab_sky);
-        AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_density, R.color.tab_exposure);
+        AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_exposure, R.color.tab_exposure);
         AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.tab_focus);
         AHBottomNavigationItem nav_tools = new AHBottomNavigationItem(R.string.title_tools_short, R.drawable.ic_tools, R.color.colorAccent);
 
@@ -108,6 +112,22 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
             }
         });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel timerChannel = new NotificationChannel(getString(R.string.channel_timer), getString(R.string.channel_timer_name), NotificationManager.IMPORTANCE_LOW);
+            timerChannel.setDescription(getString(R.string.channel_timer_description));
+            timerChannel.setGroup(getString(R.string.group_timers));
+            NotificationChannel timerFinishedChannel = new NotificationChannel(getString(R.string.channel_timer_finished), getString(R.string.channel_timer_finished_name), NotificationManager.IMPORTANCE_HIGH);
+            timerFinishedChannel.setDescription(getString(R.string.channel_timer_finished_description));
+            timerFinishedChannel.setGroup(getString(R.string.group_timers));
+
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannelGroup(new NotificationChannelGroup(getString(R.string.group_timers), getString(R.string.group_timers_name)));
+            notificationManager.createNotificationChannel(timerChannel);
+            notificationManager.createNotificationChannel(timerFinishedChannel);
+        }
+
     }
 
 

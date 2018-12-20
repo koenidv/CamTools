@@ -5,4 +5,8 @@
     <item name="full_stops" type="id"/>
     <item name="half_stops" type="id"/>
     <item name="third_stops" type="id"/>
+
+    <string name="group_timers" translatable="false">camtools_timers</string>
+    <string name="channel_timer" translatable="false">camtools_timer</string>
+    <string name="channel_timer_finished" translatable="false">camtools_timer_finished</string>
 </resources>

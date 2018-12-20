@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,17 +17,34 @@
         android:layout_height="wrap_content"
         android:text="@string/setting_cameras_new_custom_title"/>
 
-    <EditText
-        android:id="@+id/nameEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/name"
-        android:inputType="text|textAutoComplete"
-        android:singleLine="true"
-        android:text=""
-        android:importantForAutofill="no"
-        tools:targetApi="o"/>
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/iconImageButton"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="TODO"
+            android:tint="@color/textColor_normal"
+            app:srcCompat="@drawable/camera_photo"/>
+
+        <EditText
+            android:id="@+id/nameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/name"
+            android:importantForAutofill="no"
+            android:inputType="text|textAutoComplete"
+            android:singleLine="true"
+            android:text=""
+            tools:targetApi="o"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

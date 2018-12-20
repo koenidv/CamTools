@@ -329,4 +329,14 @@
     <string name="timer_text">%s: %s verbleibend</string>
     <string name="timer_finished">%s: Die Zeit ist abgelaufen</string>
     <string name="show">Öffnen</string>
+    <string name="timer_text_short">%s verbleibend</string>
+    <string name="timer_finished_short">Abgelaufen</string>
+    <string name="timer_cancelled">%s abgebrochen</string>
+    <string name="timer_override_title">Es läuft bereits ein Timer</string>
+    <string name="timer_override_confirm">%s abbrechen und diesen Timer starten</string>
+    <string name="group_timers_name">Timer</string>
+    <string name="channel_timer_name">Timer</string>
+    <string name="channel_timer_description">Du erhältst eine Benachrichtigung mit der verbleibenden Zeit.</string>
+    <string name="channel_timer_finished_name">Timer abgelaufen</string>
+    <string name="channel_timer_finished_description">Benachrichtigt dich, wenn ein Timer abgelaufen ist.</string>
 </resources>

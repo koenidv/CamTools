@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -64,14 +65,14 @@ class ModuleManager {
             mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
         } else {
             final List<String> cameras = new ArrayList<>();
+            final List<Integer> icons = new ArrayList<>();
             for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
-                cameras.add(gson.fromJson(prefs.getString("camera_" + camera, mContext.getString(R.string.camera_default)), camera.class).getName());
+                camera thisCamera = gson.fromJson(prefs.getString("camera_" + camera, mContext.getString(R.string.camera_default)), camera.class);
+                cameras.add(thisCamera.getName());
+                icons.add(thisCamera.getIcon());
             }
             cameras.add(mContext.getString(R.string.calculate_camera_manage));
-            ArrayList<Integer> icons = new ArrayList<>();
-            for (int icon = 0; icon < cameras.size() - 1; icon++) {
-                icons.add(R.drawable.ic_camera);
-            }
+            
             icons.add(R.drawable.ic_settings);
             int[] iconlist = new int[icons.size()];
             Iterator<Integer> iterator = icons.iterator();
@@ -149,6 +150,7 @@ class ModuleManager {
         BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
 
         TextView mTitleTextView = mDialog.findViewById(R.id.titleTextView);
+        ImageButton mIconButton = mDialog.findViewById(R.id.iconImageButton);
         final EditText mNameEditText = mDialog.findViewById(R.id.nameEditText);
         TextView mResolutionPresetTextView = mDialog.findViewById(R.id.resolutionPresetTextView);
         final EditText mResolutionXEditText = mDialog.findViewById(R.id.resolutionXEditText);
@@ -165,6 +167,7 @@ class ModuleManager {
 
         if (thisCamera != null) {
             mTitleTextView.setText(R.string.setting_cameras_edit_custom_title);
+            mIconButton.setImageDrawable(mContext.getDrawable(thisCamera.getIcon()));
             mNameEditText.setText(thisCamera.getName());
             mResolutionXEditText.setText(String.valueOf(thisCamera.getResolutionX()));
             mResolutionYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
@@ -172,10 +175,13 @@ class ModuleManager {
             mSizeYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
             mConfusionEditText.setText(String.valueOf(thisCamera.getConfusion()));
         } else {
+            thisCamera = new camera();
             mSaveButton.setEnabled(false);
             mSaveButton.getBackground().setAlpha(0);
             mSaveButton.setTextColor(mContext.getResources().getColor(R.color.gray));
         }
+
+        final camera thisCameraFinal = thisCamera;
 
 
         TextWatcher checkOnTextChanged = new TextWatcher() {
@@ -195,6 +201,46 @@ class ModuleManager {
         mResolutionXEditText.addTextChangedListener(checkOnTextChanged);
         mResolutionYEditText.addTextChangedListener(checkOnTextChanged);
         mConfusionEditText.addTextChangedListener(checkOnTextChanged);
+
+        mIconButton.setOnClickListener(v -> {
+            BottomSheet.Builder sheet = new BottomSheet.Builder(mContext);
+            int[] items = {
+                    R.string.camera_icon_photo,
+                    R.string.camera_icon_shutter,
+                    R.string.camera_icon_video,
+                    R.string.camera_icon_phone
+            };
+
+            int[] icons = {
+                    R.drawable.camera_photo,
+                    R.drawable.camera_shutter,
+                    R.drawable.camera_video,
+                    R.drawable.camera_phone
+            };
+
+            sheet.setItems(items, icons, (dialog, which) -> {
+                switch (which) {
+                    case 0:
+                        thisCameraFinal.setIcon(R.drawable.camera_photo);
+                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_photo));
+                        break;
+                    case 1:
+                        thisCameraFinal.setIcon(R.drawable.camera_shutter);
+                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_shutter));
+                        break;
+                    case 2:
+                        thisCameraFinal.setIcon(R.drawable.camera_video);
+                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_video));
+                        break;
+                    case 3:
+                        thisCameraFinal.setIcon(R.drawable.camera_phone);
+                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_phone));
+                        break;
+                }
+            });
+
+            sheet.show();
+        });
 
         mResolutionPresetTextView.setOnClickListener(v -> {
             final List<String> presets = new ArrayList<>();
@@ -243,6 +289,7 @@ class ModuleManager {
         mSaveButton.setOnClickListener(v -> {
             camera mCamera = new camera(
                     mNameEditText.getText().toString(),
+                    thisCameraFinal.getIcon(),
                     Integer.valueOf(mResolutionXEditText.getText().toString()),
                     Integer.valueOf(mResolutionYEditText.getText().toString()),
                     Float.valueOf(mSizeXEditText.getText().toString()),

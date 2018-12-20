@@ -1,16 +1,22 @@
 package com.koenidv.camtools;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.azeesoft.lib.colorpicker.ColorPickerDialog;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.michaelbel.bottomsheet.BottomSheet;
 
@@ -21,6 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 //  Created by koenidv on 12.12.2018.
 public class CalculateContrastActivity extends AppCompatActivity {
 
+    private final static String TAG = "Contrast Calculator";
     private float DARKEN_TEXT = 0.5f;
 
     int color;
@@ -183,5 +190,84 @@ public class CalculateContrastActivity extends AppCompatActivity {
                 Math.min(r,255),
                 Math.min(g,255),
                 Math.min(b,255));
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateContrastActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
+        Log.i(TAG, "Registered broacast receiver");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
+    }
+
+    Snackbar mTimerSnackBar;
+    TextView mSnackBarText;
+
+    private void updateGUI(Intent intent) {
+        if (intent.getExtras() != null) {
+            ModuleManager mModuleManager = new ModuleManager();
+            long millisUntilFinished = intent.getLongExtra("remaining", 0);
+            int maxTime = intent.getIntExtra("max", 0);
+            String name = intent.getStringExtra("name");
+
+            if (intent.getBooleanExtra("dismiss", false)) {
+                mTimerSnackBar.dismiss();
+            } else if (millisUntilFinished == 0) {
+                mTimerSnackBar.dismiss();
+                Snackbar.make(findViewById(R.id.rootView), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
+                        .setAction(R.string.okay, v -> mTimerSnackBar.dismiss())
+                        .show();
+            } else {
+                if (mTimerSnackBar == null || !mTimerSnackBar.isShown()) {
+                    mTimerSnackBar = Snackbar.make(findViewById(R.id.rootView),
+                            String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)),
+                            Snackbar.LENGTH_INDEFINITE);
+                    mTimerSnackBar
+                            .setAction(R.string.show, v -> {
+                                TimerSheet sheet = new TimerSheet();
+                                sheet.startTime = maxTime / 1000;
+                                sheet.tagName = name;
+                                sheet.show(getSupportFragmentManager(), "timer");
+                            })
+                            .show();
+                    mSnackBarText = mTimerSnackBar.getView().findViewById(com.google.android.material.R.id.snackbar_text);
+                } else {
+                    mSnackBarText.setText(String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)));
+                }
+            }
+        }
     }
 }
