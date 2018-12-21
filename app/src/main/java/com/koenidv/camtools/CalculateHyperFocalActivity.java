@@ -76,9 +76,9 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         coc[0] = lastCamera.getConfusion();
 
         mLengthEditText.setText(prefs.getString("focallength", "24"));
-        mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
+        mLengthSeekbar.setProgress(mModuleManager.focalLength(prefs.getString("focallength", "24")));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
-        mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
+        mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
 
@@ -106,7 +106,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mLengthEditText.setText(String.valueOf(progress));
+                    mLengthEditText.setText(mModuleManager.focalLength(progress));
                     changing[0] = false;
                 }
             }
@@ -120,14 +120,14 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         mLengthEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mLengthSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mLengthSeekbar.setProgress(mModuleManager.focalLength(s.toString()));
                         changing[0] = false;
                     }
                     prefsEdit.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()));
+                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("aperture", "3.5")));
                 }
             }
 
@@ -142,7 +142,7 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mApertureEditText.setText(String.valueOf(progress));
+                    mApertureEditText.setText(mModuleManager.aperture(progress, prefs.getInt("aperture_stops", 6)));
                     changing[0] = false;
                 }
             }
@@ -156,14 +156,14 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         mApertureEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mApertureSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mApertureSeekbar.setProgress(mModuleManager.aperture(s.toString(), prefs.getInt("aperture_stops", 6)));
                         changing[0] = false;
                     }
                     prefsEdit.putString("aperture", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()));
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()));
                 }
             }
 

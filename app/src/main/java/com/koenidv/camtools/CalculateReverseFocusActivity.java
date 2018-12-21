@@ -116,7 +116,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mLengthEditText.setText(String.valueOf(progress));
+                    mLengthEditText.setText(mModuleManager.focalLength(progress));
                     changing[0] = false;
                 }
             }
@@ -130,14 +130,14 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         mLengthEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mLengthSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mLengthSeekbar.setProgress(mModuleManager.focalLength(s.toString()));
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mNearEditText.getText().toString()) / conversionfactor, Float.valueOf(mFarEditText.getText().toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("nearfocus", "4")) / conversionfactor, Float.valueOf(prefs.getString("farfocus", "12")) / conversionfactor);
                 }
             }
 
@@ -166,14 +166,14 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         mNearEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
                         mNearSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
                         changing[0] = false;
                     }
                     prefsEditor.putString("nearfocus", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()) / conversionfactor, Float.valueOf(mFarEditText.getText().toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()) / conversionfactor, Float.valueOf(prefs.getString("farfocus", "12")) / conversionfactor);
                 }
             }
 
@@ -188,7 +188,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mFarEditText.setText(String.valueOf(Math.round(progress + Float.valueOf(mNearEditText.getText().toString()))));
+                    mFarEditText.setText(String.valueOf(Math.round(progress + Float.valueOf(prefs.getString("nearfocus", "4")))));
                     changing[0] = false;
                 }
             }
@@ -202,14 +202,14 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         mFarEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
                         mFarSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
                         changing[0] = false;
                     }
                     prefsEditor.putString("farfocus", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(mNearEditText.getText().toString()) / conversionfactor, Float.valueOf(s.toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")) / conversionfactor, Float.valueOf(s.toString()) / conversionfactor);
 
                 }
             }

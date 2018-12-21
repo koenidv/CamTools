@@ -79,14 +79,14 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
-        mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
+        mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
         mDistanceEditText.setText(prefs.getString("distance", "5"));
         mDistanceSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("distance", "5"))));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
 
 
         final float conversionfactor = prefs.getBoolean("empirical", false) ? 3.281f : 1f;
-        if (prefs.getBoolean("empirical", false)) mDistanceEditText.setText(R.string.feet);
+        if (prefs.getBoolean("empirical", false)) mDistanceIndicatorTextView.setText(R.string.feet);
 
         /*
          *  Listeners
@@ -110,7 +110,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mLengthEditText.setText(String.valueOf(progress));
+                    mLengthEditText.setText(mModuleManager.focalLength(progress));
                     changing[0] = false;
                 }
             }
@@ -127,11 +127,11 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                 if (!s.toString().isEmpty() && !s.equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mLengthSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mLengthSeekbar.setProgress(mModuleManager.focalLength(s.toString()));
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(mDistanceEditText.getText().toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")) / conversionfactor);
                 }
             }
 
@@ -146,7 +146,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mApertureEditText.setText(String.valueOf(progress));
+                    mApertureEditText.setText(mModuleManager.aperture(progress, prefs.getInt("aperture_stops", 6)));
                     changing[0] = false;
                 }
             }
@@ -160,14 +160,14 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         mApertureEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mApertureSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mApertureSeekbar.setProgress(mModuleManager.aperture(s.toString(), prefs.getInt("aperture_stops", 6)));
                         changing[0] = false;
                     }
                     prefsEditor.putString("aperture", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()), Float.valueOf(mDistanceEditText.getText().toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()), Float.valueOf(prefs.getString("distance", "5")) / conversionfactor);
                 }
             }
 
@@ -196,14 +196,14 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         mDistanceEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
                         mDistanceSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
                         changing[0] = false;
                     }
                     prefsEditor.putString("distance", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(mApertureEditText.getText().toString()), Float.valueOf(s.toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(s.toString()) / conversionfactor);
                 }
             }
 

@@ -72,7 +72,7 @@ public class CalculateNdActivity extends AppCompatActivity {
 
 
         mStartTimerButton.setOnClickListener(v -> {
-            float calculated = calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false));
+            float calculated = calculate(Float.valueOf(prefs.getString("ndTime", "4")), Float.valueOf(prefs.getString("ndStrength", "10")), prefs.getBoolean("ndstops", false));
             if (!timerRunning || (Float.compare(calculated, timerTime) == 0)) {
                 TimerSheet sheet = new TimerSheet();
                 sheet.startTime = calculated;
@@ -133,7 +133,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                 }
                 if (s.length() > 0 && !s.toString().equals(".")) {
                     prefsEditor.putString("ndTime", s.toString()).apply();
-                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(s.toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false)), true));
+                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(s.toString()), Float.valueOf(prefs.getString("ndStrength", "10")), prefs.getBoolean("ndstops", false)), true));
                 }
             }
 
@@ -190,7 +190,7 @@ public class CalculateNdActivity extends AppCompatActivity {
                 }
                 if (s.length() > 0 && !s.toString().equals(".")) {
                     prefsEditor.putString("ndStrength", s.toString()).apply();
-                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(s.toString()), prefs.getBoolean("ndstops", false)), true));
+                    mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(prefs.getString("ndTime", "4")), Float.valueOf(s.toString()), prefs.getBoolean("ndstops", false)), true));
                 }
             }
 

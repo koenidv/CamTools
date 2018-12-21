@@ -2,7 +2,6 @@ package com.koenidv.camtools;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -105,131 +104,103 @@ public class SettingsActivity extends AppCompatActivity {
          * Listeners
          */
 
-        mDarkmodeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int currentNightMode = getResources().getConfiguration().uiMode
-                        & Configuration.UI_MODE_NIGHT_MASK;
-                if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    prefsEdit.putBoolean("system_darkmode", false).apply();
-                } else {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    prefsEdit.putBoolean("system_darkmode", true).apply();
-                    if (!prefs.getBoolean("used_darkmode", false)) {
-                        prefsEdit.putBoolean("used_darkmode", true).apply();
-                    }
+        mDarkmodeButton.setOnClickListener(v -> {
+            int currentNightMode = getResources().getConfiguration().uiMode
+                    & Configuration.UI_MODE_NIGHT_MASK;
+            if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                prefsEdit.putBoolean("system_darkmode", false).apply();
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                prefsEdit.putBoolean("system_darkmode", true).apply();
+                if (!prefs.getBoolean("used_darkmode", false)) {
+                    prefsEdit.putBoolean("used_darkmode", true).apply();
                 }
-                prefsEdit.putBoolean("theme_changed", true).apply();
-                SettingsActivity.this.recreate();
             }
+            prefsEdit.putBoolean("theme_changed", true).apply();
+            SettingsActivity.this.recreate();
         });
 
-        View.OnClickListener camerasClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(SettingsActivity.this, EditCamerasActivity.class));
-            }
-        };
+        View.OnClickListener camerasClickListener = v -> startActivity(new Intent(SettingsActivity.this, EditCamerasActivity.class));
         mCamerasButton.setOnClickListener(camerasClickListener);
         findViewById(R.id.settingsCamerasCard).setOnClickListener(camerasClickListener);
 
-        mApertureButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int[] items = new int[]{
-                        R.string.setting_units_aperture_full,
-                        R.string.setting_units_aperture_half,
-                        R.string.setting_units_aperture_third
-                };
-                BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
-                mBuilder.setTitle(getString(R.string.setting_units_aperture))
-                        .setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                prefsEdit.putInt("aperture_stops", which).apply();
-                                String apertureText = getString(R.string.setting_units_aperture_short) + ": ";
-                                switch (which) {
-                                    case 0:
-                                        apertureText += getString(R.string.setting_units_aperture_full_short);
-                                        break;
-                                    case 1:
-                                        apertureText += getString(R.string.setting_units_aperture_half_short);
-                                        break;
-                                    case 2:
-                                        apertureText += getString(R.string.setting_units_aperture_third_short);
-                                }
-                                mApertureTextView.setText(apertureText);
-                            }
-                        })
-                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                        .show();
-            }
+        mApertureButton.setOnClickListener(v -> {
+            int[] items = new int[]{
+                    R.string.setting_units_aperture_full,
+                    R.string.setting_units_aperture_half,
+                    R.string.setting_units_aperture_third
+            };
+            BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
+            mBuilder.setTitle(getString(R.string.setting_units_aperture))
+                    .setItems(items, (dialog, which) -> {
+                        //Full (0) -> 2, Half (1) -> 4, Third (2) -> 6
+                        prefsEdit.putInt("aperture_stops", (which + 1) * 2).apply();
+                        String apertureText1 = getString(R.string.setting_units_aperture_short) + ": ";
+                        switch (which) {
+                            case 0:
+                                apertureText1 += getString(R.string.setting_units_aperture_full_short);
+                                break;
+                            case 1:
+                                apertureText1 += getString(R.string.setting_units_aperture_half_short);
+                                break;
+                            case 2:
+                                apertureText1 += getString(R.string.setting_units_aperture_third_short);
+                        }
+                        mApertureTextView.setText(apertureText1);
+                    })
+                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .show();
         });
 
-        mDistancesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int[] items = new int[]{
-                        R.string.setting_units_distance_metrical,
-                        R.string.setting_units_distance_empirical
-                };
-                BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
-                mBuilder.setTitle(getString(R.string.setting_units_distance))
-                        .setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                prefsEdit.putBoolean("empirical", which != 0).apply();
-                                String distanceText = getString(R.string.setting_units_distance) + ": ";
-                                if (which == 1) {
-                                    distanceText += getString(R.string.setting_units_distance_empirical);
-                                } else {
-                                    distanceText += getString(R.string.setting_units_distance_metrical);
-                                }
-                                mDistancesTextView.setText(distanceText);
-                            }
-                        })
-                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                        .show();
-            }
+        mDistancesButton.setOnClickListener(v -> {
+            int[] items = new int[]{
+                    R.string.setting_units_distance_metrical,
+                    R.string.setting_units_distance_empirical
+            };
+            BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
+            mBuilder.setTitle(getString(R.string.setting_units_distance))
+                    .setItems(items, (dialog, which) -> {
+                        prefsEdit.putBoolean("empirical", which != 0).apply();
+                        String distanceText1 = getString(R.string.setting_units_distance) + ": ";
+                        if (which == 1) {
+                            distanceText1 += getString(R.string.setting_units_distance_empirical);
+                        } else {
+                            distanceText1 += getString(R.string.setting_units_distance_metrical);
+                        }
+                        mDistancesTextView.setText(distanceText1);
+                    })
+                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .show();
         });
 
-        mNdButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int[] items = new int[]{
-                        R.string.setting_units_nd_stops,
-                        R.string.setting_units_nd_times
-                };
-                BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
-                mBuilder.setTitle(getString(R.string.setting_units_nd))
-                        .setItems(items, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                prefsEdit.putBoolean("ndstops", which == 0).apply();
-                                String ndText = getString(R.string.setting_units_nd) + ": ";
-                                if (which == 1) {
-                                    ndText += getString(R.string.setting_units_nd_times);
-                                } else {
-                                    ndText += getString(R.string.setting_units_nd_stops);
-                                }
-                                mNdTextView.setText(ndText);
-                            }
-                        })
-                        .setDarkTheme(prefs.getBoolean("system_darkmode", false))
-                        .show();
-            }
+        mNdButton.setOnClickListener(v -> {
+            int[] items = new int[]{
+                    R.string.setting_units_nd_stops,
+                    R.string.setting_units_nd_times
+            };
+            BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
+            mBuilder.setTitle(getString(R.string.setting_units_nd))
+                    .setItems(items, (dialog, which) -> {
+                        prefsEdit.putBoolean("ndstops", which == 0).apply();
+                        String ndText1 = getString(R.string.setting_units_nd) + ": ";
+                        if (which == 1) {
+                            ndText1 += getString(R.string.setting_units_nd_times);
+                        } else {
+                            ndText1 += getString(R.string.setting_units_nd_stops);
+                        }
+                        mNdTextView.setText(ndText1);
+                    })
+                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .show();
         });
 
-        View.OnClickListener feedbackClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String appPackageName = SettingsActivity.this.getPackageName(); // getPackageName() from Context or Activity object
-                try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-                }
+        View.OnClickListener feedbackClickListener = v -> {
+            final String appPackageName = SettingsActivity.this.getPackageName(); // getPackageName() from Context or Activity object
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (android.content.ActivityNotFoundException anfe) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
         };
         mFeedbackButton.setOnClickListener(feedbackClickListener);

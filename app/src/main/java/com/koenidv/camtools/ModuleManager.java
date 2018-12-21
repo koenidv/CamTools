@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import org.michaelbel.bottomsheet.BottomSheet;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -41,10 +42,10 @@ import androidx.recyclerview.widget.RecyclerView;
 //  Created by koenidv on 30.11.2018.
 class ModuleManager {
 
+    int APERTURE_FULL = 2, APERTURE_HALF = 4, APERTURE_THIRD = 6;
+
     /*
-     *
      *  UI
-     *
      */
 
     /**
@@ -456,9 +457,46 @@ class ModuleManager {
     }
 
     /*
-     *
+     * Input
+     */
+
+    String focalLength(int mProgress) {
+        int out = (int) Math.round(mProgress * mProgress * 0.2);
+        return String.valueOf(out);
+    }
+
+    int focalLength(String mText) {
+        double in = Double.valueOf(mText);
+        return (int) Math.round(Math.sqrt(5 * in));
+    }
+
+    /**
+     * Returns the aperture for a seekbar progress
+     * @param mProgress: Seekbar progress
+     * @param mPart: 2 for full stops, 4 for halfs, 6 for thirds
+     */
+    String aperture(int mProgress, int mPart) {
+        double aperture = Math.pow(2.0, 1.0 / (double) mPart * (double) mProgress);
+
+        DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+        df.applyPattern(aperture >= 10 ? "#" : "#.#");
+
+        return df.format(aperture);
+    }
+
+    /**
+     * Returns the seekbar progress for an aperture
+     * @param mText: Aperture (e.g. "3.5")
+     * @param mPart: 2 for full stops, 4 for halfs, 6 for thirds
+     */
+    int aperture(String mText, int mPart) {
+        double in = Double.valueOf(mText);
+        double out = (Math.log(in) / Math.log(2)) / (1.0 / (double) mPart);
+        return  (int) Math.round(out);
+    }
+
+    /*
      *  Tools
-     *
      */
 
     /**

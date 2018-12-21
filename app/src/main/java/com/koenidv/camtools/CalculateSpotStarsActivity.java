@@ -57,7 +57,6 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
-        Gson gson = new Gson();
 
         final boolean changing[] = {false};
 
@@ -72,12 +71,10 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final Button mExpandButton = findViewById(R.id.expandButton);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        Camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
-
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
-        mApertureSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("aperture", "3.5"))));
+        mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
         calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
 
@@ -111,7 +108,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mLengthEditText.setText(String.valueOf(progress));
+                    mLengthEditText.setText(mModuleManager.focalLength(progress));
                     changing[0] = false;
                 }
             }
@@ -125,14 +122,14 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         mLengthEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mLengthSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mLengthSeekbar.setProgress(mModuleManager.focalLength(s.toString()));
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(mPixelpitch[0], Float.valueOf(s.toString()), Float.valueOf(mApertureEditText.getText().toString()));
+                    calculate(mPixelpitch[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("aperture", "3.5")));
                 }
             }
 
@@ -147,7 +144,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mApertureEditText.setText(String.valueOf(progress));
+                    mApertureEditText.setText(mModuleManager.aperture(progress, prefs.getInt("aperture_stops", 6)));
                     changing[0] = false;
                 }
             }
@@ -161,14 +158,14 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         mApertureEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.equals(".")) {
+                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mApertureSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mApertureSeekbar.setProgress(mModuleManager.aperture(s.toString(), prefs.getInt("aperture_stops", 6)));
                         changing[0] = false;
                     }
                     prefsEditor.putString("aperture", s.toString()).apply();
-                    calculate(mPixelpitch[0], Float.valueOf(mLengthEditText.getText().toString()), Float.valueOf(s.toString()));
+                    calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()));
                 }
             }
 
@@ -178,12 +175,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
             //f:on
         });
 
-        mEquationsLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mModuleManager.showEquations(CalculateSpotStarsActivity.this, "spotstars");
-            }
-        });
+        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateSpotStarsActivity.this, "spotstars"));
     }
 
     private void calculate(float mPixelpitch, float mLength, float mAperture) {
@@ -199,9 +191,9 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final TextView m500TextView = findViewById(R.id.result500TextView);
         final TextView m600TextView = findViewById(R.id.result600TextView);
 
-        mNpfTextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, mNpf));
-        m500TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m500));
-        m600TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m600));
+        mNpfTextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, mNpf, true));
+        m500TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m500, true));
+        m600TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m600, true));
     }
 
     @Override
