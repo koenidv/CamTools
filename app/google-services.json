@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "824981976898",
+    "firebase_url": "https://koenidv-camtools.firebaseio.com",
+    "project_id": "koenidv-camtools",
+    "storage_bucket": "koenidv-camtools.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824981976898:android:b2d32012c0927623",
+        "android_client_info": {
+          "package_name": "com.koenidv.camtools"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824981976898-8l7pa6eq9f75na27i0l2k93bns80vlho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.koenidv.camtools",
+            "certificate_hash": "ee4c1253b37a75ce6c3195f6f3c846b1a2bd1352"
+          }
+        },
+        {
+          "client_id": "824981976898-5pal9gctks8h86jicvkjl4c21gv6blp4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0Nx8vxU8PlTCJ9-c-WpNccGWcOUW6oGM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824981976898-5pal9gctks8h86jicvkjl4c21gv6blp4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
