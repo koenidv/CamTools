@@ -23,7 +23,7 @@
     <color name="background_dark_darker">#090909</color> <!-- Dialog background -->
 
     <color name="text_main_light">#000000</color> <!-- Card titles in light mode -->
-    <color name="text_sub_light">#757575</color> <!-- Switchtexts / Icons in light mode -->
+    <color name="text_sub_light">#757575</color> <!-- Switchtexts / ons in light mode -->
     <color name="text_main_dark">@color/background_light_lighter</color> <!-- Card titles in dark mode -->
     <color name="text_sub_dark">@color/background_light_darker</color> <!-- Switchtexts / Icons in dark mode -->
 
@@ -40,4 +40,7 @@
     <color name="colorWarning">#f02c2c</color>
 
     <color name="gray">#a9a9a9</color>
+
+    <color name="ic_launcher_background">@color/colorAccent</color>
+    <color name="ic_shortcut_background">#ffffff</color>
 </resources>

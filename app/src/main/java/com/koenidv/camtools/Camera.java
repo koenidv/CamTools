@@ -1,27 +1,15 @@
 package com.koenidv.camtools;
 
 //  Created by koenidv on 06.12.2018.
-public class camera {
+public class Camera {
     private String mName;
     private int iconId = R.drawable.camera_photo, mResolutionX, mResolutionY;
     private float mSensorSizeX, mSensorSizeY, mCropfactor, mPixelpitch, mConfusion;
 
-    camera() {
+    Camera() {
     }
 
-    camera(String mName, int mIconId, int mResolutionX, int mResolutionY, float mSensorSizeX, float mSensorSizeY, float mCropfactor, float mPixelpitch, float mConfusion) {
-        this.mName = mName;
-        this.iconId = mIconId;
-        this.mResolutionX = mResolutionX;
-        this.mResolutionY = mResolutionY;
-        this.mSensorSizeX = mSensorSizeX;
-        this.mSensorSizeY = mSensorSizeY;
-        this.mCropfactor = mCropfactor;
-        this.mPixelpitch = mPixelpitch;
-        this.mConfusion = mConfusion;
-    }
-
-    camera(String mName, int mIconId, int mResolutionX, int mResolutionY, float mSensorSizeX, float mSensorSizeY, float mConfusion) {
+    Camera(String mName, int mIconId, int mResolutionX, int mResolutionY, float mSensorSizeX, float mSensorSizeY, float mConfusion) {
         float cropfactor = (float) (43.27 / Math.sqrt(mSensorSizeX * mSensorSizeX + mSensorSizeY * mSensorSizeY));
         float pixelpitch = mSensorSizeX / mResolutionX * 1000;
 
@@ -43,7 +31,7 @@ public class camera {
      * @param mConfusion  The circle of confusion
      */
     @Deprecated
-    camera(String mName, String mResolution, String mSize, String mConfusion) {
+    Camera(String mName, String mResolution, String mSize, String mConfusion) {
         int resX = Integer.valueOf(mResolution.substring(0, mResolution.indexOf(":")));
         int resY = Integer.valueOf(mResolution.substring(mResolution.indexOf(":") + 1));
         float sizeX = Float.valueOf(mSize.substring(0, mSize.indexOf(":")));
@@ -64,12 +52,12 @@ public class camera {
 
     /**
      * @param mName       The name
-     * @param mIconId     Resource id of the camera's icon
+     * @param mIconId     Resource id of the Camera's icon
      * @param mResolution Maximum resolution, should be formatted as "x:y"
      * @param mSize       Sensor size, should be formatted as "x:y"
      * @param mConfusion  The circle of confusion
      */
-    camera(String mName, int mIconId, String mResolution, String mSize, String mConfusion) {
+    Camera(String mName, int mIconId, String mResolution, String mSize, String mConfusion) {
         int resX = Integer.valueOf(mResolution.substring(0, mResolution.indexOf(":")));
         int resY = Integer.valueOf(mResolution.substring(mResolution.indexOf(":") + 1));
         float sizeX = Float.valueOf(mSize.substring(0, mSize.indexOf(":")));

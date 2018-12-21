@@ -48,10 +48,10 @@ class ModuleManager {
      */
 
     /**
-     * Display a bottom sheet to let the user select a camera
+     * Display a bottom sheet to let the user select a Camera
      *
      * @param mContext        The context to run in.
-     * @param mCameraTextView The TextView which displays the currently selected camera.
+     * @param mCameraTextView The TextView which displays the currently selected Camera.
      * @param mValue          The list in which either the current cicle of confusion or pixel pitch is saved.
      * @param mType           Defines what should be saved to {@param mValue}.
      *                        Should be "coc" for circle of confusion or "pixelpitch" for pixel pitch.
@@ -67,12 +67,12 @@ class ModuleManager {
             final List<String> cameras = new ArrayList<>();
             final List<Integer> icons = new ArrayList<>();
             for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
-                camera thisCamera = gson.fromJson(prefs.getString("camera_" + camera, mContext.getString(R.string.camera_default)), camera.class);
+                Camera thisCamera = gson.fromJson(prefs.getString("camera_" + camera, mContext.getString(R.string.camera_default)), Camera.class);
                 cameras.add(thisCamera.getName());
                 icons.add(thisCamera.getIcon());
             }
             cameras.add(mContext.getString(R.string.calculate_camera_manage));
-            
+
             icons.add(R.drawable.ic_settings);
             int[] iconlist = new int[icons.size()];
             Iterator<Integer> iterator = icons.iterator();
@@ -87,7 +87,7 @@ class ModuleManager {
                             mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
                         } else {
                             prefsEdit.putInt("cameras_last", which).apply();
-                            camera mCamera = gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), camera.class);
+                            Camera mCamera = gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class);
                             switch (mType) {
                                 case "coc":
                                     mValue[0] = mCamera.getConfusion();
@@ -97,7 +97,7 @@ class ModuleManager {
                                     break;
                             }
                             mCameraTextView.setText(mContext.getString(R.string.calculate_camera)
-                                    .replace("%s", gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), camera.class).getName()));
+                                    .replace("%s", gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class).getName()));
                         }
                     })
                     .setDarkTheme(prefs.getBoolean("system_darkmode", false))
@@ -127,18 +127,18 @@ class ModuleManager {
     }
 
     /**
-     * Show a bottom sheet which lets the user manipulate a camera
+     * Show a bottom sheet which lets the user manipulate a Camera
      *
-     * @param mContext  The context to run in.
-     * @param mIndex    The position in {@param mCardList}.
-     *                  Should be one larger than the size of {@param mCardList} to create a new camera
-     *                  or withing its size to edit an existing camera.
-     * @param mCardList A list in which all {@link cameraCard} are stored to display them in the RecyclerView.
-     * @param mAdapter  The RecyclerView's adapter.
+     * @param mContext    The context to run in.
+     * @param mIndex      The position in {@param mCameraList}.
+     *                    Should be one larger than the size of {@param mCameraList} to create a new Camera
+     *                    or withing its size to edit an existing Camera.
+     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
+     * @param mAdapter    The RecyclerView's adapter.
      * @see #editCameraCheckAllFilled(Context, Dialog)
      * @see EditCamerasActivity
      */
-    void editCamera(final Context mContext, final int mIndex, @Nullable final List<cameraCard> mCardList, @Nullable final RecyclerView.Adapter mAdapter) {
+    void editCamera(final Context mContext, final int mIndex, @Nullable final List<Camera> mCameraList, @Nullable final RecyclerView.Adapter mAdapter) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         Gson gson = new Gson();
@@ -163,7 +163,7 @@ class ModuleManager {
         final Button mSaveButton = mDialog.findViewById(R.id.saveButton);
 
         final String index = "camera_" + String.valueOf(mIndex);
-        camera thisCamera = gson.fromJson(prefs.getString(index, null), camera.class);
+        Camera thisCamera = gson.fromJson(prefs.getString(index, null), Camera.class);
 
         if (thisCamera != null) {
             mTitleTextView.setText(R.string.setting_cameras_edit_custom_title);
@@ -175,13 +175,13 @@ class ModuleManager {
             mSizeYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
             mConfusionEditText.setText(String.valueOf(thisCamera.getConfusion()));
         } else {
-            thisCamera = new camera();
+            thisCamera = new Camera();
             mSaveButton.setEnabled(false);
             mSaveButton.getBackground().setAlpha(0);
             mSaveButton.setTextColor(mContext.getResources().getColor(R.color.gray));
         }
 
-        final camera thisCameraFinal = thisCamera;
+        final Camera thisCameraFinal = thisCamera;
 
 
         TextWatcher checkOnTextChanged = new TextWatcher() {
@@ -239,7 +239,8 @@ class ModuleManager {
                 }
             });
 
-            sheet.show();
+            sheet.setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .show();
         });
 
         mResolutionPresetTextView.setOnClickListener(v -> {
@@ -287,7 +288,7 @@ class ModuleManager {
         mCancelButton.setOnClickListener(v -> mDialog.dismiss());
 
         mSaveButton.setOnClickListener(v -> {
-            camera mCamera = new camera(
+            Camera mCamera = new Camera(
                     mNameEditText.getText().toString(),
                     thisCameraFinal.getIcon(),
                     Integer.valueOf(mResolutionXEditText.getText().toString()),
@@ -300,21 +301,13 @@ class ModuleManager {
             prefsEdit.putString(index, gson.toJson(mCamera))
                     .apply();
 
-            if (mCardList != null && mAdapter != null) {
-                cameraCard mCameraCard = new cameraCard(
-                        mNameEditText.getText().toString(),
-                        String.valueOf(Math.round(Integer.valueOf(mResolutionXEditText.getText().toString()) * Integer.valueOf(mResolutionYEditText.getText().toString()) / (float) 1000000))
-                                + mContext.getString(R.string.megapixel)
-                                + mContext.getString(R.string.resolution_size_seperator)
-                                + ModuleManager.truncateNumber(Float.valueOf(mSizeXEditText.getText().toString())) + "x" + ModuleManager.truncateNumber(Float.valueOf(mSizeYEditText.getText().toString()))
-                                + mContext.getString(R.string.millimeter),
-                        (prefs.getInt("cameras_last", -1) == mIndex));
+            if (mCameraList != null && mAdapter != null) {
 
                 if (mIndex > prefs.getInt("cameras_amount", -1)) {
-                    mCardList.add(mCameraCard);
+                    mCameraList.add(mCamera);
                     mAdapter.notifyItemInserted(mIndex);
                 } else {
-                    mCardList.set(mIndex, mCameraCard);
+                    mCameraList.set(mIndex, mCamera);
                     mAdapter.notifyItemChanged(mIndex);
                 }
             }
@@ -330,20 +323,20 @@ class ModuleManager {
     }
 
     /**
-     * Delete a camera
-     * Show a bottom sheet which lets the user manipulate a camera
+     * Delete a Camera
+     * Show a bottom sheet which lets the user manipulate a Camera
      *
-     * @param mContext  The context to run in.
-     * @param mIndex    The position in {@param mCardList}.
-     * @param mCardList A list in which all {@link cameraCard} are stored to display them in the RecyclerView.
-     * @param mAdapter  The RecyclerView's adapter.
+     * @param mContext    The context to run in.
+     * @param mIndex      The position in {@param mCameraList}.
+     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
+     * @param mAdapter    The RecyclerView's adapter.
      * @see EditCamerasActivity
      */
-    void deleteCamera(final Context mContext, final int mIndex, final List<cameraCard> mCardList, final RecyclerView.Adapter mAdapter) {
+    void deleteCamera(final Context mContext, final int mIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
-        // Move every camera with a higher index one down
+        // Move every Camera with a higher index one down
         for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
             String indexLast = "camera_" + String.valueOf(move - 1);
             String indexThis = "camera_" + move;
@@ -351,7 +344,7 @@ class ModuleManager {
             prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
         }
 
-        // Use the standard camera if the deleted camera was used last
+        // Use the standard Camera if the deleted Camera was used last
         if (prefs.getInt("cameras_last", 0) == mIndex) {
             prefsEdit.putInt("cameras_last", 0);
         }
@@ -363,8 +356,8 @@ class ModuleManager {
         // The amount of cameras is now one smaller
         prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).apply();
 
-        if (mCardList != null && mAdapter != null) {
-            mCardList.remove(mIndex);
+        if (mCameraList != null && mAdapter != null) {
+            mCameraList.remove(mIndex);
             mAdapter.notifyItemRemoved(mIndex);
         }
     }
@@ -372,14 +365,14 @@ class ModuleManager {
     /**
      * Switches to position of two cameras
      *
-     * @param mContext   The context to run in.
-     * @param mFromIndex The position of the camera to move.
-     * @param mToIndex   The position to move the camera to.
-     * @param mCardList  A list in which all {@link cameraCard} are stored to display them in the RecyclerView.
-     * @param mAdapter   The RecyclerView's adapter.
+     * @param mContext    The context to run in.
+     * @param mFromIndex  The position of the Camera to move.
+     * @param mToIndex    The position to move the Camera to.
+     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
+     * @param mAdapter    The RecyclerView's adapter.
      * @see EditCamerasActivity
      */
-    void moveCamera(final Context mContext, final int mFromIndex, final int mToIndex, final List<cameraCard> mCardList, final RecyclerView.Adapter mAdapter) {
+    void moveCamera(final Context mContext, final int mFromIndex, final int mToIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
@@ -396,9 +389,9 @@ class ModuleManager {
         }
         prefsEdit.apply();
 
-        cameraCard toCard = mCardList.get(mToIndex);
-        mCardList.set(mToIndex, mCardList.get(mFromIndex));
-        mCardList.set(mFromIndex, toCard);
+        Camera toCard = mCameraList.get(mToIndex);
+        mCameraList.set(mToIndex, mCameraList.get(mFromIndex));
+        mCameraList.set(mFromIndex, toCard);
         mAdapter.notifyItemMoved(mFromIndex, mToIndex);
     }
 

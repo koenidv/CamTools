@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -33,14 +34,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class EditCamerasActivity extends AppCompatActivity {
 
-    final List<cameraCard> mCameraCardList = new ArrayList<>();
-    final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraCardList);
+    final List<Camera> mCameraList = new ArrayList<>();
+    final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraList);
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        //Toast.makeText(EditCamerasActivity.this, "OnResume", Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -92,14 +91,14 @@ public class EditCamerasActivity extends AppCompatActivity {
                     data = data.substring(data.indexOf(";") + 1);
                     String confusion = data;
 
-                    camera addCamera = new camera(name, resolution, sensorsize, confusion);
+                    Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize, confusion);
                     int index = prefs.getInt("cameras_amount", -1) + 1;
                     prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
                             .putInt("cameras_amount", index)
                             .apply();
 
                     Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG)
-                            .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraCardList, mAdapter)).show();
+                            .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraList, mAdapter)).show();
                 } catch (IndexOutOfBoundsException ie) {
                     Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
                 }
@@ -120,7 +119,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                 data = data.substring(data.indexOf(";") + 1);
                 String confusion = data;
 
-                camera addCamera = new camera(name, resolution, sensorsize, confusion);
+                Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize, confusion);
                 int index = prefs.getInt("cameras_amount", -1) + 1;
 
                 prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
@@ -128,7 +127,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                         .apply();
 
                 Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG)
-                        .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraCardList, mAdapter)).show();
+                        .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraList, mAdapter)).show();
             } catch (IndexOutOfBoundsException ie) {
                 Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
             }
@@ -139,17 +138,9 @@ public class EditCamerasActivity extends AppCompatActivity {
             mEmptyCardView.setVisibility(View.VISIBLE);
         } else {
             for (int i = 0; i <= prefs.getInt("cameras_amount", -1); i++) {
-                camera mCamera = gson.fromJson(prefs.getString("camera_" + i, getString(R.string.camera_default)), camera.class);
+                Camera mCamera = gson.fromJson(prefs.getString("camera_" + i, getString(R.string.camera_default)), Camera.class);
 
-                cameraCard mCameraCard = new cameraCard(
-                        mCamera.getName(),
-                        String.valueOf(Math.round(mCamera.getResolutionX() * mCamera.getResolutionY() / (float) 1000000))
-                                + getString(R.string.megapixel)
-                                + getString(R.string.resolution_size_seperator)
-                                + ModuleManager.truncateNumber(mCamera.getSensorSizeX()) + "x" + ModuleManager.truncateNumber(mCamera.getSensorSizeY())
-                                + getString(R.string.millimeter),
-                        (prefs.getInt("cameras_last", -1) == i));
-                mCameraCardList.add(mCameraCard);
+                mCameraList.add(mCamera);
             }
             mAdapter.notifyDataSetChanged();
         }
@@ -182,18 +173,33 @@ public class EditCamerasActivity extends AppCompatActivity {
                         mEmptyCardView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
                         mEmptyCardView.setVisibility(View.GONE);
                     }
-                    mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraCardList, mAdapter);
+                    mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter);
                     break;
             }
 
             return false;
         });
+
         if (!prefs.getBoolean("has_seen_nfc_tip", false) && prefs.getInt("cameras_amount", -1) != -1) {
             Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
                     .setAction(R.string.okay, v -> {
                     })
                     .show();
             prefsEdit.putBoolean("has_seen_nfc_tip", true).apply();
+        }
+
+        NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if (nfcAdapter != null) {
+            Camera mCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
+            String data =
+                    mCamera.getName().replace(" ", "%20")
+                            + ";" + mCamera.getResolutionX()
+                            + ":" + mCamera.getResolutionY()
+                            + ";" + mCamera.getSensorSizeX()
+                            + ":" + mCamera.getSensorSizeY()
+                            + ";" + mCamera.getConfusion();
+            NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
+            nfcAdapter.setNdefPushMessage(message, this);
         }
     }
 
@@ -266,24 +272,37 @@ public class EditCamerasActivity extends AppCompatActivity {
                 sheet.which = position;
                 sheet.show(getSupportFragmentManager(), "camera_details_sheet");
             } else if (which == finalPosition_up) {
-                mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraCardList, adapter);
+                mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraList, adapter);
             } else if (which == finalPosition_down) {
-                mModuleManager.moveCamera(EditCamerasActivity.this, position, position + 1, EditCamerasActivity.this.mCameraCardList, adapter);
+                mModuleManager.moveCamera(EditCamerasActivity.this, position, position + 1, EditCamerasActivity.this.mCameraList, adapter);
             } else if (which == finalPosition_use) {
-                mCameraCardList.get(prefs.getInt("cameras_last", 0)).setIsLastUsed(false);
-                mCameraCardList.get(position).setIsLastUsed(true);
+                adapter.notifyItemChanged(prefs.getInt("cameras_last", 0), rv.getChildAt(prefs.getInt("cameras_last", 0)));
+                adapter.notifyItemChanged(position);
                 prefsEdit.putInt("cameras_last", position).apply();
-                adapter.notifyDataSetChanged();
+
+                NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+                if (nfcAdapter != null) {
+                    Camera mCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
+                    String data =
+                            mCamera.getName().replace(" ", "%20")
+                                    + ";" + mCamera.getResolutionX()
+                                    + ":" + mCamera.getResolutionY()
+                                    + ";" + mCamera.getSensorSizeX()
+                                    + ":" + mCamera.getSensorSizeY()
+                                    + ";" + mCamera.getConfusion();
+                    NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
+                    nfcAdapter.setNdefPushMessage(message, this);
+                }
             } else if (which == position_edit) {
-                mModuleManager.editCamera(EditCamerasActivity.this, position, EditCamerasActivity.this.mCameraCardList, adapter);
+                mModuleManager.editCamera(EditCamerasActivity.this, position, EditCamerasActivity.this.mCameraList, adapter);
             } else if (which == finalPosition_delete) {
-                cameraCard card = mCameraCardList.get(position);
-                mCameraCardList.remove(position);
+                Camera deletedCamera = mCameraList.get(position);
+                mCameraList.remove(position);
                 mAdapter.notifyItemRemoved(position);
 
-                Snackbar undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", card.getName()), Snackbar.LENGTH_LONG);
+                Snackbar undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", deletedCamera.getName()), Snackbar.LENGTH_LONG);
                 undoSnackbar.setAction(R.string.undo, v -> {
-                    mCameraCardList.add(position, card);
+                    mCameraList.add(position, deletedCamera);
                     mAdapter.notifyItemInserted(position);
                 });
                 undoSnackbar.addCallback(new Snackbar.Callback() {
@@ -305,7 +324,7 @@ public class EditCamerasActivity extends AppCompatActivity {
     public void addCard(View v) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final ModuleManager mModuleManager = new ModuleManager();
-        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraCardList, mAdapter);
+        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter);
 
         RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
         CardView mEmptyCardView = findViewById(R.id.emptyCard);

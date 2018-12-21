@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -190,6 +195,44 @@ public class CalculateContrastActivity extends AppCompatActivity {
                 Math.min(r,255),
                 Math.min(g,255),
                 Math.min(b,255));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateContrastActivity.this, "tools_contrast")
+                                        .setShortLabel(getString(R.string.shortcut_tools_contrast))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_contrast))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateContrastActivity.class))
+                                        .build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateContrastActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

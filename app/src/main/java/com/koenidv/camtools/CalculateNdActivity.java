@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -227,7 +228,11 @@ public class CalculateNdActivity extends AppCompatActivity {
                     if (mShortcutManager.isRequestPinShortcutSupported()) {
 
                         ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateNdActivity.this, "exposure_nd").build();
+                                new ShortcutInfo.Builder(CalculateNdActivity.this, "exposure_nd")
+                                        .setShortLabel(getString(R.string.shortcut_exposure_nd))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_nd))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateNdActivity.class))
+                                        .build();
 
                         mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
                     }

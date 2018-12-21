@@ -46,10 +46,11 @@ public class CameraDetailsSheet extends BottomSheetDialogFragment {
         TextView mCocTextView = view.findViewById(R.id.confusionTextView);
 
 
-        camera mCamera = gson.fromJson(prefs.getString("camera_" + which, getString(R.string.camera_default)), camera.class);
+        Camera mCamera = gson.fromJson(prefs.getString("camera_" + which, getString(R.string.camera_default)), Camera.class);
 
 
         mNameTextView.setText(mCamera.getName());
+        mNameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(mCamera.getIcon(), 0, 0, 0);
         mPixelCountTextView.setText(getString(R.string.pixelcount_text)
                 .replace("%s", String.valueOf(Math.round(mCamera.getResolutionX() * mCamera.getResolutionY() / (float) 1000000))));
         mResolutionTextView.setText(getString(R.string.resolution_text)
@@ -67,7 +68,7 @@ public class CameraDetailsSheet extends BottomSheetDialogFragment {
 
 
         /*
-         * Transfer camera with android beam
+         * Transfer Camera with android beam
          */
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(getActivity());
         if (nfcAdapter != null) {
@@ -83,7 +84,6 @@ public class CameraDetailsSheet extends BottomSheetDialogFragment {
                             + mCamera.getSensorSizeY()
                             + ";"
                             + mCamera.getConfusion();
-            //NdefMessage message = new NdefMessage(NdefRecord.createUri(url));
             NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
             nfcAdapter.setNdefPushMessage(message, getActivity());
         }

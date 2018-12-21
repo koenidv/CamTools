@@ -272,11 +272,10 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = SettingsActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
         if (prefs.getBoolean("theme_changed", false)) {
+            prefs.edit().putBoolean("theme_changed", false).apply();
             startActivity(new Intent(SettingsActivity.this, MainActivity.class));
-            prefsEdit.putBoolean("theme_changed", false).apply();
         }
         super.onBackPressed();
     }

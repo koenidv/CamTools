@@ -207,11 +207,11 @@
     <string name="stars_expand">Mehr</string>
     <string name="stars_collapse">Weniger</string>
     <string name="more_coming_soon">Mehr ist bald verfügbar</string>
-    <string name="shortcut_focus_hyper">Hyperfokale Distanz</string>
+    <string name="shortcut_focus_hyper">Hyperfokal</string>
     <string name="shortcut_focus_limits">Tiefenschärfe</string>
-    <string name="shortcut_focus_reverse">Fokus Rückwärts</string>
-    <string name="shortcut_exposure_nd">ND-Belichtungszeit</string>
-    <string name="shortcut_exposure_spotstars">Sternenpunkte</string>
+    <string name="shortcut_focus_reverse">Fokus</string>
+    <string name="shortcut_exposure_nd">ND-Filter</string>
+    <string name="shortcut_exposure_spotstars">Sterne</string>
     <string name="shortcut_exposure_startrails">Sternenspuren</string>
     <string name="shortcut_sky_overview">Himmelereignisse</string>
     <string name="shortcut_sky_details">Himmel-Details</string>
@@ -312,7 +312,7 @@
     <string name="coc_text">Zerstreuungskreis: %smm</string>
     <string name="setting_cameras_added_camera">%s wurde hinzugefügt</string>
     <string name="setting_cameras_added_error">Kamera konnte nicht hinzugefügt werden</string>
-    <string name="tip_share_beam">Tipp: Öffne die Detailansicht, um eine Kamera per Android Beam zu teilen.</string>
+    <string name="tip_share_beam">Tipp: Die ausgewählte Kamera kann per Android Beam geteilt werden</string>
     <string name="undo">Rückgängig</string>
     <string name="setting_cameras_deleted">%s gelöscht</string>
     <string name="no_cameras_added">Du hast noch keine Kameras hinzugefügt</string>

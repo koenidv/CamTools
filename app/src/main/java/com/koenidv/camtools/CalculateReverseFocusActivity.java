@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
@@ -38,7 +39,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
     protected void onResume() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        Camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
         if (prefs.getInt("cameras_amount", -1) == -1) {
             mCameraTextView.setText(R.string.calculate_camera_add);
         } else {
@@ -74,7 +75,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         TextView mFarIndicatorTextView = findViewById(R.id.farfocusIndicator);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        Camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
         coc[0] = lastCamera.getConfusion();
 
         mLengthEditText.setText(prefs.getString("focallength", "24"));
@@ -264,7 +265,11 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
                     if (mShortcutManager.isRequestPinShortcutSupported()) {
 
                         ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateReverseFocusActivity.this, "focus_reverse").build();
+                                new ShortcutInfo.Builder(CalculateReverseFocusActivity.this, "focus_reverse")
+                                        .setShortLabel(getString(R.string.shortcut_focus_reverse))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_reversefocus))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateReverseFocusActivity.class))
+                                        .build();
 
                         mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
                     }

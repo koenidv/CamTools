@@ -20,19 +20,19 @@
 
     <string name="select_hyper">Hyperfocal</string>
     <string name="description_hyper">Set the focus at this distance so that the DoF reaches to infinity.</string>
-    <string name="shortcut_focus_hyper">Hyperfocal distance</string>
-    <string name="select_limits">Depth of field</string>
+    <string name="shortcut_focus_hyper">Hyperfocal</string>
+    <string name="select_limits">DoF</string>
     <string name="description_limits">Calculate which range will be sharp at a given focus point.</string>
     <string name="shortcut_focus_limits">Depth of field</string>
     <string name="select_reverse">Reverse</string>
     <string name="description_reverse">Calculate the needed aperture for a given depth of field.</string>
-    <string name="shortcut_focus_reverse">Reverse focus</string>
+    <string name="shortcut_focus_reverse">Focus</string>
     <string name="select_nd">ND filter</string>
     <string name="description_nd">Use a neutral density filter to extend the exposure time.</string>
-    <string name="shortcut_exposure_nd">ND Exposure time</string>
+    <string name="shortcut_exposure_nd">ND filter</string>
     <string name="select_stars">Stars</string>
     <string name="description_stars">Calculate the maximum exposure time at which stars are shown as points.</string>
-    <string name="shortcut_exposure_spotstars">Spot stars</string>
+    <string name="shortcut_exposure_spotstars">Stars</string>
     <string name="select_startrails">Startrails</string>
     <string name="description_startrails">Calculate the exposure time for a specific rotation of stars.</string>
     <string name="shortcut_exposure_startrails">Startrails</string>
@@ -41,7 +41,7 @@
     <string name="shortcut_sky_overview">Sky events</string>
     <string name="select_sky_details">Details</string>
     <string name="description_sky_details">All details about the sky.</string>
-    <string name="shortcut_sky_details">Sky event details</string>
+    <string name="shortcut_sky_details">Sky</string>
     <string name="select_sky_ar">Augmented Reality</string>
     <string name="description_sky_ar">See where the sun and moon will be in real life.</string>
     <string name="shortcut_sky_ar">Sky AR</string>
@@ -310,7 +310,7 @@
     <string name="coc_text">"Circle of confusion: %smm"</string>
     <string name="resolution_size_seperator">" at "</string>
     <string name="preset_choose">Choose a preset</string>
-    <string name="tip_share_beam">Tip: Open the details view to share a camera by Android Beam</string>
+    <string name="tip_share_beam">Tip: The currently active camera can be shared with Android Beam</string>
     <string name="no_cameras_added">You haven\'t added a camera yet</string>
     <string name="no_cameras_added_description">Add your camera to get more precise results.</string>
 

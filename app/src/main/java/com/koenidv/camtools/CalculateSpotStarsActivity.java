@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,7 +38,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
     protected void onResume() {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        Camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
         if (prefs.getInt("cameras_amount", -1) == -1) {
             mCameraTextView.setText(R.string.calculate_camera_add);
         } else {
@@ -71,7 +72,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final Button mExpandButton = findViewById(R.id.expandButton);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
-        camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), camera.class);
+        Camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
 
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
@@ -220,7 +221,11 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
                     if (mShortcutManager.isRequestPinShortcutSupported()) {
 
                         ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateSpotStarsActivity.this, "exposure_spotstars").build();
+                                new ShortcutInfo.Builder(CalculateSpotStarsActivity.this, "exposure_spotstars")
+                                        .setShortLabel(getString(R.string.shortcut_exposure_spotstars))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_spotstars))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateSpotStarsActivity.class))
+                                        .build();
 
                         mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
                     }
@@ -250,7 +255,7 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            updateGUI(intent); // or whatever method used to update your GUI fields
+            updateGUI(intent);
         }
     };
 
