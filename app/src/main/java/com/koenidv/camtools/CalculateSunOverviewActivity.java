@@ -1,6 +1,5 @@
 package com.koenidv.camtools;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -28,14 +26,13 @@ import java.util.Calendar;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CalculateSunOverviewActivity extends AppCompatActivity {
 
-    List<sunDetail> sunDetailList = new ArrayList<>();
-    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    private List<sunDetail> sunDetailList = new ArrayList<>();
+    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
 
     @Override
@@ -44,38 +41,36 @@ public class CalculateSunOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calculate_sun_overview);
 
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
 
         LinearLayout mSearchLayout = findViewById(R.id.searchLayout);
         RecyclerView mRecyclerView = findViewById(R.id.detailsRecyclerView);
 
+        (new ModuleManager()).checkDarkmode(prefs);
 
-        mSearchLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    AutocompleteFilter citiesFilter = new AutocompleteFilter.Builder()
-                            .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
-                            .build();
-                    Intent intent =
-                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
-                                    .setFilter(citiesFilter)
-                            .build(CalculateSunOverviewActivity.this);
-                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
-                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                    // TODO: Handle the error.
-                }
 
+        mSearchLayout.setOnClickListener(v -> {
+            try {
+                AutocompleteFilter citiesFilter = new AutocompleteFilter.Builder()
+                        .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                        .build();
+                Intent intent =
+                        new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                .setFilter(citiesFilter)
+                                .build(CalculateSunOverviewActivity.this);
+                startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+            } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
             }
+
         });
 
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(CalculateSunOverviewActivity.this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        RecyclerView.Adapter mAdapter = new sunDetailsAdapter(sunDetailList);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.setAdapter(mAdapter);
+        //RecyclerView.Adapter mAdapter = new sunDetailsAdapter(sunDetailList);
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        //mRecyclerView.setAdapter(mAdapter);
 
 
         Location location = new Location("39.9522222", "-75.1641667");
@@ -141,7 +136,7 @@ public class CalculateSunOverviewActivity extends AppCompatActivity {
         mSunDetail = new sunDetail(mAstronomicalSunset, getString(R.string.sun_details_astronomical), getString(R.string.sun_details_evening_description_astronomical), getResources().getColor(R.color.sun_astronomical));
         sunDetailList.add(mSunDetail);
 
-        mAdapter.notifyDataSetChanged();
+        //mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -153,11 +148,8 @@ public class CalculateSunOverviewActivity extends AppCompatActivity {
                 Log.i("TAG", "Coordinates: " + place.getLatLng());
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
                 Log.i("TAG", status.getStatusMessage());
 
-            } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
             }
         }
     }
@@ -185,7 +177,7 @@ public class CalculateSunOverviewActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.action_settings:
-                    startActivity(new Intent(CalculateSunOverviewActivity.this, SettingsActivity.class));
+                startActivity(new Intent(CalculateSunOverviewActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_help:
 

@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,16 +38,27 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.RecyclerView;
 
 //  Created by koenidv on 30.11.2018.
 class ModuleManager {
 
-    int APERTURE_FULL = 2, APERTURE_HALF = 4, APERTURE_THIRD = 6;
-
     /*
      *  UI
      */
+
+    void checkDarkmode(SharedPreferences mPrefs) {
+        if (!mPrefs.getBoolean("darkmode_follow_system", false)) {
+            if (mPrefs.getBoolean("darkmode", false)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+    }
 
     /**
      * Display a bottom sheet to let the user select a Camera
@@ -101,7 +113,7 @@ class ModuleManager {
                                     .replace("%s", gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class).getName()));
                         }
                     })
-                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
                     .show();
         }
     }
@@ -173,10 +185,12 @@ class ModuleManager {
             mResolutionXEditText.setText(String.valueOf(thisCamera.getResolutionX()));
             mResolutionYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
             mSizeXEditText.setText(String.valueOf(thisCamera.getSensorSizeX()));
-            mSizeYEditText.setText(String.valueOf(thisCamera.getResolutionY()));
+            mSizeYEditText.setText(String.valueOf(thisCamera.getSensorSizeY()));
             mConfusionEditText.setText(String.valueOf(thisCamera.getConfusion()));
         } else {
             thisCamera = new Camera();
+            mDialog.findViewById(R.id.cocLabelTextView).setVisibility(View.GONE);
+            mConfusionEditText.setVisibility(View.GONE);
             mSaveButton.setEnabled(false);
             mSaveButton.getBackground().setAlpha(0);
             mSaveButton.setTextColor(mContext.getResources().getColor(R.color.gray));
@@ -240,7 +254,7 @@ class ModuleManager {
                 }
             });
 
-            sheet.setDarkTheme(prefs.getBoolean("system_darkmode", false))
+            sheet.setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
                     .show();
         });
 
@@ -260,7 +274,7 @@ class ModuleManager {
                         mResolutionXEditText.setText(mContext.getString(resXid));
                         mResolutionYEditText.setText(mContext.getString(resYid));
                     })
-                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
                     .show();
         });
 
@@ -282,22 +296,35 @@ class ModuleManager {
                         mSizeYEditText.setText(mContext.getString(sizeYid));
                         mConfusionEditText.setText(mContext.getString(cocid));
                     })
-                    .setDarkTheme(prefs.getBoolean("system_darkmode", false))
+                    .setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
                     .show();
         });
 
         mCancelButton.setOnClickListener(v -> mDialog.dismiss());
 
         mSaveButton.setOnClickListener(v -> {
-            Camera mCamera = new Camera(
-                    mNameEditText.getText().toString(),
-                    thisCameraFinal.getIcon(),
-                    Integer.valueOf(mResolutionXEditText.getText().toString()),
-                    Integer.valueOf(mResolutionYEditText.getText().toString()),
-                    Float.valueOf(mSizeXEditText.getText().toString()),
-                    Float.valueOf(mSizeYEditText.getText().toString()),
-                    Float.valueOf(mConfusionEditText.getText().toString())
-            );
+            Camera mCamera;
+
+            if (!mConfusionEditText.getText().toString().equals("") && !mConfusionEditText.getText().toString().equals(".")) {
+                mCamera = new Camera(
+                        mNameEditText.getText().toString(),
+                        thisCameraFinal.getIcon(),
+                        Integer.valueOf(mResolutionXEditText.getText().toString()),
+                        Integer.valueOf(mResolutionYEditText.getText().toString()),
+                        Float.valueOf(mSizeXEditText.getText().toString()),
+                        Float.valueOf(mSizeYEditText.getText().toString()),
+                        Float.valueOf(mConfusionEditText.getText().toString())
+                );
+            } else {
+                mCamera = new Camera(
+                        mNameEditText.getText().toString(),
+                        thisCameraFinal.getIcon(),
+                        Integer.valueOf(mResolutionXEditText.getText().toString()),
+                        Integer.valueOf(mResolutionYEditText.getText().toString()),
+                        Float.valueOf(mSizeXEditText.getText().toString()),
+                        Float.valueOf(mSizeYEditText.getText().toString())
+                );
+            }
 
             prefsEdit.putString(index, gson.toJson(mCamera))
                     .apply();
@@ -324,42 +351,34 @@ class ModuleManager {
     }
 
     /**
-     * Delete a Camera
-     * Show a bottom sheet which lets the user manipulate a Camera
+     * Checks whether all EditTexts in {@param mDialog} are filled
+     * and enables / disables its save button
      *
-     * @param mContext    The context to run in.
-     * @param mIndex      The position in {@param mCameraList}.
-     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
-     * @param mAdapter    The RecyclerView's adapter.
-     * @see EditCamerasActivity
+     * @param mContext The context to run in.
+     * @param mDialog  The dialog in which to check the views.
      */
-    void deleteCamera(final Context mContext, final int mIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+    private void editCameraCheckAllFilled(Context mContext, Dialog mDialog) {
+        EditText mNameEditText = mDialog.findViewById(R.id.nameEditText);
+        EditText mSizeXEditText = mDialog.findViewById(R.id.sensorsizeXEditText);
+        EditText mSizeYEditText = mDialog.findViewById(R.id.sensorsizeYEditText);
+        EditText mResolutionXEditText = mDialog.findViewById(R.id.resolutionXEditText);
+        EditText mResolutionYEditText = mDialog.findViewById(R.id.resolutionYEditText);
+        Button mSaveButton = mDialog.findViewById(R.id.saveButton);
 
-        // Move every Camera with a higher index one down
-        for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
-            String indexLast = "camera_" + String.valueOf(move - 1);
-            String indexThis = "camera_" + move;
-
-            prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
-        }
-
-        // Use the standard Camera if the deleted Camera was used last
-        if (prefs.getInt("cameras_last", 0) == mIndex) {
-            prefsEdit.putInt("cameras_last", 0);
-        }
-
-        // Remove the last entry (which is now the same as the second-to-last entry
-        String index = "camera_" + prefs.getInt("cameras_amount", 0);
-        prefsEdit.remove(index).apply();
-
-        // The amount of cameras is now one smaller
-        prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).apply();
-
-        if (mCameraList != null && mAdapter != null) {
-            mCameraList.remove(mIndex);
-            mAdapter.notifyItemRemoved(mIndex);
+        if (!mNameEditText.getText().toString().isEmpty()
+                && !mSizeXEditText.getText().toString().isEmpty()
+                && !mSizeYEditText.getText().toString().isEmpty()
+                && !mResolutionXEditText.getText().toString().isEmpty()
+                && !mResolutionXEditText.getText().toString().equals(".")
+                && !mResolutionYEditText.getText().toString().isEmpty()
+                && !mResolutionYEditText.getText().toString().equals(".")) {
+            mSaveButton.setEnabled(true);
+            mSaveButton.getBackground().setAlpha(255);
+            mSaveButton.setTextColor(Color.WHITE);
+        } else {
+            mSaveButton.setEnabled(false);
+            mSaveButton.getBackground().setAlpha(0);
+            mSaveButton.setTextColor(mContext.getResources().getColor(R.color.gray));
         }
     }
 
@@ -471,9 +490,50 @@ class ModuleManager {
     }
 
     /**
+     * Delete a Camera
+     * Show a bottom sheet which lets the user manipulate a Camera
+     *
+     * @param mContext    The context to run in.
+     * @param mIndex      The position in {@param mCameraList}.
+     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
+     * @param mAdapter    The RecyclerView's adapter.
+     * @see EditCamerasActivity
+     */
+    void deleteCamera(final Context mContext, final int mIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+
+        // Move every Camera with a higher index one down
+        for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
+            String indexLast = "camera_" + String.valueOf(move - 1);
+            String indexThis = "camera_" + move;
+
+            prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
+        }
+
+        // Use the standard Camera if the deleted Camera was used last
+        if (prefs.getInt("cameras_last", 0) == mIndex) {
+            prefsEdit.putInt("cameras_last", 0);
+        }
+
+        // Remove the last entry (which is now the same as the second-to-last entry
+        String index = "camera_" + prefs.getInt("cameras_amount", 0);
+        prefsEdit.remove(index);
+
+        // The amount of cameras is now one smaller
+        prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).commit();
+
+        if (mCameraList != null && mAdapter != null) {
+            mCameraList.remove(mIndex);
+            mAdapter.notifyItemRemoved(mIndex);
+        }
+    }
+
+    /**
      * Returns the aperture for a seekbar progress
+     *
      * @param mProgress: Seekbar progress
-     * @param mPart: 2 for full stops, 4 for halfs, 6 for thirds
+     * @param mPart:     2 for full stops, 4 for halfs, 6 for thirds
      */
     String aperture(int mProgress, int mPart) {
         double aperture = Math.pow(2.0, 1.0 / (double) mPart * (double) mProgress);
@@ -486,50 +546,44 @@ class ModuleManager {
 
     /**
      * Returns the seekbar progress for an aperture
+     *
      * @param mText: Aperture (e.g. "3.5")
      * @param mPart: 2 for full stops, 4 for halfs, 6 for thirds
      */
     int aperture(String mText, int mPart) {
         double in = Double.valueOf(mText);
         double out = (Math.log(in) / Math.log(2)) / (1.0 / (double) mPart);
-        return  (int) Math.round(out);
+        return (int) Math.round(out);
+    }
+
+    String distance(int mProgress, boolean mEmpirical) {
+        mProgress++;
+        double distance = mProgress * mProgress / 10d;
+
+        if (mEmpirical) {
+            distance *= 3.281;
+        }
+
+        DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
+        df.applyPattern(distance >= 8 ? "#" : "#.#");
+
+        return df.format(distance);
     }
 
     /*
      *  Tools
      */
 
-    /**
-     * Checks whether all EditTexts in {@param mDialog} are filled
-     * and enables / disables its save button
-     *
-     * @param mContext The context to run in.
-     * @param mDialog  The dialog in which to check the views.
-     */
-    private void editCameraCheckAllFilled(Context mContext, Dialog mDialog) {
-        EditText mNameEditText = mDialog.findViewById(R.id.nameEditText);
-        EditText mSizeXEditText = mDialog.findViewById(R.id.sensorsizeXEditText);
-        EditText mSizeYEditText = mDialog.findViewById(R.id.sensorsizeYEditText);
-        EditText mResolutionXEditText = mDialog.findViewById(R.id.resolutionXEditText);
-        EditText mResolutionYEditText = mDialog.findViewById(R.id.resolutionYEditText);
-        EditText mConfusionEditText = mDialog.findViewById(R.id.cocEditText);
-        Button mSaveButton = mDialog.findViewById(R.id.saveButton);
+    int distance(String mText, boolean mEmpirical) {
+        double in = Double.valueOf(mText);
 
-        if (!mNameEditText.getText().toString().isEmpty()
-                && !mSizeXEditText.getText().toString().isEmpty()
-                && !mSizeYEditText.getText().toString().isEmpty()
-                && !mResolutionXEditText.getText().toString().isEmpty()
-                && !mResolutionYEditText.getText().toString().isEmpty()
-                && !mConfusionEditText.getText().toString().isEmpty()
-                && !mConfusionEditText.getText().toString().equals(".")) {
-            mSaveButton.setEnabled(true);
-            mSaveButton.getBackground().setAlpha(255);
-            mSaveButton.setTextColor(Color.WHITE);
-        } else {
-            mSaveButton.setEnabled(false);
-            mSaveButton.getBackground().setAlpha(0);
-            mSaveButton.setTextColor(mContext.getResources().getColor(R.color.gray));
+        if (mEmpirical) {
+            in /= 3.281;
         }
+
+        double out = Math.sqrt(in * 10) - 1;
+
+        return (int) Math.round(out);
     }
 
     void addToHistory(Context mContext, final String mName) {

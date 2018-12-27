@@ -76,6 +76,17 @@
                         android:gravity="end"
                         android:orientation="horizontal">
 
+                        <Switch
+                            android:id="@+id/followSystemSwitch"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="@string/setting_darkmode_follow_system"
+                            />
+
                         <Button
                             android:id="@+id/settingsDarkmodeButton"
                             style="@style/Widget.AppCompat.Button.Colored"

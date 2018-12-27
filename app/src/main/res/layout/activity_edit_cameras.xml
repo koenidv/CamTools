@@ -31,7 +31,6 @@
         android:foreground="?attr/selectableItemBackground"
         app:cardCornerRadius="@dimen/cardCornerRadiusSmall"
         app:cardElevation="@dimen/cardElevation"
-        android:onClick="addCard"
         android:visibility="gone">
 
         <LinearLayout
@@ -58,13 +57,13 @@
                 android:textColor="@android:color/white"/>
 
             <Button
+                android:id="@+id/noCamerasAddButton"
                 style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
                 android:text="@string/calculate_camera_add"
-                android:textColor="@color/textColor_normal"
-                android:onClick="addCard"/>
+                android:textColor="@android:color/black"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

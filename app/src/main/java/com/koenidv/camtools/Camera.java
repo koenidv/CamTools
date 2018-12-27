@@ -24,30 +24,19 @@ public class Camera {
         this.mConfusion = mConfusion;
     }
 
-    /**
-     * @param mName       The name
-     * @param mResolution Maximum resolution, should be formatted as "x:y"
-     * @param mSize       Sensor size, should be formatted as "x:y"
-     * @param mConfusion  The circle of confusion
-     */
-    @Deprecated
-    Camera(String mName, String mResolution, String mSize, String mConfusion) {
-        int resX = Integer.valueOf(mResolution.substring(0, mResolution.indexOf(":")));
-        int resY = Integer.valueOf(mResolution.substring(mResolution.indexOf(":") + 1));
-        float sizeX = Float.valueOf(mSize.substring(0, mSize.indexOf(":")));
-        float sizeY = Float.valueOf(mSize.substring(mSize.indexOf(":") + 1));
-        float cropfactor = (float) (43.27 / Math.sqrt(sizeX * sizeX + sizeY * sizeY));
-        float pixelpitch = sizeX / resX * 1000;
+    Camera(String mName, int mIconId, int mResolutionX, int mResolutionY, float mSensorSizeX, float mSensorSizeY) {
+        float cropfactor = (float) (43.27 / Math.sqrt(mSensorSizeX * mSensorSizeX + mSensorSizeY * mSensorSizeY));
+        float pixelpitch = mSensorSizeX / mResolutionX * 1000;
 
         this.mName = mName;
-        this.iconId = R.drawable.camera_photo;
-        this.mResolutionX = resX;
-        this.mResolutionY = resY;
-        this.mSensorSizeX = sizeX;
-        this.mSensorSizeY = sizeY;
-        mCropfactor = cropfactor;
-        mPixelpitch = pixelpitch;
-        this.mConfusion = Float.valueOf(mConfusion);
+        this.iconId = mIconId;
+        this.mResolutionX = mResolutionX;
+        this.mResolutionY = mResolutionY;
+        this.mSensorSizeX = mSensorSizeX;
+        this.mSensorSizeY = mSensorSizeY;
+        this.mCropfactor = cropfactor;
+        this.mPixelpitch = pixelpitch;
+        this.mConfusion = Math.round((float) Math.sqrt(mSensorSizeX * mSensorSizeX + mSensorSizeY * mSensorSizeY) / 1.5) / 1000f;
     }
 
     /**
@@ -55,9 +44,8 @@ public class Camera {
      * @param mIconId     Resource id of the Camera's icon
      * @param mResolution Maximum resolution, should be formatted as "x:y"
      * @param mSize       Sensor size, should be formatted as "x:y"
-     * @param mConfusion  The circle of confusion
      */
-    Camera(String mName, int mIconId, String mResolution, String mSize, String mConfusion) {
+    Camera(String mName, int mIconId, String mResolution, String mSize) {
         int resX = Integer.valueOf(mResolution.substring(0, mResolution.indexOf(":")));
         int resY = Integer.valueOf(mResolution.substring(mResolution.indexOf(":") + 1));
         float sizeX = Float.valueOf(mSize.substring(0, mSize.indexOf(":")));
@@ -73,15 +61,11 @@ public class Camera {
         this.mSensorSizeY = sizeY;
         mCropfactor = cropfactor;
         mPixelpitch = pixelpitch;
-        this.mConfusion = Float.valueOf(mConfusion);
+        this.mConfusion = Math.round((float) Math.sqrt(mSensorSizeX * mSensorSizeX + mSensorSizeY * mSensorSizeY) / 1.5) / 1000f;
     }
 
     public String getName() {
         return mName;
-    }
-
-    public void setName(String name) {
-        this.mName = name;
     }
 
     public int getIcon() {

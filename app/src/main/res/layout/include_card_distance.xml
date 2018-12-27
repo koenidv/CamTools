@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:hapticFeedbackEnabled="false"
                 android:importantForAccessibility="no"
-                android:max="30"
+                android:max="15"
                 android:progress="2"
                 android:progressTint="@color/colorAccent"
                 android:saveEnabled="false"

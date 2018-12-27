@@ -8,12 +8,6 @@
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
 
-    <style name="darkDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/background_dark_darker</item>
-        <item name="android:textColor">@color/text_main_dark</item>
-        <item name="android:textColorAlertDialogListItem">@color/text_main_dark</item>
-    </style>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

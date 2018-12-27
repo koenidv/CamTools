@@ -70,7 +70,4 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
         return mDataset.size();
     }
 
-    public Camera getItem(int position) {
-        return mDataset.get(position);
-    }
 }

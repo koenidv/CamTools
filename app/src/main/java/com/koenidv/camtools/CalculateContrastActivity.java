@@ -35,7 +35,7 @@ public class CalculateContrastActivity extends AppCompatActivity {
     private final static String TAG = "Contrast Calculator";
     private float DARKEN_TEXT = 0.5f;
 
-    int color;
+    private int color;
     int contrast;
     int contrastMode;
 
@@ -52,6 +52,8 @@ public class CalculateContrastActivity extends AppCompatActivity {
         LinearLayout colorLayout = findViewById(R.id.colorLayout);
         LinearLayout modeLayout = findViewById(R.id.modeLayout);
         TextView modeTextView = findViewById(R.id.modeTextView);
+
+        (new ModuleManager()).checkDarkmode(prefs);
 
 
         color = prefs.getInt("last_color", Color.parseColor("#20ffaa"));
@@ -290,12 +292,12 @@ public class CalculateContrastActivity extends AppCompatActivity {
                 mTimerSnackBar.dismiss();
             } else if (millisUntilFinished == 0) {
                 mTimerSnackBar.dismiss();
-                Snackbar.make(findViewById(R.id.rootView), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
+                Snackbar.make(findViewById(R.id.resultLayout), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
                         .setAction(R.string.okay, v -> mTimerSnackBar.dismiss())
                         .show();
             } else {
                 if (mTimerSnackBar == null || !mTimerSnackBar.isShown()) {
-                    mTimerSnackBar = Snackbar.make(findViewById(R.id.rootView),
+                    mTimerSnackBar = Snackbar.make(findViewById(R.id.resultLayout),
                             String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)),
                             Snackbar.LENGTH_INDEFINITE);
                     mTimerSnackBar

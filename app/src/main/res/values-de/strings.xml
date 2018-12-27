@@ -299,7 +299,7 @@
     <string name="million">" Millionen"</string>
     <string name="title_tools_short">Tools</string>
     <string name="title_tools_long">Tools</string>
-    <string name="select_contrast">Kontraste</string>
+    <string name="select_contrast">Kontraste (Beta)</string>
     <string name="description_contrast">Nutze kontrastierende Farben, um deine Bilder interessanter aussehen zu lassen.</string>
     <string name="shortcut_tools_contrast">Kontraste</string>
     <string name="calculate_color_choose">Wähle eine Farbe</string>
@@ -339,4 +339,11 @@
     <string name="channel_timer_description">Du erhältst eine Benachrichtigung mit der verbleibenden Zeit.</string>
     <string name="channel_timer_finished_name">Timer abgelaufen</string>
     <string name="channel_timer_finished_description">Benachrichtigt dich, wenn ein Timer abgelaufen ist.</string>
+    <string name="setting_darkmode_follow_system">Dem System folgen</string>
+    <string name="setting_cameras_icon_choose">Wähle ein Symbol</string>
+    <string name="camera_icon_photo">DSLR</string>
+    <string name="camera_icon_shutter">Blende</string>
+    <string name="camera_icon_video">Videokamera</string>
+    <string name="camera_icon_phone">Smartphone</string>
+    <string name="action_search">Suche</string>
 </resources>

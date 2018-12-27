@@ -2,7 +2,6 @@ package com.koenidv.camtools;
 //  Created by koenidv on 19.01.2018.
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,6 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 public class SkyFragment extends Fragment {
-
-    int selectedButton = -1;
-    int buttonDisabledColor = Color.WHITE;
-    int buttonDisabledTextColor = 0;
 
     //Called when Fragment should create its View object hierarchy
     @Override

@@ -41,11 +41,11 @@
                 android:layout_weight="1"
                 android:hapticFeedbackEnabled="false"
                 android:importantForAccessibility="no"
-                android:max="32"
+                android:max="31"
                 android:progress="2"
+                android:progressTint="@color/colorAccent"
                 android:saveEnabled="false"
-                android:thumbTint="@color/colorAccent"
-                android:progressTint="@color/colorAccent"/>
+                android:thumbTint="@color/colorAccent"/>
 
             <TextView
                 android:id="@+id/apertureIndicator"

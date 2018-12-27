@@ -1,5 +1,7 @@
 package com.koenidv.camtools;
 
+/* Well this doesn't quite work yet
+
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +23,6 @@ public class sunDetailsAdapter extends RecyclerView.Adapter<sunDetailsAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView mTime, mName, mDescription;
         MaterialTimelineView mTimelineView;
-        CardView mHolderCardView;
 
         ViewHolder(View view) {
             super(view);
@@ -29,7 +30,6 @@ public class sunDetailsAdapter extends RecyclerView.Adapter<sunDetailsAdapter.Vi
             mName = view.findViewById(R.id.astroTwiName);
             mDescription = view.findViewById(R.id.astroTwiDescription);
             mTimelineView = view.findViewById(R.id.sunDetailsTimelineCard);
-            mHolderCardView = view.findViewById(R.id.sunDetailsHolderCardView);
         }
     }
 
@@ -73,5 +73,5 @@ public class sunDetailsAdapter extends RecyclerView.Adapter<sunDetailsAdapter.Vi
     public int getItemCount() {
         return mDataset.size();
     }
-
-}
+*/
+//}

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="com.koenidv.camtools">
 
     <uses-permission android:name="android.permission.NFC"/>
@@ -34,6 +35,7 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
         </activity>
+
         <activity
             android:name=".SettingsActivity"
             android:label="@string/settings"
@@ -46,15 +48,18 @@
             android:parentActivityName=".SettingsActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="">
-            <intent-filter>
+            <intent-filter
+                android:autoVerify="true"
+                tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
 
                 <data
-                    android:host="addcam.koenidv.de"
-                    android:scheme="http"/>
+                    android:host="camtools.koenidv.de"
+                    android:pathPrefix="/add/"
+                    android:scheme="https"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
@@ -63,11 +68,6 @@
 
                 <data android:mimeType="application/com.koenidv.camtools"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".CalculatorActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
             android:name=".CalculateNdActivity"
@@ -113,7 +113,7 @@
         <service
             android:name=".TimerService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
         </service>
 
         <receiver

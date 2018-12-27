@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <plurals name="cameras">
-        <item quantity="zero">keine Kameras</item>
         <item quantity="one">eine Kamera</item>
-        <item quantity="two">zwei Kameras</item>
-        <item quantity="few">%d Kameras</item>
         <item quantity="other">%d Kameras</item>
     </plurals>
 </resources>

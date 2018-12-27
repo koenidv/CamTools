@@ -33,7 +33,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class CalculateHyperFocalActivity extends AppCompatActivity {
 
     private final static String TAG = "Hyperfocal Calculator";
-    final float[] coc = {0};
+    private final float[] coc = {0};
 
     @Override
     protected void onResume() {
@@ -51,6 +51,75 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    private Snackbar mTimerSnackBar;
+
+    /*
+     *  Calculations
+     */
+    private TextView mSnackBarText;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateHyperFocalActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateHyperFocalActivity.this, "focus_hyper")
+                                        .setShortLabel(getString(R.string.shortcut_focus_hyper))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_hyperfocal))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateHyperFocalActivity.class))
+                                        .build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateHyperFocalActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+                Intent fcBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_more_calculate)));
+                startActivity(fcBrowserIntent);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +128,6 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
         Gson gson = new Gson();
-
 
         final boolean changing[] = {false};
 
@@ -72,6 +140,8 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         final EditText mApertureEditText = findViewById(R.id.apertureEditText);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
+        mModuleManager.checkDarkmode(prefs);
+
         Camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
         coc[0] = lastCamera.getConfusion();
 
@@ -81,12 +151,24 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
+        switch (prefs.getInt("aperture_stops", 6)) {
+            case 2:
+                mApertureSeekbar.setMax(10);
+                break;
+            case 4:
+                mApertureSeekbar.setMax(20);
+                break;
+            //6 (Thirds) is the default. No change needed here.
+        }
+
 
         /*
          *  Listeners
          */
 
-        mResultLayout.setOnClickListener(v -> mModuleManager.openArMeasure(this));
+        findViewById(R.id.nearlimitTextView).setOnClickListener(v -> mModuleManager.openArMeasure(this));
+        findViewById(R.id.farlimitTextView).setOnClickListener(v -> mModuleManager.openArMeasure(this));
+        findViewById(R.id.hyperfocalTextView).setOnClickListener(v -> mModuleManager.openArMeasure(this));
 
         mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateHyperFocalActivity.this, mCameraTextView, coc, "coc"));
 
@@ -176,10 +258,6 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateHyperFocalActivity.this, "hyperfocal"));
     }
 
-    /*
-     *  Calculations
-     */
-
     @SuppressLint("DefaultLocale")
     private void calculate(float mConfusion, float mLength, float mAperture) {
         ModuleManager mModuleManager = new ModuleManager();
@@ -209,69 +287,6 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_calculator, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_add_shortcut:
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
-                    assert mShortcutManager != null;
-                    if (mShortcutManager.isRequestPinShortcutSupported()) {
-
-                        ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateHyperFocalActivity.this, "focus_hyper")
-                                        .setShortLabel(getString(R.string.shortcut_focus_hyper))
-                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_hyperfocal))
-                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateHyperFocalActivity.class))
-                                        .build();
-
-                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
-                    }
-                }
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(CalculateHyperFocalActivity.this, SettingsActivity.class));
-                break;
-            case R.id.action_help:
-                Intent fcBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.url_focus_more_calculate)));
-                startActivity(fcBrowserIntent);
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ModuleManager mModuleManager = new ModuleManager();
-            mModuleManager.showHistory(CalculateHyperFocalActivity.this);
-            return true;
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateGUI(intent); // or whatever method used to update your GUI fields
-        }
-    };
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        Log.i(TAG, "Unregistered broacast receiver");
-    }
-
-    @Override
     public void onStop() {
         try {
             unregisterReceiver(receiver);
@@ -280,9 +295,6 @@ public class CalculateHyperFocalActivity extends AppCompatActivity {
         }
         super.onStop();
     }
-
-    Snackbar mTimerSnackBar;
-    TextView mSnackBarText;
 
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {

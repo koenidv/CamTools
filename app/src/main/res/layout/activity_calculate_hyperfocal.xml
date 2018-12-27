@@ -18,6 +18,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/resultLayout"
+            android:transitionName="top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccentDark"
@@ -39,7 +40,6 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                 android:textColor="@android:color/white"
-                android:textIsSelectable="true"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +64,6 @@
                 android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@android:color/white"
-                android:textIsSelectable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/hyperfocalTextView"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +89,6 @@
                 android:text=""
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="@android:color/white"
-                android:textIsSelectable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/hyperfocalTextView"
@@ -141,6 +139,7 @@
 
         <LinearLayout
             android:id="@+id/inputLayout"
+            android:transitionName="bottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_background_input"

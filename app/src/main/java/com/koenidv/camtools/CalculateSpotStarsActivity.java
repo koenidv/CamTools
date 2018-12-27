@@ -22,8 +22,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
@@ -32,7 +34,74 @@ import androidx.appcompat.app.AppCompatActivity;
 public class CalculateSpotStarsActivity extends AppCompatActivity {
 
     private final static String TAG = "Spot Stars Calculator";
-    final float[] mPixelpitch = {0};
+    private final float[] mPixelpitch = {0};
+
+    private boolean timerRunning;
+    private float timerTime;
+    private String timerName;
+    private Snackbar mTimerSnackBar;
+    private TextView mSnackBarText;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent);
+        }
+    };
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateSpotStarsActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateSpotStarsActivity.this, "exposure_spotstars")
+                                        .setShortLabel(getString(R.string.shortcut_exposure_spotstars))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_spotstars))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateSpotStarsActivity.class))
+                                        .build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateSpotStarsActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
 
     @Override
     protected void onResume() {
@@ -45,9 +114,40 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
             mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
         }
         mPixelpitch[0] = lastCamera.getPixelpitch();
+        calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
         registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
         Log.i(TAG, "Registered broacast receiver");
         super.onResume();
+    }
+
+    private void calculate(float mPixelpitch, float mLength, float mAperture) {
+        if (mLength == 0) return;
+
+        final ModuleManager mModuleManager = new ModuleManager();
+
+        float mNpf = calculateNpf(mPixelpitch, mLength, mAperture);
+        float m500 = calculate500(mLength);
+        float m600 = calculate600(mLength);
+
+        final TextView mNpfTextView = findViewById(R.id.resultTextView);
+        final TextView m500TextView = findViewById(R.id.result500TextView);
+        final TextView m600TextView = findViewById(R.id.result600TextView);
+
+        mNpfTextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, mNpf, true));
+        m500TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m500, true));
+        m600TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m600, true));
+    }
+
+    private float calculateNpf(float mPixelpitch, float mLength, float mAperture) {
+        return (35 * mAperture + 30 * mPixelpitch) / mLength;
+    }
+
+    private float calculate500(float mLength) {
+        return 500 / mLength;
+    }
+
+    private float calculate600(float mLength) {
+        return 600 / mLength;
     }
 
     @Override
@@ -71,12 +171,66 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         final Button mExpandButton = findViewById(R.id.expandButton);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
+        mModuleManager.checkDarkmode(prefs);
+
         mLengthEditText.setText(prefs.getString("focallength", "24"));
         mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
-        calculate(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
+        switch (prefs.getInt("aperture_stops", 6)) {
+            case 2:
+                mApertureSeekbar.setMax(10);
+                break;
+            case 4:
+                mApertureSeekbar.setMax(20);
+                break;
+            //6 (Thirds) is the default. No change needed here.
+        }
+
+        View.OnClickListener timerClickListener = v -> {
+            float calculated;
+
+            if (v == findViewById(R.id.result500TextView)) {
+                calculated = Math.round(calculate500(Float.valueOf(prefs.getString("focallength", "24"))) * 10) / 10f;
+            } else if (v == findViewById(R.id.result600TextView)) {
+                calculated = Math.round(calculate600(Float.valueOf(prefs.getString("focallength", "24"))) * 10) / 10f;
+            } else {
+                calculated = Math.round(calculateNpf(mPixelpitch[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5"))) * 10) / 10f;
+            }
+
+            if (!timerRunning || (Float.compare(calculated, timerTime) == 0)) {
+                TimerSheet sheet = new TimerSheet();
+                sheet.startTime = calculated;
+                sheet.startService = true;
+                sheet.tagName = getString(R.string.select_nd);
+                sheet.show(getSupportFragmentManager(), "timer");
+            } else {
+                Toast.makeText(this, String.valueOf(timerTime), Toast.LENGTH_LONG).show();
+
+                BottomSheetDialog mSheet = new BottomSheetDialog(CalculateSpotStarsActivity.this, R.style.AppBottomSheetDialogTheme);
+                mSheet.setContentView(R.layout.sheet_timer_confirm);
+
+                Button confirmButton = mSheet.findViewById(R.id.confirmButton);
+
+                confirmButton.setText(String.format(getString(R.string.timer_override_confirm), timerName));
+                confirmButton.setOnClickListener(v1 -> {
+                    mSheet.dismiss();
+                    TimerSheet sheet = new TimerSheet();
+                    sheet.startTime = calculated;
+                    sheet.startService = true;
+                    sheet.tagName = getString(R.string.select_nd);
+                    sheet.show(getSupportFragmentManager(), "timer");
+                });
+
+                mSheet.show();
+            }
+        };
+
+        mStartTimerButton.setOnClickListener(timerClickListener);
+        findViewById(R.id.resultTextView).setOnClickListener(timerClickListener);
+        findViewById(R.id.result500TextView).setOnClickListener(timerClickListener);
+        findViewById(R.id.result600TextView).setOnClickListener(timerClickListener);
 
         mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateSpotStarsActivity.this, mCameraTextView, mPixelpitch, "pixelpitch"));
 
@@ -178,86 +332,6 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateSpotStarsActivity.this, "spotstars"));
     }
 
-    private void calculate(float mPixelpitch, float mLength, float mAperture) {
-        if (mLength == 0) return;
-
-        final ModuleManager mModuleManager = new ModuleManager();
-
-        float mNpf = (35 * mAperture + 30 * mPixelpitch) / mLength;
-        float m500 = 500 / mLength;
-        float m600 = 600 / mLength;
-
-        final TextView mNpfTextView = findViewById(R.id.resultTextView);
-        final TextView m500TextView = findViewById(R.id.result500TextView);
-        final TextView m600TextView = findViewById(R.id.result600TextView);
-
-        mNpfTextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, mNpf, true));
-        m500TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m500, true));
-        m600TextView.setText(mModuleManager.convertTime(CalculateSpotStarsActivity.this, m600, true));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_calculator, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_add_shortcut:
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
-                    assert mShortcutManager != null;
-                    if (mShortcutManager.isRequestPinShortcutSupported()) {
-
-                        ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateSpotStarsActivity.this, "exposure_spotstars")
-                                        .setShortLabel(getString(R.string.shortcut_exposure_spotstars))
-                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_spotstars))
-                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateSpotStarsActivity.class))
-                                        .build();
-
-                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
-                    }
-                }
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(CalculateSpotStarsActivity.this, SettingsActivity.class));
-                break;
-            case R.id.action_help:
-
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ModuleManager mModuleManager = new ModuleManager();
-            mModuleManager.showHistory(CalculateSpotStarsActivity.this);
-            return true;
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateGUI(intent);
-        }
-    };
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        Log.i(TAG, "Unregistered broacast receiver");
-    }
-
     @Override
     public void onStop() {
         try {
@@ -268,9 +342,6 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    Snackbar mTimerSnackBar;
-    TextView mSnackBarText;
-
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {
             ModuleManager mModuleManager = new ModuleManager();
@@ -280,12 +351,17 @@ public class CalculateSpotStarsActivity extends AppCompatActivity {
 
             if (intent.getBooleanExtra("dismiss", false)) {
                 mTimerSnackBar.dismiss();
+                timerRunning = false;
             } else if (millisUntilFinished == 0) {
                 mTimerSnackBar.dismiss();
+                timerRunning = false;
                 Snackbar.make(findViewById(R.id.rootView), String.format(getString(R.string.timer_finished), name), Snackbar.LENGTH_LONG)
                         .setAction(R.string.okay, v -> mTimerSnackBar.dismiss())
                         .show();
             } else {
+                timerRunning = true;
+                timerTime = maxTime / 1000f;
+                timerName = name;
                 if (mTimerSnackBar == null || !mTimerSnackBar.isShown()) {
                     mTimerSnackBar = Snackbar.make(findViewById(R.id.rootView),
                             String.format(getString(R.string.timer_text), name, mModuleManager.convertMilliseconds(millisUntilFinished)),

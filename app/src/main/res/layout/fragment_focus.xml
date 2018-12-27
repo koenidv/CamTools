@@ -24,22 +24,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingEnd="4dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
             android:paddingStart="4dp"
-            android:paddingTop="4dp">
+            android:paddingLeft="4dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="4dp"
+            android:paddingRight="4dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/selectHyperCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/cardMarginBottom"
-                android:layout_marginEnd="@dimen/standardPadding"
-                android:layout_marginLeft="@dimen/standardPadding"
-                android:layout_marginRight="@dimen/standardPadding"
                 android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -59,7 +59,8 @@
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/hyper"/>
+                        android:src="@drawable/hyper"
+                        android:transitionName="top"/>
 
                     <TextView
                         android:id="@+id/selectHyperTitle"
@@ -75,11 +76,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/description_hyper"/>
 
                 </LinearLayout>
@@ -90,12 +91,12 @@
                 android:id="@+id/selectLimitsCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/cardMarginBottom"
-                android:layout_marginEnd="@dimen/standardPadding"
-                android:layout_marginLeft="@dimen/standardPadding"
-                android:layout_marginRight="@dimen/standardPadding"
                 android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -131,11 +132,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/description_limits"/>
 
                 </LinearLayout>
@@ -146,12 +147,12 @@
                 android:id="@+id/selectReverseCard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/cardMarginBottom"
-                android:layout_marginEnd="@dimen/standardPadding"
-                android:layout_marginLeft="@dimen/standardPadding"
-                android:layout_marginRight="@dimen/standardPadding"
                 android:layout_marginStart="@dimen/standardPadding"
+                android:layout_marginLeft="@dimen/standardPadding"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginEnd="@dimen/standardPadding"
+                android:layout_marginRight="@dimen/standardPadding"
+                android:layout_marginBottom="@dimen/cardMarginBottom"
                 android:clickable="true"
                 android:focusable="true"
                 android:foreground="?attr/selectableItemBackgroundBorderless"
@@ -187,11 +188,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:paddingBottom="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:paddingStart="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingBottom="8dp"
                         android:text="@string/description_reverse"/>
 
                 </LinearLayout>
@@ -202,8 +203,8 @@
                 android:id="@+id/moreTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/cardMarginCombined"
                 android:layout_marginTop="@dimen/cardMarginTop"
+                android:layout_marginBottom="@dimen/cardMarginCombined"
                 android:text="@string/more_coming_soon"
                 android:textAlignment="center"
                 android:visibility="gone"/>

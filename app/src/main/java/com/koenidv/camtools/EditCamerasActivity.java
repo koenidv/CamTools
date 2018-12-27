@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
@@ -34,13 +37,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class EditCamerasActivity extends AppCompatActivity {
 
-    final List<Camera> mCameraList = new ArrayList<>();
-    final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraList);
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    private final List<Camera> mCameraList = new ArrayList<>();
+    private final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraList);
+    private Snackbar undoSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class EditCamerasActivity extends AppCompatActivity {
         final ModuleManager mModuleManager = new ModuleManager();
         Gson gson = new Gson();
 
-        if (prefs.getBoolean("system_darkmode", false)) {
+        if (getResources().getBoolean(R.bool.darkmode)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
@@ -60,6 +59,8 @@ public class EditCamerasActivity extends AppCompatActivity {
         RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
         SpeedDialView mAddDial = findViewById(R.id.addSpeedDial);
         CardView mEmptyCardView = findViewById(R.id.emptyCard);
+
+        mModuleManager.checkDarkmode(prefs);
 
 
         mRecyclerView.setHasFixedSize(true);
@@ -78,20 +79,18 @@ public class EditCamerasActivity extends AppCompatActivity {
 
         if (Objects.equals(intentAction, Intent.ACTION_VIEW)) {
 
-            if (appLinkData != null && !appLinkData.toString().startsWith("%7B")) {
+            if (appLinkData != null) {
+                //Add camera from URL (web database)
                 try {
-
-                    String data = appLinkData.toString().replace("http://addcam.koenidv.de/", "").replace("%20", " ");
+                    String data = appLinkData.toString().replace("https://camtools.koenidv.de/add/", "").replace("%20", " ");
 
                     String name = data.substring(0, data.indexOf(";"));
                     data = data.substring(data.indexOf(";") + 1);
                     String resolution = data.substring(0, data.indexOf(";"));
                     data = data.substring(data.indexOf(";") + 1);
-                    String sensorsize = data.substring(0, data.indexOf(";"));
-                    data = data.substring(data.indexOf(";") + 1);
-                    String confusion = data;
+                    String sensorsize = data;
 
-                    Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize, confusion);
+                    Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize);
                     int index = prefs.getInt("cameras_amount", -1) + 1;
                     prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
                             .putInt("cameras_amount", index)
@@ -99,12 +98,14 @@ public class EditCamerasActivity extends AppCompatActivity {
 
                     Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG)
                             .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraList, mAdapter)).show();
-                } catch (IndexOutOfBoundsException ie) {
+                } catch (Exception e) {
                     Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
             }
 
         } else if (Objects.equals(intentAction, NfcAdapter.ACTION_NDEF_DISCOVERED)) {
+            //Add camera from Android Beam
             Parcelable[] rawMessage = startIntent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             NdefMessage message = (NdefMessage) rawMessage[0];
             String data = new String(message.getRecords()[0].getPayload());
@@ -115,11 +116,9 @@ public class EditCamerasActivity extends AppCompatActivity {
                 data = data.substring(data.indexOf(";") + 1);
                 String resolution = data.substring(0, data.indexOf(";"));
                 data = data.substring(data.indexOf(";") + 1);
-                String sensorsize = data.substring(0, data.indexOf(";"));
-                data = data.substring(data.indexOf(";") + 1);
-                String confusion = data;
+                String sensorsize = data;
 
-                Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize, confusion);
+                Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize);
                 int index = prefs.getInt("cameras_amount", -1) + 1;
 
                 prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
@@ -128,8 +127,18 @@ public class EditCamerasActivity extends AppCompatActivity {
 
                 Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_camera).replace("%s", addCamera.getName()), Snackbar.LENGTH_LONG)
                         .setAction(R.string.undo, v -> mModuleManager.deleteCamera(this, index, mCameraList, mAdapter)).show();
-            } catch (IndexOutOfBoundsException ie) {
+            } catch (Exception e) {
                 Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_added_error), Snackbar.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        } else {
+            //Show NFC tip snackbar if opened from settings and it hasn't been shown before
+            if (!prefs.getBoolean("has_seen_nfc_tip", false) && prefs.getInt("cameras_amount", -1) != -1) {
+                Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.okay, v -> {
+                        })
+                        .show();
+                prefsEdit.putBoolean("has_seen_nfc_tip", true).apply();
             }
         }
 
@@ -173,20 +182,41 @@ public class EditCamerasActivity extends AppCompatActivity {
                         mEmptyCardView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
                         mEmptyCardView.setVisibility(View.GONE);
                     }
-                    mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter);
+                    if (undoSnackbar != null && undoSnackbar.isShown()) {
+                        undoSnackbar.dismiss();
+                        (new Handler()).postDelayed(() ->
+                                        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter),
+                                250);
+                    } else {
+                        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter);
+                    }
                     break;
             }
 
             return false;
         });
 
-        if (!prefs.getBoolean("has_seen_nfc_tip", false) && prefs.getInt("cameras_amount", -1) != -1) {
-            Snackbar.make(findViewById(R.id.rootView), getString(R.string.tip_share_beam), Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.okay, v -> {
-                    })
-                    .show();
-            prefsEdit.putBoolean("has_seen_nfc_tip", true).apply();
-        }
+        View.OnClickListener emptyAddCardListener = v -> {
+            // Open database if there is a network connection, otherwise let the user add a custom camera
+
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
+                CustomTabsIntent intent = new CustomTabsIntent.Builder().build();
+                intent.launchUrl(this, Uri.parse("https://camtools.koenidv.de/cams"));
+            } else {
+                mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter);
+
+                mRecyclerView.setVisibility(View.VISIBLE);
+                mEmptyCardView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
+                mEmptyCardView.setVisibility(View.GONE);
+            }
+        };
+
+        mEmptyCardView.setOnClickListener(emptyAddCardListener);
+        findViewById(R.id.noCamerasAddButton).setOnClickListener(emptyAddCardListener);
 
         NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
@@ -196,8 +226,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                             + ";" + mCamera.getResolutionX()
                             + ":" + mCamera.getResolutionY()
                             + ";" + mCamera.getSensorSizeX()
-                            + ":" + mCamera.getSensorSizeY()
-                            + ";" + mCamera.getConfusion();
+                            + ":" + mCamera.getSensorSizeY();
             NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
             nfcAdapter.setNdefPushMessage(message, this);
         }
@@ -288,8 +317,7 @@ public class EditCamerasActivity extends AppCompatActivity {
                                     + ";" + mCamera.getResolutionX()
                                     + ":" + mCamera.getResolutionY()
                                     + ";" + mCamera.getSensorSizeX()
-                                    + ":" + mCamera.getSensorSizeY()
-                                    + ";" + mCamera.getConfusion();
+                                    + ":" + mCamera.getSensorSizeY();
                     NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
                     nfcAdapter.setNdefPushMessage(message, this);
                 }
@@ -300,37 +328,24 @@ public class EditCamerasActivity extends AppCompatActivity {
                 mCameraList.remove(position);
                 mAdapter.notifyItemRemoved(position);
 
-                Snackbar undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", deletedCamera.getName()), Snackbar.LENGTH_LONG);
+                undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", deletedCamera.getName()), Snackbar.LENGTH_LONG);
                 undoSnackbar.setAction(R.string.undo, v -> {
                     mCameraList.add(position, deletedCamera);
                     mAdapter.notifyItemInserted(position);
                 });
                 undoSnackbar.addCallback(new Snackbar.Callback() {
-                   @Override
-                   public void onDismissed(Snackbar mSnackbar, int event) {
-                       if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                           mModuleManager.deleteCamera(EditCamerasActivity.this, position, null, null);
-                       }
-                   }
+                    @Override
+                    public void onDismissed(Snackbar mSnackbar, int event) {
+                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                            mModuleManager.deleteCamera(EditCamerasActivity.this, position, null, null);
+                        }
+                    }
                 });
                 undoSnackbar.show();
 
             }
         });
-        mBuilder.setDarkTheme(prefs.getBoolean("system_darkmode", false))
+        mBuilder.setDarkTheme(getResources().getBoolean(R.bool.darkmode))
                 .show();
-    }
-
-    public void addCard(View v) {
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        final ModuleManager mModuleManager = new ModuleManager();
-        mModuleManager.editCamera(EditCamerasActivity.this, prefs.getInt("cameras_amount", -1) + 1, mCameraList, mAdapter);
-
-        RecyclerView mRecyclerView = findViewById(R.id.camerasRecyclerView);
-        CardView mEmptyCardView = findViewById(R.id.emptyCard);
-
-        mRecyclerView.setVisibility(View.VISIBLE);
-        mEmptyCardView.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_out));
-        mEmptyCardView.setVisibility(View.GONE);
     }
 }

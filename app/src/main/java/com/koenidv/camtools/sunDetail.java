@@ -3,7 +3,7 @@ package com.koenidv.camtools;
 
 import android.graphics.Color;
 
-public class sunDetail {
+class sunDetail {
     private boolean mIsLine;
     private String mTime, mName, mDescription;
     private int mColor, mTextColor;
@@ -40,16 +40,8 @@ public class sunDetail {
         return mTime;
     }
 
-    public void setTime(String mTime) {
-        this.mTime = mTime;
-    }
-
     public String getName() {
         return mName;
-    }
-
-    public void setName(String mName) {
-        this.mName = mName;
     }
 
     String getDescription() {
@@ -58,10 +50,6 @@ public class sunDetail {
 
     public int getColor() {
         return mColor;
-    }
-
-    public void setColor(int mColor) {
-        this.mColor = mColor;
     }
 
     int getTextColor() {

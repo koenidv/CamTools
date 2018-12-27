@@ -35,8 +35,7 @@
                 android:paddingRight="8dp"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                android:textColor="@android:color/white"
-                android:textIsSelectable="true"/>
+                android:textColor="@android:color/white"/>
 
 
             <com.github.aakira.expandablelayout.ExpandableLinearLayout
@@ -81,8 +80,7 @@
                     android:paddingRight="8dp"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                    android:textColor="@android:color/white"
-                    android:textIsSelectable="true"/>
+                    android:textColor="@android:color/white"/>
 
                 <TextView
                     android:id="@+id/result500IndicatorTextView"
@@ -119,8 +117,7 @@
                     android:paddingRight="8dp"
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                    android:textColor="@android:color/white"
-                    android:textIsSelectable="true"/>
+                    android:textColor="@android:color/white"/>
 
                 <TextView
                     android:id="@+id/result600IndicatorTextView"

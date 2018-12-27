@@ -32,7 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class CalculateFocusLimitsActivity extends AppCompatActivity {
 
     private final static String TAG = "DoF Calculator";
-    final float[] coc = {0};
+    private final float[] coc = {0};
 
     @Override
     protected void onResume() {
@@ -50,6 +50,70 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    private Snackbar mTimerSnackBar;
+    private TextView mSnackBarText;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateFocusLimitsActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateFocusLimitsActivity.this, "focus_limits")
+                                        .setShortLabel(getString(R.string.shortcut_focus_limits))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_focuslimits))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateFocusLimitsActivity.class))
+                                        .build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateFocusLimitsActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +122,6 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
         Gson gson = new Gson();
-
 
         final boolean changing[] = {false};
 
@@ -73,6 +136,8 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         TextView mDistanceIndicatorTextView = findViewById(R.id.distanceIndicatorTextView);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
+        mModuleManager.checkDarkmode(prefs);
+
         Camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
         coc[0] = lastCamera.getConfusion();
 
@@ -81,16 +146,27 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
         mDistanceEditText.setText(prefs.getString("distance", "5"));
-        mDistanceSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("distance", "5"))));
+        mDistanceSeekbar.setProgress(mModuleManager.distance(prefs.getString("distance", "5"), prefs.getBoolean("empirical", false)));
         calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
 
+        switch (prefs.getInt("aperture_stops", 6)) {
+            case 2:
+                mApertureSeekbar.setMax(10);
+                break;
+            case 4:
+                mApertureSeekbar.setMax(20);
+                break;
+            //6 (Thirds) is the default. No change needed here.
+        }
 
-        final float conversionfactor = prefs.getBoolean("empirical", false) ? 3.281f : 1f;
         if (prefs.getBoolean("empirical", false)) mDistanceIndicatorTextView.setText(R.string.feet);
 
         /*
          *  Listeners
          */
+
+        findViewById(R.id.nearlimitTextView).setOnClickListener(v -> mModuleManager.openArMeasure(this));
+        findViewById(R.id.farlimitTextView).setOnClickListener(v -> mModuleManager.openArMeasure(this));
 
         mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateFocusLimitsActivity.this, mCameraTextView, coc, "coc"));
 
@@ -101,7 +177,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             //f:on
             @Override
             public void afterTextChanged(Editable s) {
-                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")) / conversionfactor);
+                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
             }
         });
 
@@ -131,7 +207,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(prefs.getString("distance", "5")));
                 }
             }
 
@@ -167,7 +243,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("aperture", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()), Float.valueOf(prefs.getString("distance", "5")) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()), Float.valueOf(prefs.getString("distance", "5")));
                 }
             }
 
@@ -182,7 +258,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mDistanceEditText.setText(String.valueOf(progress));
+                    mDistanceEditText.setText(mModuleManager.distance(progress, prefs.getBoolean("empirical", false)));
                     changing[0] = false;
                 }
             }
@@ -199,11 +275,11 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
                 if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mDistanceSeekbar.setProgress(Math.round(Float.valueOf(s.toString())));
+                        mDistanceSeekbar.setProgress(mModuleManager.distance(s.toString(), prefs.getBoolean("empirical", false)));
                         changing[0] = false;
                     }
                     prefsEditor.putString("distance", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(s.toString()) / conversionfactor);
+                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")), Float.valueOf(s.toString()));
                 }
             }
 
@@ -249,68 +325,6 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_calculator, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_add_shortcut:
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
-                    assert mShortcutManager != null;
-                    if (mShortcutManager.isRequestPinShortcutSupported()) {
-
-                        ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateFocusLimitsActivity.this, "focus_limits")
-                                        .setShortLabel(getString(R.string.shortcut_focus_limits))
-                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_focuslimits))
-                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateFocusLimitsActivity.class))
-                                        .build();
-
-                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
-                    }
-                }
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(CalculateFocusLimitsActivity.this, SettingsActivity.class));
-                break;
-            case R.id.action_help:
-
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ModuleManager mModuleManager = new ModuleManager();
-            mModuleManager.showHistory(CalculateFocusLimitsActivity.this);
-            return true;
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateGUI(intent); // or whatever method used to update your GUI fields
-        }
-    };
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        Log.i(TAG, "Unregistered broacast receiver");
-    }
-
-    @Override
     public void onStop() {
         try {
             unregisterReceiver(receiver);
@@ -319,9 +333,6 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         }
         super.onStop();
     }
-
-    Snackbar mTimerSnackBar;
-    TextView mSnackBarText;
 
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {

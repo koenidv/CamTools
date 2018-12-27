@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.feeeei.circleseekbar.CircleSeekBar;
 
@@ -25,9 +24,8 @@ public class TimerSheet extends BottomSheetDialogFragment {
     private final static String TAG = "TimerSheet";
     float startTime;
 
-    CircleSeekBar timeSeekbar;
-    TextView timeTextView;
-    Button cancelButton;
+    private CircleSeekBar timeSeekbar;
+    private TextView timeTextView;
     boolean startService = false;
     String tagName = "";
 
@@ -49,7 +47,7 @@ public class TimerSheet extends BottomSheetDialogFragment {
 
         timeSeekbar = view.findViewById(R.id.timeSeekbar);
         timeTextView = view.findViewById(R.id.timeTextView);
-        cancelButton = view.findViewById(R.id.cancelButton);
+        Button mCancelButton = view.findViewById(R.id.cancelButton);
 
         Activity mActivity = getActivity();
 
@@ -63,7 +61,7 @@ public class TimerSheet extends BottomSheetDialogFragment {
             getActivity().startService(timerIntent);
         }
 
-        cancelButton.setOnClickListener(v -> {
+        mCancelButton.setOnClickListener(v -> {
             getActivity().stopService(timerIntent);
             this.dismiss();
             Intent intent = new Intent("com.koenidv.camtools.timer");
@@ -73,11 +71,6 @@ public class TimerSheet extends BottomSheetDialogFragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {

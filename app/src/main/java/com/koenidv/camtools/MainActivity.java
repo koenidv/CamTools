@@ -23,9 +23,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -36,11 +34,64 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private AHBottomNavigation mNavigation;
 
-    protected ActionBar mActionBar;
-
-    private boolean noUpdate = false;
-
     private final static String TAG = "MainActivity";
+
+    private Snackbar mTimerSnackbar;
+    private TextView mSnackBarText;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(MainActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_default, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_search:
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+                //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
+        Log.i(TAG, "Registered broacast receiver");
+    }
 
     @SuppressWarnings("RedundantCast")
     @Override
@@ -51,14 +102,10 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
 
-        if (prefs.getBoolean("system_darkmode", false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        (new ModuleManager()).checkDarkmode(prefs);
+
 
         mNavigation = findViewById(R.id.navigation);
-        mActionBar = getSupportActionBar();
 
 
         //ViewPager - Pages
@@ -70,9 +117,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         //Navigation - Bottom bar
-        AHBottomNavigationItem nav_sky = new AHBottomNavigationItem(R.string.title_sky_short, R.drawable.ic_sun, R.color.tab_sky);
-        AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_exposure, R.color.tab_exposure);
-        AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.tab_focus);
+        AHBottomNavigationItem nav_sky = new AHBottomNavigationItem(R.string.title_sky_short, R.drawable.ic_sun, R.color.colorAccent);
+        AHBottomNavigationItem nav_exposure = new AHBottomNavigationItem(R.string.title_exposure_short, R.drawable.ic_exposure, R.color.colorAccent);
+        AHBottomNavigationItem nav_focus = new AHBottomNavigationItem(R.string.title_focus_short, R.drawable.ic_focus, R.color.colorAccent);
         AHBottomNavigationItem nav_tools = new AHBottomNavigationItem(R.string.title_tools_short, R.drawable.ic_tools, R.color.colorAccent);
 
         //tmNavigation.addItem(nav_sky);
@@ -130,8 +177,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onStop() {
+        try {
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            // Receiver was probably already stopped in onPause()
+        }
+        super.onStop();
+    }
 
-    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+    class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
         SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -160,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3; //TODO: 4 skyfragment is available
+            return 3; //TODO: 4 if skyfragment is available
         }
 
         @Override
@@ -180,74 +236,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_default, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.action_search:
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
-                break;
-            case R.id.action_help:
-                //startActivity(new Intent(MainActivity.this, FragmentActivity.class));
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ModuleManager mModuleManager = new ModuleManager();
-            mModuleManager.showHistory(MainActivity.this);
-            return true;
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateGUI(intent); // or whatever method used to update your GUI fields
-        }
-    };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
-        Log.i(TAG, "Registered broacast receiver");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        Log.i(TAG, "Unregistered broacast receiver");
-    }
-
-    @Override
-    public void onStop() {
-        try {
-            unregisterReceiver(receiver);
-        } catch (Exception e) {
-            // Receiver was probably already stopped in onPause()
-        }
-        super.onStop();
-    }
-
-    Snackbar mTimerSnackbar;
-    TextView mSnackBarText;
 
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {

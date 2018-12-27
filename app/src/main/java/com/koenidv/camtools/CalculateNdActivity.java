@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -31,9 +32,79 @@ public class CalculateNdActivity extends AppCompatActivity {
 
     private final static String TAG = "ND Calculator";
 
-    boolean timerRunning;
-    float timerTime;
-    String timerName;
+    private boolean timerRunning;
+    private float timerTime;
+    private String timerName;
+    private Snackbar mTimerSnackBar;
+    private TextView mSnackBarText;
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateGUI(intent); // or whatever method used to update your GUI fields
+        }
+    };
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            ModuleManager mModuleManager = new ModuleManager();
+            mModuleManager.showHistory(CalculateNdActivity.this);
+            return true;
+        }
+        return super.onKeyLongPress(keyCode, event);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_calculator, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_add_shortcut:
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
+                    assert mShortcutManager != null;
+                    if (mShortcutManager.isRequestPinShortcutSupported()) {
+
+                        ShortcutInfo pinShortcutInfo =
+                                new ShortcutInfo.Builder(CalculateNdActivity.this, "exposure_nd")
+                                        .setShortLabel(getString(R.string.shortcut_exposure_nd))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_nd))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateNdActivity.class))
+                                        .build();
+
+                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
+                    }
+                }
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(CalculateNdActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_help:
+
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(receiver);
+        Log.i(TAG, "Unregistered broacast receiver");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
+        Log.i(TAG, "Registered broacast receiver");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +124,9 @@ public class CalculateNdActivity extends AppCompatActivity {
         final EditText mStrengthEditText = findViewById(R.id.densityEditText);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
+        mModuleManager.checkDarkmode(prefs);
+
+
         mTimeEditText.setText(prefs.getString("ndTime", "4"));
         mTimeSeekbar.setProgress(Math.round(Float.valueOf(mTimeEditText.getText().toString())));
         mStrengthEditText.setText(prefs.getString("ndStrength", "10"));
@@ -70,8 +144,7 @@ public class CalculateNdActivity extends AppCompatActivity {
             mResultTextView.setText(mModuleManager.convertTime(CalculateNdActivity.this, calculate(Float.valueOf(mTimeEditText.getText().toString()), Float.valueOf(mStrengthEditText.getText().toString()), prefs.getBoolean("ndstops", false)), true));
         }
 
-
-        mStartTimerButton.setOnClickListener(v -> {
+        View.OnClickListener timerClickListener = v -> {
             float calculated = calculate(Float.valueOf(prefs.getString("ndTime", "4")), Float.valueOf(prefs.getString("ndStrength", "10")), prefs.getBoolean("ndstops", false));
             if (!timerRunning || (Float.compare(calculated, timerTime) == 0)) {
                 TimerSheet sheet = new TimerSheet();
@@ -96,9 +169,11 @@ public class CalculateNdActivity extends AppCompatActivity {
                 });
 
                 mSheet.show();
-
             }
-        });
+        };
+
+        mStartTimerButton.setOnClickListener(timerClickListener);
+        mResultTextView.setOnClickListener(timerClickListener);
 
         mTimeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -212,75 +287,6 @@ public class CalculateNdActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_calculator, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.action_add_shortcut:
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    ShortcutManager mShortcutManager = getSystemService(ShortcutManager.class);
-                    assert mShortcutManager != null;
-                    if (mShortcutManager.isRequestPinShortcutSupported()) {
-
-                        ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateNdActivity.this, "exposure_nd")
-                                        .setShortLabel(getString(R.string.shortcut_exposure_nd))
-                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_nd))
-                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateNdActivity.class))
-                                        .build();
-
-                        mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
-                    }
-                }
-                break;
-            case R.id.action_settings:
-                startActivity(new Intent(CalculateNdActivity.this, SettingsActivity.class));
-                break;
-            case R.id.action_help:
-
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            ModuleManager mModuleManager = new ModuleManager();
-            mModuleManager.showHistory(CalculateNdActivity.this);
-            return true;
-        }
-        return super.onKeyLongPress(keyCode, event);
-    }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateGUI(intent); // or whatever method used to update your GUI fields
-        }
-    };
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
-        Log.i(TAG, "Registered broacast receiver");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        Log.i(TAG, "Unregistered broacast receiver");
-    }
-
-    @Override
     public void onStop() {
         try {
             unregisterReceiver(receiver);
@@ -289,9 +295,6 @@ public class CalculateNdActivity extends AppCompatActivity {
         }
         super.onStop();
     }
-
-    Snackbar mTimerSnackBar;
-    TextView mSnackBarText;
 
     private void updateGUI(Intent intent) {
         if (intent.getExtras() != null) {

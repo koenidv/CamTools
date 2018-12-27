@@ -48,7 +48,7 @@
     <string name="select_lightpollution">Light pollution</string>
     <string name="description_lightpollution">Explore where you can take the best night-time images.</string>
     <string name="shortcut_sky_lightpollution">Light pollution</string>
-    <string name="select_contrast">Contrasts</string>
+    <string name="select_contrast">Contrasts (Beta)</string>
     <string name="description_contrast">Use contrasting colors to make your images look more interesting.</string>
     <string name="shortcut_tools_contrast">Contrasts</string>
 
@@ -59,6 +59,7 @@
     <string name="setting_change">Change</string>
     <string name="setting_darkmode_title">Dark theme</string>
     <string name="setting_darkmode_description">Use the dark theme to protect your eyes.</string>
+    <string name="setting_darkmode_follow_system">Follow the system</string>
     <string name="setting_units_title">Units</string>
     <string name="setting_units_aperture">f-stops</string>
     <string name="setting_units_aperture_short">Aperture</string>
@@ -270,6 +271,7 @@
     <string name="megapixel">MP</string>
     <string name="million">" million"</string>
     <string name="pixel">px</string>
+    <string name="dimensions_separator" translatable="false">x</string>
 
     <string name="details">Details</string>
     <string name="edit">Edit</string>
@@ -316,7 +318,7 @@
 
     <string name="color_palette">Color Palette</string>
     <string name="colors">Colors</string>
-    
+
     <string name="group_timers_name">Timers</string>
     <string name="channel_timer_name">Timer</string>
     <string name="channel_timer_description">You will get a notification if you start a timer within the app.</string>
@@ -379,7 +381,5 @@
     <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
     <string name="sun_details_morning_astronomical">Astronomical twilight</string>
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_search">Search</string>
 </resources>

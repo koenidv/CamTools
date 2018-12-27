@@ -38,8 +38,7 @@
                 android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                android:textColor="@android:color/white"
-                android:textIsSelectable="true"/>
+                android:textColor="@android:color/white"/>
 
             <Button
                 android:id="@+id/startTimerButton"

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <bool name="darkmode">false</bool>
+
     <integer name="preset_size_amount">5</integer>
 
     <string name="preset_size_0" translatable="false">Full frame</string>

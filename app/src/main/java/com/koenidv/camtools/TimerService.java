@@ -19,22 +19,17 @@ public class TimerService extends Service {
 
     private final static String TAG = "TimerService";
     final static String ACTION = "com.koenidv.camtools.timer";
-    final static int NOTIFYID = 42;
+    private final static int NOTIFYID = 42;
 
-    Intent intent = new Intent(ACTION);
+    private Intent intent = new Intent(ACTION);
 
     private int time = 10000;
     private String name;
     private boolean running = false;
 
-    CountDownTimer timer = null;
+    private CountDownTimer timer = null;
 
     public TimerService() {
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
     }
 
     @Override
@@ -59,7 +54,7 @@ public class TimerService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    void startTimer() {
+    private void startTimer() {
         NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent contentIntent = new Intent(this, MainActivity.class);
@@ -133,7 +128,4 @@ public class TimerService extends Service {
         super.onDestroy();
     }
 
-    boolean isRunning() {
-        return running;
-    }
 }
