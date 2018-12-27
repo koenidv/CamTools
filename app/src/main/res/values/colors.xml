@@ -9,8 +9,9 @@
     <color name="dial_overlay">#7fffffff</color>
     <color name="textColor_normal">#000000</color>
 
-    <color name="background_light_lighter">#ffffff</color> <!-- Cards, Navbar, Actionbar, etc. in light mode -->
-    <color name="background_light_normal">#eeeeee</color>  <!-- Background in light mode -->
+    <color name="background_light_lighter">#ffffff</color>
+    <color name="background_light_normal">#eeeeee</color>
+    <color name="background_dark_lighter">#363535</color>
 
     <color name="sun_astronomical">#11114E</color>
     <color name="sun_nautical">#2d2973</color>
