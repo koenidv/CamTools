@@ -52,20 +52,17 @@
                 android:autoVerify="true"
                 tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data
                     android:host="camtools.koenidv.de"
                     android:pathPrefix="/add/"
                     android:scheme="https"/>
+                <data android:scheme="http"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data android:mimeType="application/com.koenidv.camtools"/>
             </intent-filter>
         </activity>
@@ -108,6 +105,12 @@
             android:name=".CalculateContrastActivity"
             android:label="@string/select_contrast"
             android:parentActivityName=".MainActivity">
+        </activity>
+        <activity
+            android:name=".CalculateCropfactorActivity"
+            android:label="@string/select_cropfactor"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.BlueActionBar">
         </activity>
 
         <service

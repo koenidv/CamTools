@@ -237,6 +237,10 @@ public class EditCamerasActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
 
+        if (undoSnackbar != null && undoSnackbar.isShown()) {
+            undoSnackbar.dismiss();
+        }
+
         final RecyclerView rv = findViewById(R.id.camerasRecyclerView);
         final int position = rv.getChildAdapterPosition(view);
 

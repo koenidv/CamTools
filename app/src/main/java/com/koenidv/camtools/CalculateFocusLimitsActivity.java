@@ -142,7 +142,7 @@ public class CalculateFocusLimitsActivity extends AppCompatActivity {
         coc[0] = lastCamera.getConfusion();
 
         mLengthEditText.setText(prefs.getString("focallength", "24"));
-        mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
+        mLengthSeekbar.setProgress(mModuleManager.focalLength(prefs.getString("focallength", "24")));
         mApertureEditText.setText(prefs.getString("aperture", "3.5"));
         mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
         mDistanceEditText.setText(prefs.getString("distance", "5"));

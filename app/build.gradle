@@ -6,9 +6,9 @@ android {
         applicationId "com.koenidv.camtools"
         minSdkVersion 21
         targetSdkVersion 28
-        versionName '0.9'
+        versionName 'Beta 1'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        versionCode 9
+        versionCode 10
     }
     dataBinding {
         enabled = true

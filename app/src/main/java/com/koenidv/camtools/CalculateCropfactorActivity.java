@@ -27,32 +27,13 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class CalculateReverseFocusActivity extends AppCompatActivity {
+public class CalculateCropfactorActivity extends AppCompatActivity {
 
-    private final static String TAG = "Aperture Calculator";
-    private final float[] coc = {0};
-
-    @Override
-    protected void onResume() {
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        final TextView mCameraTextView = findViewById(R.id.cameraTextView);
-        Camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
-        if (prefs.getInt("cameras_amount", -1) == -1) {
-            mCameraTextView.setText(R.string.calculate_camera_add);
-        } else {
-            mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
-        }
-        coc[0] = lastCamera.getConfusion();
-        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
-        Log.i(TAG, "Registered broacast receiver");
-        super.onResume();
-    }
-
+    private final static String TAG = "Cropped Calculator";
+    private final float[] cropfactor = {0};
     private Snackbar mTimerSnackBar;
     private TextView mSnackBarText;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -66,7 +47,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
     public boolean onKeyLongPress(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             ModuleManager mModuleManager = new ModuleManager();
-            mModuleManager.showHistory(CalculateReverseFocusActivity.this);
+            mModuleManager.showHistory(CalculateCropfactorActivity.this);
             return true;
         }
         return super.onKeyLongPress(keyCode, event);
@@ -89,10 +70,10 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
                     if (mShortcutManager.isRequestPinShortcutSupported()) {
 
                         ShortcutInfo pinShortcutInfo =
-                                new ShortcutInfo.Builder(CalculateReverseFocusActivity.this, "focus_reverse")
-                                        .setShortLabel(getString(R.string.shortcut_focus_reverse))
-                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_reversefocus))
-                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateReverseFocusActivity.class))
+                                new ShortcutInfo.Builder(CalculateCropfactorActivity.this, "tools_cropfactor")
+                                        .setShortLabel(getString(R.string.shortcut_cropfactor))
+                                        .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_cropfactor))
+                                        .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateCropfactorActivity.class))
                                         .build();
 
                         mShortcutManager.requestPinShortcut(pinShortcutInfo, null);
@@ -100,7 +81,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(CalculateReverseFocusActivity.this, SettingsActivity.class));
+                startActivity(new Intent(CalculateCropfactorActivity.this, SettingsActivity.class));
                 break;
             case R.id.action_help:
 
@@ -118,9 +99,25 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final TextView mCameraTextView = findViewById(R.id.cameraTextView);
+        Camera lastCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
+        if (prefs.getInt("cameras_amount", -1) == -1) {
+            mCameraTextView.setText(R.string.calculate_camera_add);
+        } else {
+            mCameraTextView.setText(String.format(getString(R.string.calculate_camera), lastCamera.getName()));
+        }
+        cropfactor[0] = lastCamera.getCropfactor();
+        registerReceiver(receiver, new IntentFilter(TimerService.ACTION));
+        Log.i(TAG, "Registered broacast receiver");
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_calculate_reversefocus);
+        setContentView(R.layout.activity_calculate_cropfactor);
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEditor = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
@@ -132,44 +129,27 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
         final TextView mCameraTextView = findViewById(R.id.cameraTextView);
         final SeekBar mLengthSeekbar = findViewById(R.id.focallengthSeekbar);
         final EditText mLengthEditText = findViewById(R.id.focallengthEditText);
-        final SeekBar mNearSeekbar = findViewById(R.id.nearfocusSeekbar);
-        final EditText mNearEditText = findViewById(R.id.nearfocusEditText);
-        TextView mNearIndicatorTextView = findViewById(R.id.nearfocusIndicator);
-        final SeekBar mFarSeekbar = findViewById(R.id.farfocusSeekbar);
-        final EditText mFarEditText = findViewById(R.id.farfocusEditText);
-        TextView mFarIndicatorTextView = findViewById(R.id.farfocusIndicator);
+        final SeekBar mApertureSeekbar = findViewById(R.id.apertureSeekbar);
+        final EditText mApertureEditText = findViewById(R.id.apertureEditText);
         final LinearLayout mEquationsLayout = findViewById(R.id.equationsLayout);
 
         mModuleManager.checkDarkmode(prefs);
 
         Camera lastCamera = gson.fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
-        coc[0] = lastCamera.getConfusion();
+        cropfactor[0] = lastCamera.getCropfactor();
 
         mLengthEditText.setText(prefs.getString("focallength", "24"));
-        mLengthSeekbar.setProgress(mModuleManager.focalLength(prefs.getString("focallength", "24")));
-        mNearEditText.setText(prefs.getString("nearfocus", "4"));
-        mNearSeekbar.setProgress(mModuleManager.distance(prefs.getString("nearfocus", "4"), prefs.getBoolean("empirical", false)));
-        mFarEditText.setText(prefs.getString("farfocus", "12"));
-        mFarSeekbar.setProgress(mModuleManager.distance(
-                String.valueOf(Float.valueOf(prefs.getString("farfocus", "12"))
-                        - Float.valueOf(prefs.getString("nearfocus", "4"))),
-                prefs.getBoolean("empirical", false)));
-        calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")), Float.valueOf(prefs.getString("farfocus", "12")));
-
-
-        if (prefs.getBoolean("empirical", false)) {
-            mNearIndicatorTextView.setText(R.string.feet);
-            mFarIndicatorTextView.setText(R.string.feet);
-        }
+        mLengthSeekbar.setProgress(Math.round(Float.valueOf(prefs.getString("focallength", "24"))));
+        mApertureEditText.setText(prefs.getString("aperture", "3.5"));
+        mApertureSeekbar.setProgress(mModuleManager.aperture(prefs.getString("aperture", "3.5"), prefs.getInt("aperture_stops", 6)));
+        calculate(cropfactor[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
 
 
         /*
          *  Listeners
          */
 
-        findViewById(R.id.distanceTextView).setOnClickListener(v -> mModuleManager.openArMeasure(this));
-
-        mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateReverseFocusActivity.this, mCameraTextView, coc, "coc"));
+        mCameraLayout.setOnClickListener(v -> mModuleManager.selectCamera(CalculateCropfactorActivity.this, mCameraTextView, cropfactor, "cropfactor"));
 
         mCameraTextView.addTextChangedListener(new TextWatcher() {
             //f:off
@@ -178,7 +158,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             //f:on
             @Override
             public void afterTextChanged(Editable s) {
-                calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")), Float.valueOf(prefs.getString("farfocus", "12")));
+                calculate(cropfactor[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("aperture", "3.5")));
             }
         });
 
@@ -208,7 +188,7 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
                         changing[0] = false;
                     }
                     prefsEditor.putString("focallength", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("nearfocus", "4")), Float.valueOf(prefs.getString("farfocus", "12")));
+                    calculate(cropfactor[0], Float.valueOf(s.toString()), Float.valueOf(prefs.getString("aperture", "3.5")));
                 }
             }
 
@@ -218,12 +198,12 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             //f:on
         });
 
-        mNearSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        mApertureSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!changing[0]) {
                     changing[0] = true;
-                    mNearEditText.setText(mModuleManager.distance(progress, prefs.getBoolean("empirical", false)));
+                    mApertureEditText.setText(mModuleManager.aperture(progress, prefs.getInt("aperture_stops", 6)));
                     changing[0] = false;
                 }
             }
@@ -234,17 +214,17 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             //f:on
         });
 
-        mNearEditText.addTextChangedListener(new TextWatcher() {
+        mApertureEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().isEmpty() && !s.toString().equals(".")) {
                     if (!changing[0]) {
                         changing[0] = true;
-                        mNearSeekbar.setProgress(mModuleManager.distance(s.toString(), prefs.getBoolean("empirical", false)));
+                        mApertureSeekbar.setProgress(mModuleManager.aperture(s.toString(), prefs.getInt("aperture_stops", 6)));
                         changing[0] = false;
                     }
-                    prefsEditor.putString("nearfocus", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()), Float.valueOf(prefs.getString("farfocus", "12")));
+                    prefsEditor.putString("aperture", s.toString()).apply();
+                    calculate(cropfactor[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(s.toString()));
                 }
             }
 
@@ -254,79 +234,20 @@ public class CalculateReverseFocusActivity extends AppCompatActivity {
             //f:on
         });
 
-        mFarSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (!changing[0]) {
-                    changing[0] = true;
-                    double distance = Float.valueOf(mModuleManager.distance(progress, prefs.getBoolean("empirical", false)))
-                            + Float.valueOf(prefs.getString("nearfocus", "4"));
 
-                    DecimalFormat df = (DecimalFormat) NumberFormat.getNumberInstance(Locale.US);
-                    df.applyPattern(distance >= 8 ? "#" : "#.#");
-
-                    mFarEditText.setText(String.valueOf(df.format(distance)));
-                    changing[0] = false;
-                }
-            }
-
-            //f:off
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
-            //f:on
-        });
-
-        mFarEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty() && !s.toString().equals(".")) {
-                    if (!changing[0]) {
-                        changing[0] = true;
-                        mFarSeekbar.setProgress(mModuleManager.distance(
-                                String.valueOf(
-                                        Float.valueOf(s.toString())
-                                                - Float.valueOf(prefs.getString("nearfocus", "4"))),
-                                prefs.getBoolean("empirical", false)));
-                        changing[0] = false;
-                    }
-                    prefsEditor.putString("farfocus", s.toString()).apply();
-                    calculate(coc[0], Float.valueOf(prefs.getString("focallength", "24")), Float.valueOf(prefs.getString("nearfocus", "4")), Float.valueOf(s.toString()));
-
-                }
-            }
-
-            //f:off
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void afterTextChanged(Editable s) {}
-            //f:on
-        });
-
-        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateReverseFocusActivity.this, "reversefocus"));
+        mEquationsLayout.setOnClickListener(v -> mModuleManager.showEquations(CalculateCropfactorActivity.this, "cropfactor"));
 
     }
 
-    private void calculate(float mConfusion, float mLength, float mNear, float mFar) {
-        ModuleManager mModuleManager = new ModuleManager();
-        mNear *= 10000;
-        mFar *= 10000;
+    private void calculate(float mCropfactor, float mLength, float mAperture) {
+        Spanned lengthSpanned = Html.fromHtml(Math.round(mLength * mCropfactor) + "<small>" + getString(R.string.millimeter) + "</small>");
+        Spanned apertureSpanned = Html.fromHtml("<small>" + getString(R.string.aperture) + "</small>" + new DecimalFormat("#.#").format(mAperture * mCropfactor));
 
-        float mCalc = (mLength / mNear + mLength / mFar - 2) / (1 / mFar - 1 / mNear);
-        float mDistance = (mCalc - mLength) / (mCalc / mNear - 1);
-        float mAperture = mLength * mLength / (mCalc * mConfusion);
+        TextView lengthTextView = findViewById(R.id.lengthTextView);
+        TextView apertureTextView = findViewById(R.id.apertureTextView);
 
-        Spanned mDistanceSpanned = mModuleManager.convertDistance(CalculateReverseFocusActivity.this, mDistance / 10000);
-        Spanned mApertureSpanned = Html.fromHtml("<small>" + getString(R.string.aperture) + "</small>" + new DecimalFormat(mAperture > 10 ? "#" : "#.#").format(mAperture));
-
-        if (mFar <= mNear) {
-            mDistanceSpanned = null;
-            mApertureSpanned = null;
-        }
-
-        TextView mApertureTextView = findViewById(R.id.apertureTextView);
-        TextView mDistanceTextView = findViewById(R.id.distanceTextView);
-
-        mApertureTextView.setText(mApertureSpanned);
-        mDistanceTextView.setText(mDistanceSpanned);
+        lengthTextView.setText(lengthSpanned);
+        apertureTextView.setText(apertureSpanned);
     }
 
     @Override

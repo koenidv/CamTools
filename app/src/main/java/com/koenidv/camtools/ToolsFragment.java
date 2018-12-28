@@ -26,10 +26,17 @@ public class ToolsFragment extends Fragment {
         final ModuleManager mModuleManager = new ModuleManager();
 
         CardView mContrastCard = view.findViewById(R.id.selectContrastCard);
+        CardView mCropfactorCard = view.findViewById(R.id.selectCropfactorCard);
 
         mContrastCard.setOnClickListener(v -> {
             mModuleManager.addToHistory(getActivity(), "CalculateContrastActivity");
             Intent intent = new Intent(getActivity(), CalculateContrastActivity.class);
+            startActivity(intent);
+        });
+
+        mCropfactorCard.setOnClickListener(v -> {
+            mModuleManager.addToHistory(getActivity(), "CalculateCropfactorActivity");
+            Intent intent = new Intent(getActivity(), CalculateCropfactorActivity.class);
             startActivity(intent);
         });
 

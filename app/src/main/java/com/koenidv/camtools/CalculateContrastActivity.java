@@ -217,7 +217,7 @@ public class CalculateContrastActivity extends AppCompatActivity {
 
                         ShortcutInfo pinShortcutInfo =
                                 new ShortcutInfo.Builder(CalculateContrastActivity.this, "tools_contrast")
-                                        .setShortLabel(getString(R.string.shortcut_tools_contrast))
+                                        .setShortLabel(getString(R.string.shortcut_contrast))
                                         .setIcon(Icon.createWithResource(getBaseContext(), R.mipmap.shortcut_contrast))
                                         .setIntent(new Intent().setAction(Intent.ACTION_VIEW).setClass(getApplicationContext(), CalculateContrastActivity.class))
                                         .build();

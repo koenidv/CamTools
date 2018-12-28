@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccentDark"
+    android:orientation="horizontal"
+    android:saveEnabled="false"
+    tools:context="com.koenidv.camtools.CalculateHyperFocalActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/resultLayout"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/cardMarginBottom"
+        android:background="@color/colorAccentDark"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/lengthTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.19999999"/>
+
+        <TextView
+            android:id="@+id/apertureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1"
+            android:text=""
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.65"/>
+
+        <TextView
+            android:id="@+id/lengthIndicatorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/focus_length"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/lengthTextView"
+            app:layout_constraintStart_toStartOf="@+id/lengthTextView"
+            app:layout_constraintTop_toBottomOf="@+id/lengthTextView"/>
+
+        <TextView
+            android:id="@+id/apertureIndicatorTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/focus_aperture"
+            android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="@+id/apertureTextView"
+            app:layout_constraintHorizontal_bias="0.558"
+            app:layout_constraintStart_toStartOf="@+id/apertureTextView"
+            app:layout_constraintTop_toBottomOf="@+id/apertureTextView"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="4dp">
+
+            <include layout="@layout/include_card_camera"/>
+
+            <include layout="@layout/include_card_focallength"/>
+
+            <include
+                layout="@layout/include_card_aperture"
+                />
+
+            <include layout="@layout/include_card_equations"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -5,14 +5,19 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.BlueActionBar" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/colorAccentDark</item>
         <item name="colorPrimaryDark">@color/colorAccentDark</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
     <style name="AppBottomSheetDialogTheme"

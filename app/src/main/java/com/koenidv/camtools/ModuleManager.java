@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.text.Editable;
 import android.text.Html;
@@ -22,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
@@ -67,7 +69,7 @@ class ModuleManager {
      * @param mCameraTextView The TextView which displays the currently selected Camera.
      * @param mValue          The list in which either the current cicle of confusion or pixel pitch is saved.
      * @param mType           Defines what should be saved to {@param mValue}.
-     *                        Should be "coc" for circle of confusion or "pixelpitch" for pixel pitch.
+     *                        Should be "coc" for circle of confusion, "pixelpitch" for pixel pitch or "cropfactor" for cropfactor.
      */
     void selectCamera(final Context mContext, final TextView mCameraTextView, final float[] mValue, final String mType) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
@@ -107,6 +109,9 @@ class ModuleManager {
                                     break;
                                 case "pixelpitch":
                                     mValue[0] = mCamera.getPixelpitch();
+                                    break;
+                                case "cropfactor":
+                                    mValue[0] = mCamera.getCropfactor();
                                     break;
                             }
                             mCameraTextView.setText(mContext.getString(R.string.calculate_camera)
@@ -465,12 +470,33 @@ class ModuleManager {
         try {
             Intent intent = manager.getLaunchIntentForPackage("com.google.tango.measure");
             mContext.startActivity(intent);
-        } catch (ActivityNotFoundException anfe) {
+        } catch (ActivityNotFoundException | NullPointerException anfe) {
             try {
                 Intent intent = manager.getLaunchIntentForPackage("com.grymala.ruler");
                 mContext.startActivity(intent);
-            } catch (ActivityNotFoundException anfet) {
-                //
+            } catch (ActivityNotFoundException | NullPointerException anfet) {
+                new BottomDialog.Builder(mContext)
+                        .setTitle(R.string.no_ar_measure_app_installed)
+                        .setContent(R.string.no_ar_measure_app_installed_description)
+                        .setPositiveText(R.string.install_measure_by_google)
+                        .setNegativeText(R.string.install_aruler_by_grymala)
+                        .setPositiveTextColor(R.color.colorAccent)
+                        .setNegativeTextColor(R.color.colorAccent)
+                        .onPositive(mBottomDialog -> {
+                            try {
+                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.tango.measure")));
+                            } catch (android.content.ActivityNotFoundException anfei) {
+                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.tango.measure")));
+                            }
+                        })
+                        .onNegative(mBottomDialog -> {
+                            try {
+                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.grymala.aruler")));
+                            } catch (android.content.ActivityNotFoundException anfei) {
+                                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.grymala.aruler")));
+                            }
+                        })
+                        .show();
             }
         }
     }

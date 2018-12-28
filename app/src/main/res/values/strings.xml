@@ -50,7 +50,10 @@
     <string name="shortcut_sky_lightpollution">Light pollution</string>
     <string name="select_contrast">Contrasts (Beta)</string>
     <string name="description_contrast">Use contrasting colors to make your images look more interesting.</string>
-    <string name="shortcut_tools_contrast">Contrasts</string>
+    <string name="shortcut_contrast">Contrasts</string>
+    <string name="select_cropfactor">Crop factor adjustment</string>
+    <string name="description_cropfactor">See how a full-frame lens will look on a sensor cropped sensor.</string>
+    <string name="shortcut_cropfactor">Crop factor</string>
 
 
     <string name="settings">Settings</string>
@@ -296,6 +299,10 @@
     <string name="more_coming_soon">More will come soon</string>
     <string name="coming_soon_title">Sorry!</string>
     <string name="coming_soon_description">This feature is still under development. It will be available </string>
+    <string name="no_ar_measure_app_installed">No apps to measure distances installed</string>
+    <string name="no_ar_measure_app_installed_description">You can open Measure or AruleR directly from here once you have one of them installed.</string>
+    <string name="install_measure_by_google">Install Measure</string>
+    <string name="install_aruler_by_grymala">Install AruleR</string>
 
     <string name="name">Name</string>
     <string name="pixelcount_indicator">"Pixels: "</string>
@@ -373,6 +380,15 @@
     </string>
     <string name="equation_spotstars_description">
         k = Aperture\np = Pixel pitch\nf = Focal length
+    </string>
+    <string name="equation_cropfactor">
+        Focal length \\(f\\):
+        $$f = f_f * c$$
+        Aperture \\(k\\):
+        $$k = k_f * c$$
+    </string>
+    <string name="equation_cropfactor_description">
+        ff = Full-frame focal length\nkf = Full-frame aperture\nc = Crop factor
     </string>
 
     <!-- Functional -->

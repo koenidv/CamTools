@@ -291,6 +291,15 @@
     <string name="equation_spotstars_description">
         k = Blende\np = Pixelabstand\nf = Brennweite
     </string>
+    <string name="equation_cropfactor">
+        Brennweite \\(f\\):
+        $$f = f_f * c$$
+        Blende \\(k\\):
+        $$k = k_f * c$$
+    </string>
+    <string name="equation_cropfactor_description">
+        ff = Vollformat-Brennweite\nkf = Vollformat-Blende\nc = Formatfaktor
+    </string>
     <string name="delete_history">Verlauf löschen</string>
     <string name="resolution_size_seperator">" auf "</string>
     <string name="cropfactor_indicator">"Formatfaktor: "</string>
@@ -301,7 +310,7 @@
     <string name="title_tools_long">Tools</string>
     <string name="select_contrast">Kontraste (Beta)</string>
     <string name="description_contrast">Nutze kontrastierende Farben, um deine Bilder interessanter aussehen zu lassen.</string>
-    <string name="shortcut_tools_contrast">Kontraste</string>
+    <string name="shortcut_contrast">Kontraste</string>
     <string name="calculate_color_choose">Wähle eine Farbe</string>
     <string name="calculate_color_mode">Kontrast: %s</string>
     <string name="pixelcount_text">Pixel: %s Millionen</string>
@@ -346,4 +355,11 @@
     <string name="camera_icon_video">Videokamera</string>
     <string name="camera_icon_phone">Smartphone</string>
     <string name="action_search">Suche</string>
+    <string name="select_cropfactor">Formatfaktoranpassungen</string>
+    <string name="description_cropfactor">Berechne, wie ein ein Objektiv für Vollformat-Kameras auf einer Kamera mit einem kleineren Sensor aussehen wird.</string>
+    <string name="shortcut_cropfactor">Formatfaktor</string>
+    <string name="no_ar_measure_app_installed">Keine Apps zum Distanzmessen installiert</string>
+    <string name="no_ar_measure_app_installed_description">Du kannst Measure oder AruleR direkt von hier öffnen, sobald eine der beiden Apps installiert ist.</string>
+    <string name="install_measure_by_google">Measure installieren</string>
+    <string name="install_aruler_by_grymala">AruleR installieren</string>
 </resources>
