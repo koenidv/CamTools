@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Phones</title>
+    <link rel="stylesheet" href="/selectorstyle.css" />
+</head>
+
+<body>
+    <input id="search" type="text" onkeyup="search()" placeholder="Search..." title="Search for a camera">
+
+    <ul id="searchable">
+        <li><a href="https://camtools.koenidv.de/add/OnePlus%20device;5.5:4.1;4640:3480">
+                OnePlus devices
+            </a></li>
+        <li></li>
+        
+    </ul>
+
+    <hr />
+
+
+    <a href="/cams/" class="alt" style="margin-top: 3em">
+        Looking for DSLRs?
+    </a>
+
+
+    <script>
+        var coll = document.getElementsByClassName("expand");
+        var contents = document.getElementsByClassName("expandable");
+        var titles = document.getElementsByTagName("h2");
+
+        for (var i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var content = this.previousElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    content.classList.remove("expanded");
+                    this.innerHTML = "Show more";
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.classList.add("expanded");
+                    this.innerHTML = "Show less"
+                }
+            });
+        }
+
+        function search() {
+            var input, filter, ul, li, a, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("searchable");
+            li = ul.getElementsByTagName("li");
+            for (i = 0; i < li.length; i++) {
+                a = li[i].getElementsByTagName("a")[0];
+                txtValue = a.textContent || a.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }
+
+            if (filter.length > 0) {
+                for (expandable of contents) {
+                    expandable.style.maxHeight = expandable.scrollHeight + "px";
+                    expandable.classList.add("expanded");
+                    expandable.classList.add("searchresult");
+                }
+                for (button of coll) {
+                    button.style.display = "none";
+                }
+                for (title of titles) {
+                    title.style.display = "none";
+                }
+                document.getElementById("frequentseparator").style.display = "none";
+            } else {
+                for (expandable of contents) {
+                    expandable.style.maxHeight = null;
+                    expandable.classList.remove("expanded");
+                    expandable.classList.remove("searchresult");
+                }
+                for (button of coll) {
+                    button.style.display = "";
+                }
+                for (title of titles) {
+                    title.style.display = "";
+                }
+                document.getElementById("frequentseparator").style.display = "";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

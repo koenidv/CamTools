@@ -1,0 +1,11 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.koenidv.camtools",
+    "sha256_cert_fingerprints":
+    ["93:22:54:56:82:89:F9:7C:2F:E7:81:12:DE:E0:EC:82:06:58:49:EC:A5:79:DA:A3:8E:AC:EF:5E:9F:5D:B6:B3",
+      "9D:B5:02:E7:01:8B:9E:F1:0F:57:4B:20:47:37:00:D2:45:1C:81:2E:7F:A1:A3:6B:13:60:C5:6F:73:E1:57:CF",
+      "AB:AD:1B:0B:58:75:AA:F1:1C:38:60:2D:BF:D0:8E:76:A1:CE:5A:91:EB:C3:47:17:C7:A3:10:12:82:27:47:A3"]
+  }
+}]

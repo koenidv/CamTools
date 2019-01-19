@@ -1,0 +1,82 @@
+body {
+    text-align: center;
+    font-family: sans-serif;
+    margin: 0;
+    padding-bottom: 1em;
+}
+
+h2 {
+    margin-top: 1.5em;
+    color: #202020;
+}
+
+hr {
+    margin-top: 2em;
+}
+
+input#search {
+    display: block;
+    background-color: white;
+    box-shadow: 0 0 2px gray;
+    border: unset;
+    padding: 1em;
+    width: 80%;
+    margin: 1.5em auto 0 auto;
+    border-radius: 5em;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: block;
+}
+
+a {
+    display: block;
+    box-shadow: 0 0 5px gray;
+    padding: 1em;
+    margin: 0.5em 8px 0.5em 8px;
+    border-radius: 5em;
+    text-decoration: none;
+    color: #202020;
+    transition: 250ms;
+}
+
+a.alt {
+    box-shadow: 0 0 2px gray;    
+}
+
+a:hover,
+a:active,
+button:hover {
+    box-shadow: 0 0 1px gray;
+    transform: scale(0.98);
+}
+
+button {
+    display: block;
+    background-color: white;
+    box-shadow: 0 0 2px gray;
+    border: unset;
+    padding: 0.75em;
+    width: calc(100% - 16px);
+    margin: 0.5em 8px 0 8px;
+    border-radius: 5em;
+}
+
+.expandable {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.expandable.expanded {
+    border-top: 1px solid #aaaaaa;
+}
+
+.expandable.expanded.searchresult {
+    border-top: unset;
+}
