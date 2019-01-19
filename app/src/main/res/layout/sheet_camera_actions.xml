@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/titleTextView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:gravity="center_vertical"
-        android:paddingStart="20dp"
-        android:paddingEnd="16dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="A camera"/>
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingStart="18dp"
+            android:paddingEnd="16dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="731dp"
+            tools:text="A camera"/>
+
+        <TextView
+            android:id="@+id/useTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:drawableTint="@color/textColor_secondary"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:text="@string/use_next"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:layout_editor_absoluteY="731dp"
+            tools:targetApi="m"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/detailsTextView"
@@ -27,21 +51,6 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:text="@string/details"
-        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
-        tools:targetApi="m"/>
-
-    <TextView
-        android:id="@+id/useTextView"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/ic_favorite"
-        android:drawablePadding="16dp"
-        android:drawableTint="@color/textColor_secondary"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/use_next"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         tools:targetApi="m"/>
 
@@ -63,7 +72,7 @@
     <TextView
         android:id="@+id/deleteTextView"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="52dp"
         android:background="?attr/selectableItemBackground"
         android:drawableStart="@drawable/ic_delete"
         android:drawablePadding="16dp"
@@ -71,6 +80,7 @@
         android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
+        android:paddingBottom="4dp"
         android:text="@string/delete"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         tools:targetApi="m"/>

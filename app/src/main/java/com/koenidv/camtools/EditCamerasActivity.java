@@ -92,7 +92,10 @@ public class EditCamerasActivity extends AppCompatActivity {
             if (appLinkData != null) {
                 //Add camera from URL (web database)
                 try {
-                    String data = appLinkData.toString().replace("https://camtools.koenidv.de/add/", "").replace("%20", " ");
+                    String data = appLinkData.toString()
+                            .replace("https://camtools.koenidv.de/add/", "")
+                            .replace("%20", " ")
+                            .replace("%CE%B1", "α");
 
                     String name = data.substring(0, data.indexOf(";"));
                     data = data.substring(data.indexOf(";") + 1);
@@ -242,6 +245,7 @@ public class EditCamerasActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     public void cardClicked(final View view) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
@@ -253,6 +257,7 @@ public class EditCamerasActivity extends AppCompatActivity {
 
         final RecyclerView rv = findViewById(R.id.camerasRecyclerView);
         final int position = rv.getChildAdapterPosition(view);
+        RecyclerView.Adapter adapter = rv.getAdapter();
 
 
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
@@ -260,95 +265,21 @@ public class EditCamerasActivity extends AppCompatActivity {
 
         ((TextView) Objects.requireNonNull(dialog.findViewById(R.id.titleTextView))).setText(((TextView) view.findViewById(R.id.nameTextView)).getText());
 
-        dialog.findViewById(R.id.detailsTextView).setOnClickListener(v -> {
+        try {
+            //Hide "Use" option if the camera is already currently active
+            if (position == prefs.getInt("cameras_last", -1))
+                dialog.findViewById(R.id.useTextView).setVisibility(View.GONE);
 
-        });
-        dialog.findViewById(R.id.useTextView).setOnClickListener(v -> {
-
-        });
-        dialog.findViewById(R.id.editTextView).setOnClickListener(v -> {
-
-        });
-        dialog.findViewById(R.id.deleteTextView).setOnClickListener(v -> {
-
-        });
-
-        dialog.show();
-
-
-
-
-        /*
-        // Using BottomSheetMenu, Deprecated
-
-
-        List<String> options = new ArrayList<>();
-        List<Integer> icons = new ArrayList<>();
-        int counter = -1;
-        final int position_details;
-        int position_up = -1;
-        int position_down = -1;
-        int position_use = 0;
-        final int position_edit;
-        int position_delete = -1;
-
-        options.add(getString(R.string.details));
-        icons.add(R.drawable.ic_info);
-        position_details = counter + 1;
-        counter++;
-        if (prefs.getBoolean("camera_move_legacy", false)) {
-            if (position != 0) {
-                options.add(getString(R.string.move_up));
-                icons.add(R.drawable.ic_up);
-                position_up = counter + 1;
-                counter++;
-            }
-            if (position != rv.getChildCount() - 1) {
-                options.add(getString(R.string.move_down));
-                icons.add(R.drawable.ic_down);
-                position_down = counter + 1;
-                counter++;
-            }
-        }
-        if (rv.getChildCount() > 1 && position != prefs.getInt("cameras_last", 0)) {
-            options.add(getString(R.string.use_next));
-            icons.add(R.drawable.ic_favorite);
-            position_use = counter + 1;
-            counter++;
-        }
-        options.add(getString(R.string.edit));
-        icons.add(R.drawable.ic_edit);
-        position_edit = counter + 1;
-        counter++;
-        if (rv.getChildCount() > 1) {
-            options.add(getString(R.string.delete));
-            icons.add(R.drawable.ic_delete);
-            position_delete = counter + 1;
-        }
-
-        int[] iconlist = new int[icons.size()];
-        Iterator<Integer> iterator = icons.iterator();
-        for (int i = 0; i < iconlist.length; i++) {
-            iconlist[i] = iterator.next();
-        }
-
-        final int finalPosition_up = position_up;
-        final int finalPosition_down = position_down;
-        final int finalPosition_use = position_use;
-        final int finalPosition_delete = position_delete;
-        BottomSheet.Builder mBuilder = new BottomSheet.Builder(EditCamerasActivity.this);
-        mBuilder.setItems(options.toArray(new String[0]), iconlist, (dialog, which) -> {
-            RecyclerView.Adapter adapter = rv.getAdapter();
-
-            if (which == position_details) {
+            dialog.findViewById(R.id.detailsTextView).setOnClickListener(v -> {
+                //Show a bottomsheet with details about the camera
+                dialog.dismiss();
                 CameraDetailsSheet sheet = new CameraDetailsSheet();
                 sheet.which = position;
                 sheet.show(getSupportFragmentManager(), "camera_details_sheet");
-            } else if (which == finalPosition_up) {
-                mModuleManager.moveCamera(EditCamerasActivity.this, position, position - 1, EditCamerasActivity.this.mCameraList, adapter);
-            } else if (which == finalPosition_down) {
-                mModuleManager.moveCamera(EditCamerasActivity.this, position, position + 1, EditCamerasActivity.this.mCameraList, adapter);
-            } else if (which == finalPosition_use) {
+            });
+            dialog.findViewById(R.id.useTextView).setOnClickListener(v -> {
+                //Set the camera as the currently active one
+                dialog.dismiss();
                 adapter.notifyItemChanged(prefs.getInt("cameras_last", 0), rv.getChildAt(prefs.getInt("cameras_last", 0)));
                 adapter.notifyItemChanged(position);
                 prefsEdit.putInt("cameras_last", position).apply();
@@ -365,15 +296,21 @@ public class EditCamerasActivity extends AppCompatActivity {
                     NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
                     nfcAdapter.setNdefPushMessage(message, this);
                 }
-            } else if (which == position_edit) {
+            });
+            dialog.findViewById(R.id.editTextView).setOnClickListener(v -> {
+                //Open a bottomsheet which lets the user edit the camera
+                dialog.dismiss();
                 mModuleManager.editCamera(EditCamerasActivity.this, position, EditCamerasActivity.this.mCameraList, adapter);
-            } else if (which == finalPosition_delete) {
+            });
+            dialog.findViewById(R.id.deleteTextView).setOnClickListener(v -> {
+                //Show a snackbar, delete the camera after it has been dismissed
+                dialog.dismiss();
                 Camera deletedCamera = mCameraList.get(position);
                 mCameraList.remove(position);
                 mAdapter.notifyItemRemoved(position);
 
                 undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", deletedCamera.getName()), Snackbar.LENGTH_LONG);
-                undoSnackbar.setAction(R.string.undo, v -> {
+                undoSnackbar.setAction(R.string.undo, ignored -> {
                     mCameraList.add(position, deletedCamera);
                     mAdapter.notifyItemInserted(position);
                 });
@@ -386,11 +323,11 @@ public class EditCamerasActivity extends AppCompatActivity {
                     }
                 });
                 undoSnackbar.show();
+            });
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
 
-            }
-        });
-        mBuilder.setDarkTheme(getResources().getBoolean(R.bool.darkmode))
-                .show();
-        */
+        dialog.show();
     }
 }

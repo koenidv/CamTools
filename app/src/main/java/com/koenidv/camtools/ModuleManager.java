@@ -386,16 +386,29 @@ class ModuleManager {
             //Move every camera between from and to one down
             for (int movethis = mToIndex; movethis > mFromIndex; movethis--) {
                 prefsEdit.putString("camera_" + String.valueOf(movethis - 1), prefs.getString("camera_" + movethis, mContext.getString(R.string.camera_default)));
+                if (prefs.getInt("cameras_last", -1) == movethis) {
+                    prefsEdit.putInt("cameras_last", movethis - 1);
+                }
             }
         } else if (mFromIndex > mToIndex) {
             //As above, but one up
             for (int movethis = mToIndex; movethis < mFromIndex; movethis++) {
                 prefsEdit.putString("camera_" + String.valueOf(movethis + 1), prefs.getString("camera_" + movethis, mContext.getString(R.string.camera_default)));
+                if (prefs.getInt("cameras_last", -1) == movethis) {
+                    prefsEdit.putInt("cameras_last", movethis + 1);
+                }
             }
+        }
+
+        //Set the last used camera if it was the moved
+        if (prefs.getInt("cameras_last", -1) == mFromIndex) {
+            prefsEdit.putInt("cameras_last", mToIndex - 1);
         }
 
         //Put the moved Camera in the right place
         prefsEdit.putString("camera_" + mToIndex, moving).apply();
+
+
 
         if (mCameraList != null && mAdapter != null) {
             Camera toCard = mCameraList.get(mToIndex);

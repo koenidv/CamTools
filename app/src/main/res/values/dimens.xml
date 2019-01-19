@@ -6,7 +6,7 @@
     <dimen name="standardPadding">8dp</dimen>
 
     <dimen name="cardCornerRadius">12dp</dimen>
-    <dimen name="cardCornerRadiusSmall">6dp</dimen>
+    <dimen name="cardCornerRadiusSmall">8dp</dimen>
     <dimen name="cardElevation">6dp</dimen>
     <dimen name="cardMarginTop">6dp</dimen>
     <dimen name="cardMarginBottom">8dp</dimen>

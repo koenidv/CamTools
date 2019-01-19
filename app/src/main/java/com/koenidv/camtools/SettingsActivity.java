@@ -17,15 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import org.michaelbel.bottomsheet.BottomSheet;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -149,55 +152,124 @@ public class SettingsActivity extends AppCompatActivity {
         findViewById(R.id.settingsCamerasCard).setOnClickListener(camerasClickListener);
 
         mApertureButton.setOnClickListener(v -> {
-            int[] items = new int[]{
-                    R.string.setting_units_aperture_full,
-                    R.string.setting_units_aperture_half,
-                    R.string.setting_units_aperture_third
-            };
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
-            mBuilder.setTitle(getString(R.string.setting_units_aperture))
-                    .setItems(items, (dialog, which) -> {
-                        //Full (0) -> 2, Half (1) -> 4, Third (2) -> 6
-                        prefsEdit.putInt("aperture_stops", (which + 1) * 2).apply();
-                        String apertureText1 = getString(R.string.setting_units_aperture_short) + ": ";
-                        switch (which) {
-                            case 0:
-                                apertureText1 += getString(R.string.setting_units_aperture_full_short);
-                                break;
-                            case 1:
-                                apertureText1 += getString(R.string.setting_units_aperture_half_short);
-                                break;
-                            case 2:
-                                apertureText1 += getString(R.string.setting_units_aperture_third_short);
-                        }
-                        mApertureTextView.setText(apertureText1);
-                    })
-                    .setDarkTheme(getResources().getBoolean(R.bool.darkmode))
-                    .show();
+            BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
+            dialog.setContentView(R.layout.sheet_options_chooser);
+
+            RadioGroup optionsGroup = dialog.findViewById(R.id.selectRadioGroup);
+
+            ((TextView) Objects.requireNonNull(dialog.findViewById(R.id.titleTextView))).setText(R.string.setting_units_aperture);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option0))).setText(R.string.setting_units_aperture_full);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option1))).setText(R.string.setting_units_aperture_half);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option2))).setText(R.string.setting_units_aperture_third);
+
+            //Which RadioButton should be checked
+            int checked = R.id.option2;
+            switch (prefs.getInt("aperture_stops", 6)) {
+                //Thirds are set as standard
+                case 4:
+                    //Halfs
+                    checked = R.id.option1;
+                    break;
+                case 2:
+                    //Fulls
+                    checked = R.id.option0;
+            }
+
+            assert optionsGroup != null;
+            optionsGroup.check(checked);
+
+            optionsGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                switch (checkedId) {
+                    case R.id.option0:
+                        mApertureTextView.setText(getString(R.string.setting_units_aperture_short) + ": " + getString(R.string.setting_units_aperture_full_short));
+                        prefsEdit.putInt("aperture_stops", 2).apply();
+                        dialog.dismiss();
+                        break;
+                    case R.id.option1:
+                        mApertureTextView.setText(getString(R.string.setting_units_aperture_short) + ": " + getString(R.string.setting_units_aperture_half_short));
+                        prefsEdit.putInt("aperture_stops", 4).apply();
+                        dialog.dismiss();
+                        break;
+                    case R.id.option2:
+                        mApertureTextView.setText(getString(R.string.setting_units_aperture_short) + ": " + getString(R.string.setting_units_aperture_third_short));
+                        prefsEdit.putInt("aperture_stops", 6).apply();
+                        dialog.dismiss();
+                }
+            });
+
+            dialog.show();
         });
 
         mDistancesButton.setOnClickListener(v -> {
-            int[] items = new int[]{
-                    R.string.setting_units_distance_metrical,
-                    R.string.setting_units_distance_empirical
-            };
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
-            mBuilder.setTitle(getString(R.string.setting_units_distance))
-                    .setItems(items, (dialog, which) -> {
-                        prefsEdit.putBoolean("empirical", which != 0).apply();
-                        String distanceText1 = getString(R.string.setting_units_distance) + ": ";
-                        if (which == 1) {
-                            distanceText1 += getString(R.string.setting_units_distance_empirical);
-                        } else {
-                            distanceText1 += getString(R.string.setting_units_distance_metrical);
-                        }
-                        mDistancesTextView.setText(distanceText1);
-                    })
-                    .setDarkTheme(getResources().getBoolean(R.bool.darkmode))
-                    .show();
+            BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
+            dialog.setContentView(R.layout.sheet_options_chooser);
+
+            RadioGroup optionsGroup = dialog.findViewById(R.id.selectRadioGroup);
+
+            ((TextView) Objects.requireNonNull(dialog.findViewById(R.id.titleTextView))).setText(R.string.setting_units_distance);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option0))).setText(R.string.setting_units_distance_metrical);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option1))).setText(R.string.setting_units_distance_empirical);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option2))).setVisibility(View.GONE);
+
+            //Which RadioButton should be checked, 1 if empirical, 0 if metrical
+            int checked = prefs.getBoolean("empirical", false) ? R.id.option1 : R.id.option0;
+
+            assert optionsGroup != null;
+            optionsGroup.check(checked);
+
+            optionsGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                switch (checkedId) {
+                    case R.id.option0:
+                        mDistancesTextView.setText(getString(R.string.setting_units_distance) + ": " + getString(R.string.setting_units_distance_metrical));
+                        prefsEdit.putBoolean("empirical", false).apply();
+                        dialog.dismiss();
+                        break;
+                    case R.id.option1:
+                        mDistancesTextView.setText(getString(R.string.setting_units_distance) + ": " + getString(R.string.setting_units_distance_empirical));
+                        prefsEdit.putBoolean("empirical", true).apply();
+                        dialog.dismiss();
+                }
+            });
+
+            dialog.show();
         });
 
         mNdButton.setOnClickListener(v -> {
+            BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
+            dialog.setContentView(R.layout.sheet_options_chooser);
+
+            RadioGroup optionsGroup = dialog.findViewById(R.id.selectRadioGroup);
+
+            ((TextView) Objects.requireNonNull(dialog.findViewById(R.id.titleTextView))).setText(R.string.setting_units_nd);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option0))).setText(R.string.setting_units_nd_stops);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option1))).setText(R.string.setting_units_nd_times);
+            ((RadioButton) Objects.requireNonNull(dialog.findViewById(R.id.option2))).setVisibility(View.GONE);
+
+            //Which RadioButton should be checked, 0 if stops, 1 if factor
+            int checked = prefs.getBoolean("ndstops", false) ? R.id.option0 : R.id.option1;
+
+            assert optionsGroup != null;
+            optionsGroup.check(checked);
+
+            optionsGroup.setOnCheckedChangeListener((group, checkedId) -> {
+                switch (checkedId) {
+                    case R.id.option0:
+                        mNdTextView.setText(getString(R.string.setting_units_nd) + ": " + getString(R.string.setting_units_nd_stops));
+                        prefsEdit.putBoolean("ndstops", true).apply();
+                        dialog.dismiss();
+                        break;
+                    case R.id.option1:
+                        mNdTextView.setText(getString(R.string.setting_units_nd) + ": " + getString(R.string.setting_units_nd_times));
+                        prefsEdit.putBoolean("ndstops", false).apply();
+                        dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+
+
+
+            /*
             int[] items = new int[]{
                     R.string.setting_units_nd_stops,
                     R.string.setting_units_nd_times
@@ -216,6 +288,7 @@ public class SettingsActivity extends AppCompatActivity {
                     })
                     .setDarkTheme(getResources().getBoolean(R.bool.darkmode))
                     .show();
+                    */
         });
 
         View.OnClickListener feedbackClickListener = v -> {
