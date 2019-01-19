@@ -4,4 +4,4 @@ node_js:
 before_install:
 - npm install -g firebase-tools
 script:
-- firebase deploy --token "$FB_TOKEN"fireb
+- firebase deploy --token "$FB_TOKEN"
