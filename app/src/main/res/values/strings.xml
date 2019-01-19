@@ -54,6 +54,9 @@
     <string name="select_cropfactor">Crop factor adjustment</string>
     <string name="description_cropfactor">See how a full-frame lens will look on a sensor cropped sensor.</string>
     <string name="shortcut_cropfactor">Crop factor</string>
+    <string name="select_exif">Read EXIF data</string>
+    <string name="description_exif">Show all the information that your camera saved with the image.</string>
+    <string name="shortcut_exif">Exif reader</string>
 
 
     <string name="settings">Settings</string>
@@ -246,6 +249,7 @@
     <string name="action_add_shortcut">Add shortcut</string>
     <string name="action_advancedSettings">Advanced settings</string>
     <string name="action_show_hidden_cards">Show hidden cards</string>
+    <string name="action_toggle_alpha_cards">Toggle unfinished tools</string>
     <string name="action_used_libraries">Used libraries</string>
 
     <string name="timer_start">Start</string>

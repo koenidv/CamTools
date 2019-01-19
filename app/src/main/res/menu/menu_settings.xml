@@ -3,6 +3,11 @@
     >
 
     <item
+        android:id="@+id/action_toggle_unfinished"
+        android:title="@string/action_toggle_alpha_cards"
+        />
+
+    <item
         android:id="@+id/action_delete_history"
         android:title="@string/delete_history" />
     <item

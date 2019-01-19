@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-       android:shape="rectangle">
-    <solid android:color="@color/colorPrimary"/>
-    <corners android:topLeftRadius="9dp"
-             android:topRightRadius="9dp"/>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <padding
+                android:bottom="@dimen/sheet_padding_bottom"
+                android:left="@dimen/sheet_padding_side"
+                android:right="@dimen/sheet_padding_side"
+                android:top="@dimen/sheet_padding_side"/>
+        </shape>
+    </item>
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+               android:shape="rectangle">
+            <solid android:color="@color/colorPrimary"/>
+            <corners
+                android:bottomLeftRadius="@dimen/sheet_radius_bottom"
+                android:bottomRightRadius="@dimen/sheet_radius_bottom"
+                android:topLeftRadius="@dimen/sheet_radius_top"
+                android:topRightRadius="@dimen/sheet_radius_top"/>
 
-</shape>
+        </shape>
+    </item>
+</layer-list>

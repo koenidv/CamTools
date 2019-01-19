@@ -1,6 +1,7 @@
 package com.koenidv.camtools;
 //  Created by koenidv on 08.12.2018.
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +28,11 @@ public class ToolsFragment extends Fragment {
 
         CardView mContrastCard = view.findViewById(R.id.selectContrastCard);
         CardView mCropfactorCard = view.findViewById(R.id.selectCropfactorCard);
+        CardView mExifCard = view.findViewById(R.id.selectExifCard);
+
+        if (getActivity().getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE).getBoolean("show_unfinished", false)) {
+            mContrastCard.setVisibility(View.VISIBLE);
+        }
 
         mContrastCard.setOnClickListener(v -> {
             mModuleManager.addToHistory(getActivity(), "CalculateContrastActivity");
@@ -37,6 +43,12 @@ public class ToolsFragment extends Fragment {
         mCropfactorCard.setOnClickListener(v -> {
             mModuleManager.addToHistory(getActivity(), "CalculateCropfactorActivity");
             Intent intent = new Intent(getActivity(), CalculateCropfactorActivity.class);
+            startActivity(intent);
+        });
+
+        mExifCard.setOnClickListener(v -> {
+            mModuleManager.addToHistory(getActivity(), "CalculateExifActivity");
+            Intent intent = new Intent(getActivity(), CalculateExifActivity.class);
             startActivity(intent);
         });
 

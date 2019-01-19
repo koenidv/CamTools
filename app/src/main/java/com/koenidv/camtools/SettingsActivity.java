@@ -324,6 +324,9 @@ public class SettingsActivity extends AppCompatActivity {
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
         switch (id) {
+            case R.id.action_toggle_unfinished:
+                prefsEdit.putBoolean("show_unfinished", !prefs.getBoolean("show_unfinished", false));
+                break;
             case R.id.action_delete_history:
                 prefsEdit.remove("history").apply();
                 break;

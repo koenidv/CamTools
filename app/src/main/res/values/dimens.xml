@@ -12,4 +12,9 @@
     <dimen name="cardMarginBottom">8dp</dimen>
     <dimen name="cardMarginCombined">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="sheet_radius_top">8dp</dimen>
+    <dimen name="sheet_radius_bottom">8dp</dimen>
+    <dimen name="sheet_padding_side">8dp</dimen>
+    <dimen name="sheet_padding_bottom">8dp</dimen>
 </resources>

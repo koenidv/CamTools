@@ -124,27 +124,6 @@ class ModuleManager {
     }
 
     /**
-     * Show a bottom sheet with equations
-     *
-     * @param mContext The context to run in.
-     * @param mName    The name of the equation as saved in strings.xml
-     */
-    void showEquations(Context mContext, String mName) {
-        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
-        mDialog.setContentView(R.layout.sheet_equation);
-
-        int mathId = mContext.getResources().getIdentifier("equation_" + mName, "string", mContext.getPackageName());
-        int descrId = mContext.getResources().getIdentifier("equation_" + mName + "_description", "string", mContext.getPackageName());
-
-        io.github.kexanie.library.MathView mMathView = mDialog.findViewById(R.id.math_view);
-        TextView mDescriptionTextView = mDialog.findViewById(R.id.descriptionTextView);
-        mMathView.setText(mContext.getString(mathId));
-        mDescriptionTextView.setText(descrId);
-
-        mDialog.show();
-    }
-
-    /**
      * Show a bottom sheet which lets the user manipulate a Camera
      *
      * @param mContext    The context to run in.
@@ -388,7 +367,7 @@ class ModuleManager {
     }
 
     /**
-     * Switches to position of two cameras
+     * Moves a camera to a specific position
      *
      * @param mContext    The context to run in.
      * @param mFromIndex  The position of the Camera to move.
@@ -397,27 +376,95 @@ class ModuleManager {
      * @param mAdapter    The RecyclerView's adapter.
      * @see EditCamerasActivity
      */
-    void moveCamera(final Context mContext, final int mFromIndex, final int mToIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
+    void moveCamera(final Context mContext, final int mFromIndex, final int mToIndex, @Nullable final List<Camera> mCameraList, @Nullable final RecyclerView.Adapter mAdapter) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
-        String indexFrom = "camera_" + mFromIndex;
-        String indexTo = "camera_" + mToIndex;
+        String moving = prefs.getString("camera_" + mFromIndex, mContext.getString(R.string.camera_default));
 
-        prefsEdit.putString(indexFrom, prefs.getString(indexTo, mContext.getString(R.string.camera_default)))
-                .putString(indexTo, prefs.getString(indexFrom, mContext.getString(R.string.camera_default)));
-        if (prefs.getInt("cameras_last", 0) == mFromIndex) {
-            prefsEdit.putInt("cameras_last", mToIndex);
+        if (mFromIndex < mToIndex) {
+            //Move every camera between from and to one down
+            for (int movethis = mToIndex; movethis > mFromIndex; movethis--) {
+                prefsEdit.putString("camera_" + String.valueOf(movethis - 1), prefs.getString("camera_" + movethis, mContext.getString(R.string.camera_default)));
+            }
+        } else if (mFromIndex > mToIndex) {
+            //As above, but one up
+            for (int movethis = mToIndex; movethis < mFromIndex; movethis++) {
+                prefsEdit.putString("camera_" + String.valueOf(movethis + 1), prefs.getString("camera_" + movethis, mContext.getString(R.string.camera_default)));
+            }
         }
-        if (prefs.getInt("cameras_last", 0) == mToIndex) {
-            prefsEdit.putInt("cameras_last", mFromIndex);
-        }
-        prefsEdit.apply();
 
-        Camera toCard = mCameraList.get(mToIndex);
-        mCameraList.set(mToIndex, mCameraList.get(mFromIndex));
-        mCameraList.set(mFromIndex, toCard);
-        mAdapter.notifyItemMoved(mFromIndex, mToIndex);
+        //Put the moved Camera in the right place
+        prefsEdit.putString("camera_" + mToIndex, moving).apply();
+
+        if (mCameraList != null && mAdapter != null) {
+            Camera toCard = mCameraList.get(mToIndex);
+            mCameraList.set(mToIndex, mCameraList.get(mFromIndex));
+            mCameraList.set(mFromIndex, toCard);
+            mAdapter.notifyItemMoved(mFromIndex, mToIndex);
+        }
+
+    }
+
+    /**
+     * Delete a Camera
+     * Show a bottom sheet which lets the user manipulate a Camera
+     *
+     * @param mContext    The context to run in.
+     * @param mIndex      The position in {@param mCameraList}.
+     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
+     * @param mAdapter    The RecyclerView's adapter.
+     * @see EditCamerasActivity
+     */
+    void deleteCamera(final Context mContext, final int mIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
+        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
+
+        // Move every Camera with a higher index one down
+        for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
+            String indexLast = "camera_" + String.valueOf(move - 1);
+            String indexThis = "camera_" + move;
+
+            prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
+        }
+
+        // Use the standard Camera if the deleted Camera was used last
+        if (prefs.getInt("cameras_last", 0) == mIndex) {
+            prefsEdit.putInt("cameras_last", 0);
+        }
+
+        // Remove the last entry (which is now the same as the second-to-last entry
+        String index = "camera_" + prefs.getInt("cameras_amount", 0);
+        prefsEdit.remove(index);
+
+        // The amount of cameras is now one smaller
+        prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).commit();
+
+        if (mCameraList != null && mAdapter != null) {
+            mCameraList.remove(mIndex);
+            mAdapter.notifyItemRemoved(mIndex);
+        }
+    }
+
+    /**
+     * Show a bottom sheet with equations
+     *
+     * @param mContext The context to run in.
+     * @param mName    The name of the equation as saved in strings.xml
+     */
+    void showEquations(Context mContext, String mName) {
+        final BottomSheetDialog mDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
+        mDialog.setContentView(R.layout.sheet_equation);
+
+        int mathId = mContext.getResources().getIdentifier("equation_" + mName, "string", mContext.getPackageName());
+        int descrId = mContext.getResources().getIdentifier("equation_" + mName + "_description", "string", mContext.getPackageName());
+
+        io.github.kexanie.library.MathView mMathView = mDialog.findViewById(R.id.math_view);
+        TextView mDescriptionTextView = mDialog.findViewById(R.id.descriptionTextView);
+        mMathView.setText(mContext.getString(mathId));
+        mDescriptionTextView.setText(descrId);
+
+        mDialog.show();
     }
 
     void showHistory(Context mContext) {
@@ -513,46 +560,6 @@ class ModuleManager {
     int focalLength(String mText) {
         double in = Double.valueOf(mText);
         return (int) Math.round(Math.sqrt(5 * in));
-    }
-
-    /**
-     * Delete a Camera
-     * Show a bottom sheet which lets the user manipulate a Camera
-     *
-     * @param mContext    The context to run in.
-     * @param mIndex      The position in {@param mCameraList}.
-     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
-     * @param mAdapter    The RecyclerView's adapter.
-     * @see EditCamerasActivity
-     */
-    void deleteCamera(final Context mContext, final int mIndex, final List<Camera> mCameraList, final RecyclerView.Adapter mAdapter) {
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
-
-        // Move every Camera with a higher index one down
-        for (int move = mIndex + 1; move <= prefs.getInt("cameras_amount", 0); move++) {
-            String indexLast = "camera_" + String.valueOf(move - 1);
-            String indexThis = "camera_" + move;
-
-            prefsEdit.putString(indexLast, prefs.getString(indexThis, mContext.getString(R.string.camera_default))).apply();
-        }
-
-        // Use the standard Camera if the deleted Camera was used last
-        if (prefs.getInt("cameras_last", 0) == mIndex) {
-            prefsEdit.putInt("cameras_last", 0);
-        }
-
-        // Remove the last entry (which is now the same as the second-to-last entry
-        String index = "camera_" + prefs.getInt("cameras_amount", 0);
-        prefsEdit.remove(index);
-
-        // The amount of cameras is now one smaller
-        prefsEdit.putInt("cameras_amount", prefs.getInt("cameras_amount", 0) - 1).commit();
-
-        if (mCameraList != null && mAdapter != null) {
-            mCameraList.remove(mIndex);
-            mAdapter.notifyItemRemoved(mIndex);
-        }
     }
 
     /**

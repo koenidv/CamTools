@@ -15,29 +15,29 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
 import com.leinardi.android.speeddial.SpeedDialView;
 
-import org.michaelbel.bottomsheet.BottomSheet;
-
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import me.rishabhkhanna.recyclerswipedrag.RecyclerHelper;
 
 public class EditCamerasActivity extends AppCompatActivity {
 
-    private final List<Camera> mCameraList = new ArrayList<>();
+    private final ArrayList<Camera> mCameraList = new ArrayList<>();
     private final RecyclerView.Adapter mAdapter = new camerasAdapter(mCameraList);
     private Snackbar undoSnackbar;
 
@@ -45,7 +45,7 @@ public class EditCamerasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_cameras);
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
+        final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEdit = prefs.edit();
         final ModuleManager mModuleManager = new ModuleManager();
         Gson gson = new Gson();
@@ -67,6 +67,16 @@ public class EditCamerasActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+
+        RecyclerHelper touchHelper = new RecyclerHelper<Camera>(mCameraList, mAdapter);
+        touchHelper.setRecyclerItemDragEnabled(true)
+                .setRecyclerItemSwipeEnabled(false)
+                .setOnDragItemListener((mFrom, mTo) -> {
+                    mModuleManager.moveCamera(this, mFrom, mTo, null, null);
+                });
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelper);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
 
 
         /*
@@ -244,6 +254,34 @@ public class EditCamerasActivity extends AppCompatActivity {
         final RecyclerView rv = findViewById(R.id.camerasRecyclerView);
         final int position = rv.getChildAdapterPosition(view);
 
+
+        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
+        dialog.setContentView(R.layout.sheet_camera_actions);
+
+        ((TextView) Objects.requireNonNull(dialog.findViewById(R.id.titleTextView))).setText(((TextView) view.findViewById(R.id.nameTextView)).getText());
+
+        dialog.findViewById(R.id.detailsTextView).setOnClickListener(v -> {
+
+        });
+        dialog.findViewById(R.id.useTextView).setOnClickListener(v -> {
+
+        });
+        dialog.findViewById(R.id.editTextView).setOnClickListener(v -> {
+
+        });
+        dialog.findViewById(R.id.deleteTextView).setOnClickListener(v -> {
+
+        });
+
+        dialog.show();
+
+
+
+
+        /*
+        // Using BottomSheetMenu, Deprecated
+
+
         List<String> options = new ArrayList<>();
         List<Integer> icons = new ArrayList<>();
         int counter = -1;
@@ -258,17 +296,19 @@ public class EditCamerasActivity extends AppCompatActivity {
         icons.add(R.drawable.ic_info);
         position_details = counter + 1;
         counter++;
-        if (position != 0) {
-            options.add(getString(R.string.move_up));
-            icons.add(R.drawable.ic_up);
-            position_up = counter + 1;
-            counter++;
-        }
-        if (position != rv.getChildCount() - 1) {
-            options.add(getString(R.string.move_down));
-            icons.add(R.drawable.ic_down);
-            position_down = counter + 1;
-            counter++;
+        if (prefs.getBoolean("camera_move_legacy", false)) {
+            if (position != 0) {
+                options.add(getString(R.string.move_up));
+                icons.add(R.drawable.ic_up);
+                position_up = counter + 1;
+                counter++;
+            }
+            if (position != rv.getChildCount() - 1) {
+                options.add(getString(R.string.move_down));
+                icons.add(R.drawable.ic_down);
+                position_down = counter + 1;
+                counter++;
+            }
         }
         if (rv.getChildCount() > 1 && position != prefs.getInt("cameras_last", 0)) {
             options.add(getString(R.string.use_next));
@@ -351,5 +391,6 @@ public class EditCamerasActivity extends AppCompatActivity {
         });
         mBuilder.setDarkTheme(getResources().getBoolean(R.bool.darkmode))
                 .show();
+        */
     }
 }
