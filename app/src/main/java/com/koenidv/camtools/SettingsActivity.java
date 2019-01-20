@@ -266,29 +266,6 @@ public class SettingsActivity extends AppCompatActivity {
             });
 
             dialog.show();
-
-
-
-            /*
-            int[] items = new int[]{
-                    R.string.setting_units_nd_stops,
-                    R.string.setting_units_nd_times
-            };
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(SettingsActivity.this);
-            mBuilder.setTitle(getString(R.string.setting_units_nd))
-                    .setItems(items, (dialog, which) -> {
-                        prefsEdit.putBoolean("ndstops", which == 0).apply();
-                        String ndText1 = getString(R.string.setting_units_nd) + ": ";
-                        if (which == 1) {
-                            ndText1 += getString(R.string.setting_units_nd_times);
-                        } else {
-                            ndText1 += getString(R.string.setting_units_nd_stops);
-                        }
-                        mNdTextView.setText(ndText1);
-                    })
-                    .setDarkTheme(getResources().getBoolean(R.bool.darkmode))
-                    .show();
-                    */
         });
 
         View.OnClickListener feedbackClickListener = v -> {

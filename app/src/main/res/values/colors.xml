@@ -9,7 +9,7 @@
     <color name="settings_darkmodeBackground">#303030</color>
     <color name="dial_overlay">#7fffffff</color>
     <color name="textColor_normal">#000000</color>
-    <color name="textColor_secondary">#404040</color>
+    <color name="textColor_secondary">#808080</color>
 
     <color name="background_light_lighter">#ffffff</color>
     <color name="background_light_normal">#eeeeee</color>

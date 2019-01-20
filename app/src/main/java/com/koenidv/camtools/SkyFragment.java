@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.javiersantos.bottomdialogs.BottomDialog;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -37,24 +35,12 @@ public class SkyFragment extends Fragment {
             Intent intent = new Intent(getActivity(), CalculateSunOverviewActivity.class);
             startActivity(intent);
         });
-        mDetailsCard.setOnClickListener(v -> new BottomDialog.Builder(getContext())
-                .setTitle(R.string.coming_soon_title)
-                .setContent(R.string.coming_soon_description)
-                .setPositiveText(R.string.okay)
-                .setPositiveBackgroundColorResource(R.color.colorAccent)
-                .show());
-        mArCard.setOnClickListener(v -> new BottomDialog.Builder(getContext())
-                .setTitle(R.string.coming_soon_title)
-                .setContent(R.string.coming_soon_description)
-                .setPositiveText(R.string.okay)
-                .setPositiveBackgroundColorResource(R.color.colorAccent)
-                .show());
-        mPollutionCard.setOnClickListener(v -> new BottomDialog.Builder(getContext())
-                .setTitle(R.string.coming_soon_title)
-                .setContent(R.string.coming_soon_description)
-                .setPositiveText(R.string.okay)
-                .setPositiveBackgroundColorResource(R.color.colorAccent)
-                .show());
+        mDetailsCard.setOnClickListener(v -> {
+        });
+        mArCard.setOnClickListener(v -> {
+        });
+        mPollutionCard.setOnClickListener(v -> {
+        });
 
     }
 }

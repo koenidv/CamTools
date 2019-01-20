@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -72,7 +73,7 @@ public class EditCamerasActivity extends AppCompatActivity {
         touchHelper.setRecyclerItemDragEnabled(true)
                 .setRecyclerItemSwipeEnabled(false)
                 .setOnDragItemListener((mFrom, mTo) -> {
-                    mModuleManager.moveCamera(this, mFrom, mTo, null, null);
+                    mModuleManager.moveCamera(this, mFrom, mTo);
                 });
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelper);
         itemTouchHelper.attachToRecyclerView(mRecyclerView);
@@ -259,11 +260,18 @@ public class EditCamerasActivity extends AppCompatActivity {
         final int position = rv.getChildAdapterPosition(view);
         RecyclerView.Adapter adapter = rv.getAdapter();
 
+        Camera selectedCamera = (new Gson()).fromJson(prefs.getString("camera_" + position, getString(R.string.camera_default)), Camera.class);
 
         BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
         dialog.setContentView(R.layout.sheet_camera_actions);
 
-        ((TextView) Objects.requireNonNull(dialog.findViewById(R.id.titleTextView))).setText(((TextView) view.findViewById(R.id.nameTextView)).getText());
+        TextView titleTextView = dialog.findViewById(R.id.titleTextView);
+        titleTextView.setText(selectedCamera.getName());
+        titleTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(selectedCamera.getIcon(), 0, 0, 0);
+        titleTextView.setCompoundDrawablePadding((int) (16 * getResources().getDisplayMetrics().density + 0.5f));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            titleTextView.setCompoundDrawableTintList(getResources().getColorStateList(R.color.textColor_secondary, getTheme()));
+        }
 
         try {
             //Hide "Use" option if the camera is already currently active

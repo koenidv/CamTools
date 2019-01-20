@@ -9,31 +9,29 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.javiersantos.bottomdialogs.BottomDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 
-import org.michaelbel.bottomsheet.BottomSheet;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -71,7 +69,7 @@ class ModuleManager {
      * @param mType           Defines what should be saved to {@param mValue}.
      *                        Should be "coc" for circle of confusion, "pixelpitch" for pixel pitch or "cropfactor" for cropfactor.
      */
-    void selectCamera(final Context mContext, final TextView mCameraTextView, final float[] mValue, final String mType) {
+    void selectCamera(final Context mContext, @Nullable final TextView mCameraTextView, @Nullable final float[] mValue, @Nullable final String mType) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
         Gson gson = new Gson();
@@ -79,47 +77,103 @@ class ModuleManager {
         if (prefs.getInt("cameras_amount", -1) == -1) {
             mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
         } else {
-            final List<String> cameras = new ArrayList<>();
-            final List<Integer> icons = new ArrayList<>();
-            for (int camera = 0; camera <= prefs.getInt("cameras_amount", 0); camera++) {
-                Camera thisCamera = gson.fromJson(prefs.getString("camera_" + camera, mContext.getString(R.string.camera_default)), Camera.class);
-                cameras.add(thisCamera.getName());
-                icons.add(thisCamera.getIcon());
-            }
-            cameras.add(mContext.getString(R.string.calculate_camera_manage));
+            //Build a bottomsheetdialog
+            BottomSheetDialog dialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
 
-            icons.add(R.drawable.ic_settings);
-            int[] iconlist = new int[icons.size()];
-            Iterator<Integer> iterator = icons.iterator();
-            for (int i = 0; i < iconlist.length; i++) {
-                iconlist[i] = iterator.next();
-            }
+            //Get 16dp as pixel size
+            float scale = mContext.getResources().getDisplayMetrics().density;
+            int dpAsPixels = (int) (16 * scale + 0.5f);
 
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-            mBuilder.setTitle(mContext.getString(R.string.calculate_camera_choose))
-                    .setItems(cameras.toArray(new String[0]), iconlist, (dialog, which) -> {
-                        if (which == cameras.size() - 1) {
-                            mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
-                        } else {
-                            prefsEdit.putInt("cameras_last", which).apply();
-                            Camera mCamera = gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class);
-                            switch (mType) {
-                                case "coc":
-                                    mValue[0] = mCamera.getConfusion();
-                                    break;
-                                case "pixelpitch":
-                                    mValue[0] = mCamera.getPixelpitch();
-                                    break;
-                                case "cropfactor":
-                                    mValue[0] = mCamera.getCropfactor();
-                                    break;
-                            }
-                            mCameraTextView.setText(mContext.getString(R.string.calculate_camera)
-                                    .replace("%s", gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class).getName()));
+            //Ripple effect ressource
+            TypedValue outValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                    outValue, true);
+
+            //Create a LinearLayout
+            LinearLayout linearLayout = new LinearLayout(dialog.getContext());
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            //Create a TextView with a height of 48dp and add it to the LinearLayout
+            TextView titleTextView = new TextView(dialog.getContext());
+            titleTextView.setText(mContext.getString(R.string.calculate_camera_choose));
+            titleTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Medium);
+            titleTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_secondary));
+            titleTextView.setHeight((int) (48 * scale + 0.5f));
+            titleTextView.setGravity(Gravity.CENTER_VERTICAL);
+            titleTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+            linearLayout.addView(titleTextView);
+
+            //Add a TextView with an icon and an onClickListener for every camera
+            for (int i = 0; i <= prefs.getInt("cameras_amount", 0); i++) {
+                Camera thisCamera = gson.fromJson(prefs.getString("camera_" + i, mContext.getString(R.string.camera_default)), Camera.class);
+
+                TextView optionTextView = new TextView(dialog.getContext());
+                optionTextView.setText(thisCamera.getName());
+                optionTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Menu);
+                optionTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_normal));
+
+                optionTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(thisCamera.getIcon(), 0, 0, 0);
+                optionTextView.setCompoundDrawablePadding(dpAsPixels);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    optionTextView.setCompoundDrawableTintList(mContext.getResources().getColorStateList(R.color.textColor_secondary, mContext.getTheme()));
+                }
+
+                optionTextView.setHeight((int) (48 * scale + 0.5f));
+                optionTextView.setGravity(Gravity.CENTER_VERTICAL);
+                optionTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+                optionTextView.setBackgroundResource(outValue.resourceId);
+
+                int which = i;
+                optionTextView.setOnClickListener(v -> {
+                    prefsEdit.putInt("cameras_last", which).apply();
+
+                    if (mType != null && mValue != null) {
+                        Camera mCamera = gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class);
+                        switch (mType) {
+                            case "coc":
+                                mValue[0] = mCamera.getConfusion();
+                                break;
+                            case "pixelpitch":
+                                mValue[0] = mCamera.getPixelpitch();
+                                break;
+                            case "cropfactor":
+                                mValue[0] = mCamera.getCropfactor();
+                                break;
                         }
-                    })
-                    .setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
-                    .show();
+                    }
+                    if (mCameraTextView != null) {
+                        mCameraTextView.setText(mContext.getString(R.string.calculate_camera)
+                                .replace("%s", gson.fromJson(prefs.getString("camera_" + which, mContext.getString(R.string.camera_default)), Camera.class).getName()));
+                    }
+                    dialog.dismiss();
+                });
+
+                linearLayout.addView(optionTextView);
+            }
+
+            //Add an option to manage the cameras
+            TextView manageTextView = new TextView(dialog.getContext());
+            manageTextView.setText(mContext.getString(R.string.calculate_camera_manage));
+            manageTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Menu);
+            manageTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_normal));
+            manageTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_settings, 0, 0, 0);
+            manageTextView.setCompoundDrawablePadding(dpAsPixels);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                manageTextView.setCompoundDrawableTintList(mContext.getResources().getColorStateList(R.color.textColor_secondary, mContext.getTheme()));
+            }
+            manageTextView.setHeight((int) (48 * scale + 0.5f));
+            manageTextView.setGravity(Gravity.CENTER_VERTICAL);
+            manageTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+            manageTextView.setBackgroundResource(outValue.resourceId);
+            manageTextView.setOnClickListener(v -> {
+                dialog.dismiss();
+                mContext.startActivity(new Intent(mContext, EditCamerasActivity.class));
+            });
+            linearLayout.addView(manageTextView);
+
+            //Set the LinearLayout as content view and display the BottomSheet
+            dialog.setContentView(linearLayout);
+            dialog.show();
         }
     }
 
@@ -144,6 +198,8 @@ class ModuleManager {
         mDialog.setContentView(R.layout.sheet_camera_add_custom);
         Objects.requireNonNull(mDialog.getWindow()).setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         FrameLayout bottomSheet = mDialog.findViewById(R.id.design_bottom_sheet);
+
+        assert bottomSheet != null;
         BottomSheetBehavior.from(bottomSheet).setState(BottomSheetBehavior.STATE_EXPANDED);
 
         TextView mTitleTextView = mDialog.findViewById(R.id.titleTextView);
@@ -159,6 +215,16 @@ class ModuleManager {
         final Button mCancelButton = mDialog.findViewById(R.id.cancelButton);
         final Button mSaveButton = mDialog.findViewById(R.id.saveButton);
 
+        assert mTitleTextView != null;
+        assert mIconButton != null;
+        assert mNameEditText != null;
+        assert mResolutionXEditText != null;
+        assert mResolutionYEditText != null;
+        assert mSizeXEditText != null;
+        assert mSizeYEditText != null;
+        assert mConfusionEditText != null;
+        assert mSaveButton != null;
+
         final String index = "camera_" + String.valueOf(mIndex);
         Camera thisCamera = gson.fromJson(prefs.getString(index, null), Camera.class);
 
@@ -173,8 +239,8 @@ class ModuleManager {
             mConfusionEditText.setText(String.valueOf(thisCamera.getConfusion()));
         } else {
             thisCamera = new Camera();
-            mDialog.findViewById(R.id.cocLabelTextView).setVisibility(View.GONE);
-            mConfusionEditText.setVisibility(View.GONE);
+            ((TextView) Objects.requireNonNull(mDialog.findViewById(R.id.cocLabelTextView))).setVisibility(View.GONE);
+            Objects.requireNonNull(mConfusionEditText).setVisibility(View.GONE);
             mSaveButton.setEnabled(false);
             mSaveButton.getBackground().setAlpha(0);
             mSaveButton.setTextColor(mContext.getResources().getColor(R.color.gray));
@@ -201,89 +267,146 @@ class ModuleManager {
         mResolutionYEditText.addTextChangedListener(checkOnTextChanged);
         mConfusionEditText.addTextChangedListener(checkOnTextChanged);
 
+        //Show a bottomsheetdialog to select an icon
         mIconButton.setOnClickListener(v -> {
-            BottomSheet.Builder sheet = new BottomSheet.Builder(mContext);
-            int[] items = {
-                    R.string.camera_icon_photo,
-                    R.string.camera_icon_shutter,
-                    R.string.camera_icon_video,
-                    R.string.camera_icon_phone
-            };
+            BottomSheetDialog iconDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
+            iconDialog.setContentView(R.layout.sheet_camera_choose_icon);
 
-            int[] icons = {
-                    R.drawable.camera_photo,
-                    R.drawable.camera_shutter,
-                    R.drawable.camera_video,
-                    R.drawable.camera_phone
-            };
-
-            sheet.setItems(items, icons, (dialog, which) -> {
-                switch (which) {
-                    case 0:
-                        thisCameraFinal.setIcon(R.drawable.camera_photo);
-                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_photo));
-                        break;
-                    case 1:
-                        thisCameraFinal.setIcon(R.drawable.camera_shutter);
-                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_shutter));
-                        break;
-                    case 2:
-                        thisCameraFinal.setIcon(R.drawable.camera_video);
-                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_video));
-                        break;
-                    case 3:
-                        thisCameraFinal.setIcon(R.drawable.camera_phone);
-                        mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_phone));
-                        break;
-                }
+            ((View) Objects.requireNonNull(iconDialog.findViewById(R.id.photoTextView))).setOnClickListener(optionview -> {
+                iconDialog.dismiss();
+                thisCameraFinal.setIcon(R.drawable.camera_photo);
+                mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_photo));
+            });
+            ((View) Objects.requireNonNull(iconDialog.findViewById(R.id.shutterTextView))).setOnClickListener(optionview -> {
+                iconDialog.dismiss();
+                thisCameraFinal.setIcon(R.drawable.camera_shutter);
+                mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_shutter));
+            });
+            ((View) Objects.requireNonNull(iconDialog.findViewById(R.id.videoTextView))).setOnClickListener(optionview -> {
+                iconDialog.dismiss();
+                thisCameraFinal.setIcon(R.drawable.camera_video);
+                mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_video));
+            });
+            ((View) Objects.requireNonNull(iconDialog.findViewById(R.id.phoneTextView))).setOnClickListener(optionview -> {
+                iconDialog.dismiss();
+                thisCameraFinal.setIcon(R.drawable.camera_phone);
+                mIconButton.setImageDrawable(mContext.getDrawable(R.drawable.camera_phone));
             });
 
-            sheet.setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
-                    .show();
+            iconDialog.show();
         });
 
+        assert mResolutionPresetTextView != null;
         mResolutionPresetTextView.setOnClickListener(v -> {
-            final List<String> presets = new ArrayList<>();
+            //Build a bottomsheetdialog
+            BottomSheetDialog presetDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
+
+            //Get 16dp as pixel size
+            float scale = mContext.getResources().getDisplayMetrics().density;
+            int dpAsPixels = (int) (16 * scale + 0.5f);
+
+            //Ripple effect ressource
+            TypedValue outValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                    outValue, true);
+
+            //Create a LinearLayout
+            LinearLayout linearLayout = new LinearLayout(mContext);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            //Create a TextView with a height of 48dp and add it to the LinearLayout
+            TextView titleTextView = new TextView(mContext);
+            titleTextView.setText(mContext.getString(R.string.preset_choose));
+            titleTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Medium);
+            titleTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_secondary));
+            titleTextView.setHeight((int) (48 * scale + 0.5f));
+            titleTextView.setGravity(Gravity.CENTER_VERTICAL);
+            titleTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+            linearLayout.addView(titleTextView);
+
             for (int preset = 0; preset <= mContext.getResources().getInteger(R.integer.preset_res_amount); preset++) {
                 int resId = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(preset), "string", mContext.getPackageName());
-                presets.add(mContext.getString(resId));
+
+                TextView presetTextView = new TextView(mContext);
+                presetTextView.setText(mContext.getString(resId));
+                presetTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Menu);
+                presetTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_normal));
+                presetTextView.setHeight((int) (48 * scale + 0.5f));
+                presetTextView.setGravity(Gravity.CENTER_VERTICAL);
+                presetTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+
+                final String which = String.valueOf(preset);
+                presetTextView.setOnClickListener(optionview -> {
+                    int resXid = mContext.getResources().getIdentifier("preset_res_" + which + "_x", "string", mContext.getPackageName());
+                    int resYid = mContext.getResources().getIdentifier("preset_res_" + which + "_y", "string", mContext.getPackageName());
+
+                    mResolutionXEditText.setText(mContext.getString(resXid));
+                    mResolutionYEditText.setText(mContext.getString(resYid));
+                });
+                linearLayout.addView(presetTextView);
             }
 
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-            mBuilder.setTitle(mContext.getString(R.string.preset_choose))
-                    .setItems(presets.toArray(new String[0]), (dialog, which) -> {
-                        int resXid = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_x", "string", mContext.getPackageName());
-                        int resYid = mContext.getResources().getIdentifier("preset_res_" + String.valueOf(which) + "_y", "string", mContext.getPackageName());
-
-                        mResolutionXEditText.setText(mContext.getString(resXid));
-                        mResolutionYEditText.setText(mContext.getString(resYid));
-                    })
-                    .setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
-                    .show();
+            presetDialog.setContentView(linearLayout);
+            presetDialog.show();
         });
 
+        assert mSizePresetTextView != null;
         mSizePresetTextView.setOnClickListener(v -> {
-            final List<String> presets = new ArrayList<>();
+            //Build a bottomsheetdialog
+            BottomSheetDialog presetDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
+
+            //Get 16dp as pixel size
+            float scale = mContext.getResources().getDisplayMetrics().density;
+            int dpAsPixels = (int) (16 * scale + 0.5f);
+
+            //Ripple effect ressource
+            TypedValue outValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                    outValue, true);
+
+            //Create a LinearLayout
+            LinearLayout linearLayout = new LinearLayout(mContext);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            //Create a TextView with a height of 48dp and add it to the LinearLayout
+            TextView titleTextView = new TextView(mContext);
+            titleTextView.setText(mContext.getString(R.string.preset_choose));
+            titleTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Medium);
+            titleTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_secondary));
+            titleTextView.setHeight((int) (48 * scale + 0.5f));
+            titleTextView.setGravity(Gravity.CENTER_VERTICAL);
+            titleTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+            linearLayout.addView(titleTextView);
+
             for (int preset = 0; preset <= mContext.getResources().getInteger(R.integer.preset_size_amount); preset++) {
                 int resId = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(preset), "string", mContext.getPackageName());
-                presets.add(mContext.getString(resId));
+
+                TextView presetTextView = new TextView(mContext);
+                presetTextView.setText(mContext.getString(resId));
+                presetTextView.setTextAppearance(mContext, android.R.style.TextAppearance_Material_Menu);
+                presetTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_normal));
+                presetTextView.setHeight((int) (48 * scale + 0.5f));
+                presetTextView.setGravity(Gravity.CENTER_VERTICAL);
+                presetTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+
+                final String which = String.valueOf(preset);
+                presetTextView.setOnClickListener(optionview -> {
+                    int resXid = mContext.getResources().getIdentifier("preset_size_" + which + "_x", "string", mContext.getPackageName());
+                    int resYid = mContext.getResources().getIdentifier("preset_size_" + which + "_y", "string", mContext.getPackageName());
+                    int cocid = mContext.getResources().getIdentifier("preset_size_" + which + "_coc", "string", mContext.getPackageName());
+
+                    mResolutionXEditText.setText(mContext.getString(resXid));
+                    mResolutionYEditText.setText(mContext.getString(resYid));
+                    mConfusionEditText.setText(mContext.getString(cocid));
+                });
+                linearLayout.addView(presetTextView);
             }
 
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-            mBuilder.setTitle(mContext.getString(R.string.preset_choose))
-                    .setItems(presets.toArray(new String[0]), (dialog, which) -> {
-                        int sizeXid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_x", "string", mContext.getPackageName());
-                        int sizeYid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_y", "string", mContext.getPackageName());
-                        int cocid = mContext.getResources().getIdentifier("preset_size_" + String.valueOf(which) + "_coc", "string", mContext.getPackageName());
-
-                        mSizeXEditText.setText(mContext.getString(sizeXid));
-                        mSizeYEditText.setText(mContext.getString(sizeYid));
-                        mConfusionEditText.setText(mContext.getString(cocid));
-                    })
-                    .setDarkTheme(mContext.getResources().getBoolean(R.bool.darkmode))
-                    .show();
+            presetDialog.setContentView(linearLayout);
+            presetDialog.show();
         });
 
+        assert mCancelButton != null;
         mCancelButton.setOnClickListener(v -> mDialog.dismiss());
 
         mSaveButton.setOnClickListener(v -> {
@@ -369,14 +492,12 @@ class ModuleManager {
     /**
      * Moves a camera to a specific position
      *
-     * @param mContext    The context to run in.
-     * @param mFromIndex  The position of the Camera to move.
-     * @param mToIndex    The position to move the Camera to.
-     * @param mCameraList A list in which all {@link Camera} are stored to display them in the RecyclerView.
-     * @param mAdapter    The RecyclerView's adapter.
+     * @param mContext   The context to run in.
+     * @param mFromIndex The position of the Camera to move.
+     * @param mToIndex   The position to move the Camera to.
      * @see EditCamerasActivity
      */
-    void moveCamera(final Context mContext, final int mFromIndex, final int mToIndex, @Nullable final List<Camera> mCameraList, @Nullable final RecyclerView.Adapter mAdapter) {
+    void moveCamera(final Context mContext, final int mFromIndex, final int mToIndex) {
         @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
         @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
 
@@ -407,15 +528,6 @@ class ModuleManager {
 
         //Put the moved Camera in the right place
         prefsEdit.putString("camera_" + mToIndex, moving).apply();
-
-
-
-        if (mCameraList != null && mAdapter != null) {
-            Camera toCard = mCameraList.get(mToIndex);
-            mCameraList.set(mToIndex, mCameraList.get(mFromIndex));
-            mCameraList.set(mFromIndex, toCard);
-            mAdapter.notifyItemMoved(mFromIndex, mToIndex);
-        }
 
     }
 
@@ -474,6 +586,9 @@ class ModuleManager {
 
         io.github.kexanie.library.MathView mMathView = mDialog.findViewById(R.id.math_view);
         TextView mDescriptionTextView = mDialog.findViewById(R.id.descriptionTextView);
+        assert mMathView != null;
+        assert mDescriptionTextView != null;
+
         mMathView.setText(mContext.getString(mathId));
         mDescriptionTextView.setText(descrId);
 
@@ -485,35 +600,68 @@ class ModuleManager {
             @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = mContext.getSharedPreferences(mContext.getString(R.string.app_name), Context.MODE_PRIVATE);
             Gson gson = new Gson();
 
-            @SuppressWarnings("unchecked") ArrayList<String> historyClasses = gson.fromJson(prefs.getString("history", gson.toJson(new ArrayList<String>())), ArrayList.class);
-            ArrayList<String> historyNames = new ArrayList<>();
-            for (int i = 0; i < historyClasses.size(); i++) {
-                // Get activity label for each activity
-                String label = historyClasses.get(i);
+            //Build a bottomsheetdialog
+            BottomSheetDialog historyDialog = new BottomSheetDialog(mContext, R.style.AppBottomSheetDialogTheme);
+
+            //Get 16dp as pixel size
+            float scale = mContext.getResources().getDisplayMetrics().density;
+            int dpAsPixels = (int) (16 * scale + 0.5f);
+
+            //Ripple effect ressource
+            TypedValue outValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(android.R.attr.selectableItemBackground,
+                    outValue, true);
+
+            //Create a LinearLayout
+            LinearLayout linearLayout = new LinearLayout(mContext);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+            //Create a TextView with a height of 48dp and add it to the LinearLayout
+            TextView titleTextView = new TextView(mContext);
+            titleTextView.setText(mContext.getString(R.string.history));
+            titleTextView.setTextAppearance(android.R.style.TextAppearance_Material_Medium);
+            titleTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_secondary, mContext.getTheme()));
+            titleTextView.setHeight((int) (48 * scale + 0.5f));
+            titleTextView.setGravity(Gravity.CENTER_VERTICAL);
+            titleTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+            linearLayout.addView(titleTextView);
+
+            @SuppressWarnings("unchecked") ArrayList<String> historyActivities = gson.fromJson(prefs.getString("history", gson.toJson(new ArrayList<String>())), ArrayList.class);
+
+            for (String historyActivity : historyActivities) {
+                String label = historyActivity;
                 try {
                     label = mContext.getResources().getString(
                             mContext.getPackageManager().getActivityInfo(
-                                    new ComponentName(mContext.getPackageName(), mContext.getPackageName() + "." + historyClasses.get(i)), 0
+                                    new ComponentName(mContext.getPackageName(), mContext.getPackageName() + "." + historyActivity), 0
                             ).labelRes);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
-                historyNames.add(label);
+
+                TextView entryTextView = new TextView(mContext);
+                entryTextView.setText(label);
+                entryTextView.setTextAppearance(android.R.style.TextAppearance_Material_Menu);
+                entryTextView.setTextColor(mContext.getResources().getColor(R.color.textColor_normal, mContext.getTheme()));
+                entryTextView.setHeight((int) (48 * scale + 0.5f));
+                entryTextView.setGravity(Gravity.CENTER_VERTICAL);
+                entryTextView.setPadding(dpAsPixels, 0, dpAsPixels, 0);
+                entryTextView.setOnClickListener(optionview -> {
+                    try {
+                        Class<?> c = Class.forName(mContext.getPackageName() + "." + historyActivity);
+                        Intent intent = new Intent(mContext, c);
+                        mContext.startActivity(intent);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                });
+                linearLayout.addView(entryTextView);
             }
 
-            BottomSheet.Builder mBuilder = new BottomSheet.Builder(mContext);
-            mBuilder.setItems(historyNames.toArray(new String[0]), (dialog, which) -> {
-                try {
-                    Class<?> c = Class.forName(mContext.getPackageName() + "." + historyClasses.get(which));
-                    Intent intent = new Intent(mContext, c);
-                    mContext.startActivity(intent);
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-            if (historyClasses.size() > 0) {
-                mBuilder.show();
-            }
+            historyDialog.setContentView(linearLayout);
+
+            if (historyActivities.size() > 0)
+                historyDialog.show();
         }
     }
 
@@ -535,6 +683,7 @@ class ModuleManager {
                 Intent intent = manager.getLaunchIntentForPackage("com.grymala.ruler");
                 mContext.startActivity(intent);
             } catch (ActivityNotFoundException | NullPointerException anfet) {
+                /* TODO
                 new BottomDialog.Builder(mContext)
                         .setTitle(R.string.no_ar_measure_app_installed)
                         .setContent(R.string.no_ar_measure_app_installed_description)
@@ -557,6 +706,7 @@ class ModuleManager {
                             }
                         })
                         .show();
+                        */
             }
         }
     }

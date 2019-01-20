@@ -362,4 +362,9 @@
     <string name="no_ar_measure_app_installed_description">Du kannst Measure oder AruleR direkt von hier öffnen, sobald eine der beiden Apps installiert ist.</string>
     <string name="install_measure_by_google">Measure installieren</string>
     <string name="install_aruler_by_grymala">AruleR installieren</string>
+    <string name="select_exif">EXIF-Daten auslesen</string>
+    <string name="description_exif">Zeige all die Informationen, die deine Kamera mit einem Bild gespeichert hat, an.</string>
+    <string name="shortcut_exif">EXIF lesen</string>
+    <string name="action_toggle_alpha_cards">Unfertige Werkzeuge umschalten</string>
+    <string name="history">Verlauf</string>
 </resources>

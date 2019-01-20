@@ -14,6 +14,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/textColor_secondary"
         tools:text="Select"/>
 
     <RadioGroup
@@ -29,6 +30,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            android:textColor="@color/textColor_normal"
+            android:buttonTint="@color/textColor_secondary"
             tools:text="Option 0"/>
 
         <RadioButton
@@ -39,6 +42,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            android:textColor="@color/textColor_normal"
+            android:buttonTint="@color/textColor_secondary"
             tools:text="Option 1"/>
 
         <RadioButton
@@ -49,6 +54,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+            android:textColor="@color/textColor_normal"
+            android:buttonTint="@color/textColor_secondary"
             tools:text="Option 2"/>
     </RadioGroup>
 

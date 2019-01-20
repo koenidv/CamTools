@@ -7,8 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.javiersantos.bottomdialogs.BottomDialog;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
@@ -42,12 +40,8 @@ public class ExposureFragment extends Fragment {
             Intent intent = new Intent(getActivity(), CalculateSpotStarsActivity.class);
             startActivity(intent);
         });
-        mTrailsCard.setOnClickListener(v -> new BottomDialog.Builder(getContext())
-                .setTitle(R.string.coming_soon_title)
-                .setContent(R.string.coming_soon_description)
-                .setPositiveText(R.string.okay)
-                .setPositiveBackgroundColorResource(R.color.colorAccent)
-                .show());
+        mTrailsCard.setOnClickListener(v -> {
+        });
 
     }
 }

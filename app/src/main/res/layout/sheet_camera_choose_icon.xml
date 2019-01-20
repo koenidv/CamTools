@@ -1,90 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
-
-        <TextView
-            android:id="@+id/titleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:paddingStart="18dp"
-            android:paddingEnd="16dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/textColor_secondary"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="731dp"
-            tools:text="A camera"/>
-
-        <TextView
-            android:id="@+id/useTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="?attr/selectableItemBackground"
-            android:drawableTint="@color/textColor_secondary"
-            android:gravity="center_vertical"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:text="@string/use_next"
-            android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="731dp"
-            tools:targetApi="m"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="48dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/textColor_secondary"
+        android:text="@string/setting_cameras_icon_choose"/>
 
     <TextView
-        android:id="@+id/detailsTextView"
+        android:id="@+id/photoTextView"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/ic_info"
+        android:drawableStart="@drawable/camera_photo"
         android:drawablePadding="16dp"
         android:drawableTint="@color/textColor_secondary"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/details"
+        android:text="@string/camera_icon_photo"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         android:textColor="@color/textColor_normal"
         tools:targetApi="m"/>
 
     <TextView
-        android:id="@+id/editTextView"
+        android:id="@+id/shutterTextView"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/ic_edit"
+        android:drawableStart="@drawable/camera_shutter"
         android:drawablePadding="16dp"
         android:drawableTint="@color/textColor_secondary"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/edit"
+        android:text="@string/camera_icon_shutter"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         android:textColor="@color/textColor_normal"
         tools:targetApi="m"/>
 
     <TextView
-        android:id="@+id/deleteTextView"
+        android:id="@+id/videoTextView"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="?attr/selectableItemBackground"
-        android:drawableStart="@drawable/ic_delete"
+        android:drawableStart="@drawable/camera_video"
         android:drawablePadding="16dp"
         android:drawableTint="@color/textColor_secondary"
         android:gravity="center_vertical"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="4dp"
-        android:text="@string/delete"
+        android:text="@string/camera_icon_video"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textColor="@color/textColor_normal"
+        tools:targetApi="m"/>
+
+    <TextView
+        android:id="@+id/phoneTextView"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableStart="@drawable/camera_phone"
+        android:drawablePadding="16dp"
+        android:drawableTint="@color/textColor_secondary"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="4dp"
+        android:text="@string/camera_icon_phone"
         android:textAppearance="@style/TextAppearance.AppCompat.Menu"
         android:textColor="@color/textColor_normal"
         tools:targetApi="m"/>

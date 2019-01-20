@@ -293,6 +293,7 @@
     <string name="undo">Undo</string>
     <string name="show">Show</string>
     <string name="offerHelp">Need help?</string>
+    <string name="history">History</string>
     <string name="delete_history">Delete history</string>
     <string name="requestFeature">Request feature</string>
     <string name="feedback_title">Give feedback</string>

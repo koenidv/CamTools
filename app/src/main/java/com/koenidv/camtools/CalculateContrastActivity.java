@@ -18,12 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.azeesoft.lib.colorpicker.ColorPickerDialog;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.michaelbel.bottomsheet.BottomSheet;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -117,6 +114,7 @@ public class CalculateContrastActivity extends AppCompatActivity {
         });
 
         modeLayout.setOnClickListener(v -> {
+            /* TODO
             String[] entries = {
                     getString(R.string.calculate_color_mode_complementary),
                     getString(R.string.calculate_color_mode_triadic),
@@ -161,6 +159,7 @@ public class CalculateContrastActivity extends AppCompatActivity {
                 resultTextView.setTextColor(manipulateColor(color, DARKEN_TEXT));
             });
             sheetBuilder.show();
+            */
         });
 
     }
@@ -194,9 +193,9 @@ public class CalculateContrastActivity extends AppCompatActivity {
         int g = Math.round(Color.green(color) * factor);
         int b = Math.round(Color.blue(color) * factor);
         return Color.argb(a,
-                Math.min(r,255),
-                Math.min(g,255),
-                Math.min(b,255));
+                Math.min(r, 255),
+                Math.min(g, 255),
+                Math.min(b, 255));
     }
 
     @Override
