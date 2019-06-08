@@ -14,7 +14,7 @@
 
     <ul id="searchable">
         <h2>Canon</h2>
-        <li><a href="https://camtools.koenidv.de/add/Canon%20EOS-1D%20X%20Mark%20II;5472:3648;36:24">
+        <li><a href="https://camtools.koenidv.de/add/Canon%20EOS-1D%20X%20Mark%20II;5472:3648;36:24;https%3A%2F%2F1.img-dpreview.com%2Ffiles%2Fp%2FE~TS940x788~articles%2F3307797076%2F1dxii_43.png">
                 Canon EOS-1D X Mark II
             </a></li>
         <li><a href="https://camtools.koenidv.de/add/Canon%20EOS%205D%20Mark%20IV;6720:4480;36:24">
@@ -321,9 +321,11 @@
                 a = li[i].getElementsByTagName("a")[0];
                 txtValue = a.textContent || a.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    li[i].style.display = "";
+                    //li[i].style.display = "";
+                    li[i].classList.remove("hidden");
                 } else {
-                    li[i].style.display = "none";
+                    //li[i].style.display = "none";
+                    li[i].classList.add("hidden");
                 }
             }
 

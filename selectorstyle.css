@@ -80,3 +80,8 @@ button {
 .expandable.expanded.searchresult {
     border-top: unset;
 }
+
+.hidden {
+    /* Add an animation? */
+    display: none;
+}
