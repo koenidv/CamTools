@@ -55,7 +55,7 @@ public class camerasAdapter extends RecyclerView.Adapter<camerasAdapter.ViewHold
         holder.mNameTextView.setText(thisCamera.getName());
         // Display the camera's icon in the overview.
         // Disabled because it's confusing
-        //holder.mNameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(thisCamera.getIcon(), 0, 0, 0);
+        holder.mNameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(0, thisCamera.getIcon(), 0, 0);
         holder.mInfoTextView.setText(info);
 
         if (isLastUsed) {

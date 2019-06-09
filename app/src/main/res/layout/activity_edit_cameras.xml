@@ -39,7 +39,8 @@
             android:background="@color/colorAccentDark"
             android:gravity="end"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            >
 
 
             <TextView

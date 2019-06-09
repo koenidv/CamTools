@@ -367,4 +367,8 @@
     <string name="shortcut_exif">EXIF lesen</string>
     <string name="action_toggle_alpha_cards">Unfertige Werkzeuge umschalten</string>
     <string name="history">Verlauf</string>
+    <string name="details_image_description">Bild der Kamera</string>
+    <string name="sensor_description_general">%rMP %fx %pμm %cmm</string>
+    <string name="sensor_description_x">%ppx, %smm</string>
+    <string name="sensor_description_y">%ppx\n%smm</string>
 </resources>

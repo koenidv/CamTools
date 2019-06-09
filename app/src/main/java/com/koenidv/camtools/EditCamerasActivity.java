@@ -10,15 +10,12 @@ import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.widget.TextView;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.leinardi.android.speeddial.SpeedDialActionItem;
@@ -102,9 +99,17 @@ public class EditCamerasActivity extends AppCompatActivity {
                     data = data.substring(data.indexOf(";") + 1);
                     String resolution = data.substring(0, data.indexOf(";"));
                     data = data.substring(data.indexOf(";") + 1);
-                    String sensorsize = data;
-
-                    Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorsize);
+                    String sensorSize;
+                    String imageUrl;
+                    if (data.contains(";")) {
+                        sensorSize = data.substring(0, data.indexOf(";"));
+                        data = data.substring(data.indexOf(";") + 1);
+                        imageUrl = data;
+                    } else {
+                        sensorSize = data;
+                        imageUrl = null;
+                    }
+                    Camera addCamera = new Camera(name, R.drawable.camera_photo, resolution, sensorSize, imageUrl);
                     int index = prefs.getInt("cameras_amount", -1) + 1;
                     prefsEdit.putString("camera_" + String.valueOf(index), gson.toJson(addCamera))
                             .putInt("cameras_amount", index)
@@ -185,10 +190,8 @@ public class EditCamerasActivity extends AppCompatActivity {
         mAddDial.setOnActionSelectedListener(actionItem -> {
             switch (actionItem.getId()) {
                 case R.id.add_database:
-
                     CustomTabsIntent intent = new CustomTabsIntent.Builder().build();
                     intent.launchUrl(this, Uri.parse("https://camtools.koenidv.de/cams"));
-
                     break;
                 case R.id.add_custom:
                     if (mEmptyCardView.getVisibility() == View.VISIBLE) {
@@ -248,10 +251,6 @@ public class EditCamerasActivity extends AppCompatActivity {
 
     @SuppressWarnings("ConstantConditions")
     public void cardClicked(final View view) {
-        @SuppressWarnings("ConstantConditions") final SharedPreferences prefs = EditCamerasActivity.this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE);
-        @SuppressLint("CommitPrefEdits") final SharedPreferences.Editor prefsEdit = prefs.edit();
-        final ModuleManager mModuleManager = new ModuleManager();
-
         if (undoSnackbar != null && undoSnackbar.isShown()) {
             undoSnackbar.dismiss();
         }
@@ -260,82 +259,15 @@ public class EditCamerasActivity extends AppCompatActivity {
         final int position = rv.getChildAdapterPosition(view);
         RecyclerView.Adapter adapter = rv.getAdapter();
 
-        Camera selectedCamera = (new Gson()).fromJson(prefs.getString("camera_" + position, getString(R.string.camera_default)), Camera.class);
 
-        BottomSheetDialog dialog = new BottomSheetDialog(this, R.style.AppBottomSheetDialogTheme);
-        dialog.setContentView(R.layout.sheet_camera_actions);
-
-        TextView titleTextView = dialog.findViewById(R.id.titleTextView);
-        titleTextView.setText(selectedCamera.getName());
-        titleTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(selectedCamera.getIcon(), 0, 0, 0);
-        titleTextView.setCompoundDrawablePadding((int) (16 * getResources().getDisplayMetrics().density + 0.5f));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            titleTextView.setCompoundDrawableTintList(getResources().getColorStateList(R.color.textColor_secondary, getTheme()));
-        }
-
-        try {
-            //Hide "Use" option if the camera is already currently active
-            if (position == prefs.getInt("cameras_last", -1))
-                dialog.findViewById(R.id.useTextView).setVisibility(View.GONE);
-
-            dialog.findViewById(R.id.detailsTextView).setOnClickListener(v -> {
-                //Show a bottomsheet with details about the camera
-                dialog.dismiss();
-                CameraDetailsSheet sheet = new CameraDetailsSheet();
-                sheet.which = position;
-                sheet.show(getSupportFragmentManager(), "camera_details_sheet");
-            });
-            dialog.findViewById(R.id.useTextView).setOnClickListener(v -> {
-                //Set the camera as the currently active one
-                dialog.dismiss();
-                adapter.notifyItemChanged(prefs.getInt("cameras_last", 0), rv.getChildAt(prefs.getInt("cameras_last", 0)));
-                adapter.notifyItemChanged(position);
-                prefsEdit.putInt("cameras_last", position).apply();
-
-                NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-                if (nfcAdapter != null) {
-                    Camera mCamera = (new Gson()).fromJson(prefs.getString("camera_" + prefs.getInt("cameras_last", 0), getString(R.string.camera_default)), Camera.class);
-                    String data =
-                            mCamera.getName().replace(" ", "%20")
-                                    + ";" + mCamera.getResolutionX()
-                                    + ":" + mCamera.getResolutionY()
-                                    + ";" + mCamera.getSensorSizeX()
-                                    + ":" + mCamera.getSensorSizeY();
-                    NdefMessage message = new NdefMessage(NdefRecord.createMime("application/com.koenidv.camtools", data.getBytes()), NdefRecord.createApplicationRecord("com.koenidv.camtools"));
-                    nfcAdapter.setNdefPushMessage(message, this);
-                }
-            });
-            dialog.findViewById(R.id.editTextView).setOnClickListener(v -> {
-                //Open a bottomsheet which lets the user edit the camera
-                dialog.dismiss();
-                mModuleManager.editCamera(EditCamerasActivity.this, position, EditCamerasActivity.this.mCameraList, adapter);
-            });
-            dialog.findViewById(R.id.deleteTextView).setOnClickListener(v -> {
-                //Show a snackbar, delete the camera after it has been dismissed
-                dialog.dismiss();
-                Camera deletedCamera = mCameraList.get(position);
-                mCameraList.remove(position);
-                mAdapter.notifyItemRemoved(position);
-
-                undoSnackbar = Snackbar.make(findViewById(R.id.rootView), getString(R.string.setting_cameras_deleted).replace("%s", deletedCamera.getName()), Snackbar.LENGTH_LONG);
-                undoSnackbar.setAction(R.string.undo, ignored -> {
-                    mCameraList.add(position, deletedCamera);
-                    mAdapter.notifyItemInserted(position);
-                });
-                undoSnackbar.addCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar mSnackbar, int event) {
-                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                            mModuleManager.deleteCamera(EditCamerasActivity.this, position, null, null);
-                        }
-                    }
-                });
-                undoSnackbar.show();
-            });
-        } catch (NullPointerException npe) {
-            npe.printStackTrace();
-        }
-
-        dialog.show();
+        CameraDetailsSheet sheet = new CameraDetailsSheet();
+        sheet.which = position;
+        sheet.mActivity = EditCamerasActivity.this;
+        sheet.mCameraList = mCameraList;
+        sheet.mRecyclerView = rv;
+        sheet.mAdapter = adapter;
+        sheet.mUndoSnackbar = undoSnackbar;
+        sheet.show(getSupportFragmentManager(), "camera_details_sheet");
     }
+
 }

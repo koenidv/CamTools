@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@drawable/rounded_dialog"
               android:orientation="vertical"
-              android:padding="8dp"
-              android:paddingTop="16dp"
-              android:paddingBottom="16dp">
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/titleTextView"
@@ -21,7 +21,11 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_cancel"
+        android:drawablePadding="8dp"
+        android:drawableTint="@color/textColor_secondary"
         android:text="@string/timer_override_confirm"
         android:textAlignment="textStart"
-        android:textAppearance="@style/TextAppearance.AppCompat.Menu"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        tools:targetApi="m"/>
 </LinearLayout>

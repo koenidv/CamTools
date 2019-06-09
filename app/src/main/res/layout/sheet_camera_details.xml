@@ -1,61 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/nameTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_margin="16dp"
         android:drawableStart="@drawable/camera_shutter"
         android:drawablePadding="8dp"
         android:drawableTint="@color/textColor_normal"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:textColor="@color/textColor_normal"
+        tools:targetApi="m"
+        tools:text="Name"/>
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageCard"
+                android:layout_width="290dp"
+                android:layout_height="220dp"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                tools:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/imageProgressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="80dp"
+                    android:layout_weight="1"
+                    android:indeterminate="true"
+                    android:max="100"
+                    android:progress="100"/>
+
+                <ImageView
+                    android:id="@+id/cameraImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/details_image_description"
+                    android:maxHeight="192dp"
+                    tools:srcCompat="@tools:sample/avatars"/>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/sensorCard"
+                android:layout_width="300dp"
+                android:layout_height="220dp"
+                android:layout_margin="8dp"
+                android:padding="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="2dp"
+                        android:layout_height="180dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@color/textColor_normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <View
+                        android:id="@+id/view3"
+                        android:layout_width="260dp"
+                        android:layout_height="2dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@color/textColor_normal"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+                    <TextView
+                        android:id="@+id/sensorYTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:textColor="@color/textColor_normal"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/view"
+                        app:layout_constraintTop_toTopOf="@+id/view"
+                        tools:text="4000px\n24mm"/>
+
+                    <TextView
+                        android:id="@+id/sensorGeneralTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/textColor_normal"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/view3"
+                        app:layout_constraintEnd_toEndOf="@+id/view3"
+                        app:layout_constraintStart_toEndOf="@+id/view"
+                        app:layout_constraintTop_toTopOf="@+id/view"
+                        tools:text="24MP\n1x\n6μm\n0.003mm"/>
+
+                    <TextView
+                        android:id="@+id/sensorXTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:textColor="@color/textColor_normal"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/view3"
+                        app:layout_constraintEnd_toEndOf="@+id/view3"
+                        tools:text="6000px, 36mm"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/detailsCard"
+                android:layout_width="300dp"
+                android:layout_height="220dp"
+                android:layout_margin="8dp"
+                android:padding="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/pixelcountTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor_normal"
+                        tools:text="Pixel count"/>
+
+                    <TextView
+                        android:id="@+id/resolutionTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor_normal"
+                        tools:text="Resolution"/>
+
+                    <TextView
+                        android:id="@+id/sensorsizeTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor_normal"
+                        tools:text="Sensor size"/>
+
+                    <TextView
+                        android:id="@+id/cropfactorTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor_normal"
+                        tools:text="Crop factor"/>
+
+                    <TextView
+                        android:id="@+id/pixelpitchTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor_normal"
+                        tools:text="Pixel pitch"/>
+
+                    <TextView
+                        android:id="@+id/confusionTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColor_normal"
+                        tools:text="Confusion"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/useTextView"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableStart="@drawable/ic_check"
+        android:drawablePadding="16dp"
+        android:drawableTint="@color/textColor_secondary"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/use_next"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Widget.TextView.PopupMenu"
         tools:targetApi="m"/>
 
     <TextView
-        android:id="@+id/pixelcountTextView"
+        android:id="@+id/editTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor_normal"/>
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableStart="@drawable/ic_edit"
+        android:drawablePadding="16dp"
+        android:drawableTint="@color/textColor_secondary"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/edit"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textColor="@color/textColor_normal"
+        tools:targetApi="m"/>
 
     <TextView
-        android:id="@+id/resolutionTextView"
+        android:id="@+id/deleteTextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor_normal"/>
-
-    <TextView
-        android:id="@+id/sensorsizeTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor_normal"/>
-
-    <TextView
-        android:id="@+id/cropfactorTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor_normal"/>
-
-    <TextView
-        android:id="@+id/pixelpitchTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor_normal"/>
-
-    <TextView
-        android:id="@+id/confusionTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/textColor_normal"/>
+        android:layout_height="52dp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableStart="@drawable/ic_delete"
+        android:drawablePadding="16dp"
+        android:drawableTint="@color/textColor_secondary"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="4dp"
+        android:text="@string/delete"
+        android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+        android:textColor="@color/textColor_normal"
+        tools:targetApi="m"/>
 
 </LinearLayout>

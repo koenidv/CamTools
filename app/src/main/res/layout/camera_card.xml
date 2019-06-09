@@ -2,6 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cameraCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,14 +33,17 @@
             android:drawablePadding="8dp"
             android:foregroundTint="@color/textColor_normal"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            tools:text="Name"
+            android:drawableTint="@color/textColor_normal"/>
 
         <TextView
             android:id="@+id/infoTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            tools:text="Resolution at size"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
