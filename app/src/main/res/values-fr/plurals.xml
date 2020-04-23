@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="cameras">
+        <item quantity="zero">aucun d\'appareil photo</item>
+        <item quantity="one">%d appareil photo</item>
+        <item quantity="two">%d appareils photo</item>
+        <item quantity="few">%d appareils photo</item>
+        <item quantity="other">%d appareils photo</item>
+    </plurals>
+</resources>
