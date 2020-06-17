@@ -96,13 +96,27 @@ public class CalculateExifActivity extends AppCompatActivity implements BSImageP
                 if (all_tags != null) {
                     for (ExifTag exiftag : all_tags) {
                         if (exiftag.getValueAsString(null) != null) {
+                            switch (exiftag.getTagId()) {
+                                case 271:
+                                    out.append("Make : ");
+                                    break;
+                                case 272:
+                                    out.append("Model : ");
+                                    break;
+                                case 305:
+                                    out.append("Software : ");
+                                    break;
+                                case 306:
+                                    out.append("Date : ");
+                                    break;
+                            }
                             out.append(exiftag.getValueAsString());
                             out.append("<br/>");
-                            Toast.makeText(this, exiftag.getValueAsString(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(this, exiftag.getValueAsString(), Toast.LENGTH_SHORT).show();
                         }
                     }
-                } else {
-                    Toast.makeText(this, "all_tags == null", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(this, "all_tags == null", Toast.LENGTH_LONG).show();
                 }
 
                 ((TextView) findViewById(R.id.textView)).setText(Html.fromHtml(out.toString()));

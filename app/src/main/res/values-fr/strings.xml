@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CamTools</string>
+
+    <string name="aboutLibraries_description_text">Un calculateur pour les photographes.</string>
+
+    <string name="title_sky_short">Éphéméride</string>
+    <string name="title_sky_long">Éphéméride</string>
+    <string name="title_exposure_short">Exposition</string>
+    <string name="title_exposure_long">Temps exposition</string>
+    <string name="title_focus_short">Focale</string>
+    <string name="title_focus_long">Focale</string>
+    <string name="title_tools_short">Outils</string>
+    <string name="title_tools_long">Outils</string>
+    <string name="title_timelapse_short">Laps de temps</string>
+    <string name="title_timelapse_long">laps de temps</string>
+    <string name="title_settings_short">Réglages</string>
+    <string name="title_settings_long">Réglages</string>
+    <string name="overflow_description">Plus d\'options …</string>
+
+    <string name="select_hyper">Hyperfocale</string>
+    <string name="description_hyper">Réglez la mise au point à cette distance pour que la profondeur de champ atteigne l\'infini.</string>
+    <string name="shortcut_focus_hyper">Hyperfocale</string>
+    <string name="select_limits">Profondeur de champ</string>
+    <string name="description_limits">Calculez quelle plage sera nette à un point de focalisation donné.</string>
+    <string name="shortcut_focus_limits">Profondeur de champ</string>
+    <string name="select_reverse">Inverser</string>
+    <string name="description_reverse">Calculez l\'ouverture nécessaire pour une profondeur de champ donnée.</string>
+    <string name="shortcut_focus_reverse">Focale</string>
+    <string name="select_nd">Filtre ND</string>
+    <string name="description_nd">Utilisez un filtre de densité neutre pour prolonger le temps d\'exposition.</string>
+    <string name="shortcut_exposure_nd">Filtre ND</string>
+    <string name="select_stars">Etoiles</string>
+    <string name="description_stars">Calculez le temps d\'exposition maximal auquel les étoiles sont affichées sous forme de points.</string>
+    <string name="shortcut_exposure_spotstars">Etoiles</string>
+    <string name="select_startrails">Trainée d\'étoiles</string>
+    <string name="description_startrails">Calculez le temps d\'exposition pour une rotation donnée des étoiles.</string>
+    <string name="shortcut_exposure_startrails">Trainée d\'étoiles</string>
+    <string name="select_sky_overview">Présentation</string>
+    <string name="description_sky_overview">Un aperçu des moments importants pour le soleil et la lune.</string>
+    <string name="shortcut_sky_overview">Événements célestes</string>
+    <string name="select_sky_details">Détails</string>
+    <string name="description_sky_details">Tous les détails sur le soleil et la lune.</string>
+    <string name="shortcut_sky_details">Détails du paradis</string>
+    <string name="select_sky_ar">Réalité augmentée célestes</string>
+    <string name="description_sky_ar">Voir où le soleil et la lune seront en réalité.</string>
+    <string name="shortcut_sky_ar">RA Céleste</string>
+    <string name="select_lightpollution">Pollution lumineuse</string>
+    <string name="description_lightpollution">Découvrez où vous pouvez prendre les meilleures images de nuit.</string>
+    <string name="shortcut_sky_lightpollution">Pollution lumineuse</string>
+    <string name="select_contrast">Contrastes (Beta)</string>
+    <string name="description_contrast">Utilisez des couleurs contrastées pour rendre vos images plus lumineuses.</string>
+    <string name="shortcut_contrast">Contrasts</string>
+    <string name="select_cropfactor">Equivalence focale plein format (Crop factor)</string>
+    <string name="description_cropfactor">Découvrez à quoi ressemble un objectif plein format sur un capteur plus petit.</string>
+    <string name="shortcut_cropfactor">Coefficient</string>
+    <string name="select_exif">Lire les données EXIF</string>
+    <string name="description_exif">Affichez toutes les informations que votre appareil photo a enregistré avec l\'image.</string>
+    <string name="shortcut_exif">Lire Exif</string>
+
+    <string name="settings">Réglages</string>
+    <string name="setting_enable">Activer</string>
+    <string name="setting_disable">Desactiver</string>
+    <string name="setting_change">Changer</string>
+    <string name="setting_darkmode_title">Thème sombre</string>
+    <string name="setting_darkmode_description">Utilisez le thème sombre pour protéger vos yeux.</string>
+    <string name="setting_darkmode_follow_system">Identique au système</string>
+    <string name="setting_units_title">Unités</string>
+    <string name="setting_units_aperture">f-stops</string>
+    <string name="setting_units_aperture_short">Ouverture</string>
+    <string name="setting_units_aperture_full">Full stops</string>
+    <string name="setting_units_aperture_half">Half stops</string>
+    <string name="setting_units_aperture_third">Third stops</string>
+    <string name="setting_units_aperture_full_short">Full stops</string>
+    <string name="setting_units_aperture_half_short">Halfs</string>
+    <string name="setting_units_aperture_third_short">Thirds</string>
+    <string name="setting_units_distance">Distance</string>
+    <string name="setting_units_distance_metrical">Métrique</string>
+    <string name="setting_units_distance_empirical">Impérial</string>
+    <string name="setting_units_nd">Densité neutre</string>
+    <string name="setting_units_nd_times">Densité</string>
+    <string name="setting_units_nd_stops">Ouverture</string>
+
+    <string name="setting_sensor_size">Taille du capteur</string>
+    <string name="setting_cameras_title">Votre appareil photo</string>
+    <string name="setting_cameras_description">Ajoutez vos appareils photo pour des résultats plus précis.\nVous avez actuellement %s.</string>
+    <string name="setting_cameras_edit">Editer</string>
+    <string name="seeting_cameras_new_accessibilitytext">Ajouter un appareil photo ou fermer le menu</string>
+    <string name="setting_cameras_new_database">Depuis la base de données</string>
+    <string name="setting_cameras_new_custom">Personnalisé</string>
+    <string name="setting_cameras_new_custom_title">Ajouter un appareil photo</string>
+    <string name="setting_cameras_edit_custom_title">Editer cet apareil photo</string>
+    <string name="setting_cameras_icon_choose">Choisir une icône</string>
+    <string name="camera_icon_photo">DSLR</string>
+    <string name="camera_icon_shutter">Obturateur</string>
+    <string name="camera_icon_video">Appareil photo</string>
+    <string name="camera_icon_phone">Téléphone</string>
+    <string name="setting_cameras_sensorsize">Taille du capteur (mm)</string>
+    <string name="setting_cameras_resolution">Résolution de l\'image (px)</string>
+    <string name="setting_cameras_coc">Cercle de confusion (mm)</string>
+    <string name="setting_cameras_added_camera">Ajouter %s</string>
+    <string name="setting_cameras_added_error">Ne peut pas ajouter l\'appareil photo</string>
+    <string name="setting_cameras_deleted">Supprimer %s</string>
+    <string name="settings_cam_coc">Cercle de confusion</string>
+    <string name="settings_nd_strengthunit">Unité de densité</string>
+    <string name="settings_nd_strengthunit_dialog">Unité de densité optique</string>
+    <string name="settings_nd_strengthunit_stops">F-stops</string>
+    <string name="settings_nd_strengthunit_times">Filter factor</string>
+    <string name="settings_nd_timelimits">Délais</string>
+    <string name="settings_nd_strengthlimits">Limites de résistance</string>
+    <string name="appearance_appearance">Apparence</string>
+    <string name="appearance_darkmode">Thème sombre</string>
+    <string name="appearance_color">Couleurs</string>
+    <string name="appearance_navbar">Bottom navigation</string>
+    <string name="appearance_labels">Étiquettes de navigation</string>
+    <string name="appearance_singlehand">Mode à une main</string>
+    <string name="appearance_swipe">Glissez entre les onglets</string>
+    <string name="appearance_save">Enregistrer le dernier onglet</string>
+    <string name="appearance_customColors">Couleurs personnalisées</string>
+    <string name="about_about">À propos de</string>
+    <string name="about_rate">Noter / Envoyer des commentaires</string>
+    <string name="about_me">À propos de moi</string>
+    <string name="about_app">À propos de cette application</string>
+
+    <string name="more_expand">Développer</string>
+    <string name="more_expanded">Replier</string>
+
+    <string name="fallback_colorparse">Revenir à au moins une couleur standard. Assurez-vous d\'avoir entré un code couleur valide.</string>
+
+    <string name="camera_default_name">Défault</string>
+    <string name="camera_default">
+        {"mName":"Default",
+        "mResolutionX":6000,
+        "mResolutionY":4000,
+        "mSensorSizeX":36,
+        "mSensorSizeY":24,
+        "mCropfactor":1,
+        "mPixelpitch":6.6,
+        "mConfusion":0.03}
+    </string>
+
+    <string name="calculate_camera">Appareil photo: %s</string>
+    <string name="calculate_camera_add">Ajouter votre appareil photo</string>
+    <string name="calculate_camera_choose">Choisir votre appareil photo</string>
+    <string name="calculate_camera_manage">Gérer</string>
+    <string name="calculate_timer_start">Démarrer la minuterie</string>
+    <string name="calculate_equations">Comment est fait le calcul</string>
+    <string name="calculate_color_choose">Choisir une couleur</string>
+    <string name="calculate_color_mode">Contraste: %s</string>
+    <string name="calculate_color_mode_choose">Mode contraste</string>
+    <string name="calculate_color_mode_complementary">Complémentaire</string>
+    <string name="calculate_color_mode_triadic">Triadique</string>
+    <string name="calculate_color_mode_warmth">Chaleur</string>
+    <string name="calculate_color_mode_brightness">Luminosité</string>
+
+    <string name="title_activity_custom">Couleurs personnalisées</string>
+    <string name="custom_light_lighter">Lumière plus légère (cartes, barre de navigation, etc.)</string>
+    <string name="custom_light_normal">Lumière normale (principalement arrière-plans)</string>
+    <string name="custom_light_darker">Lumière plus foncée (pas encore utilisée)</string>
+    <string name="custom_dark_lighter">Obscurité plus légère (principalement arrière-plans)</string>
+    <string name="custom_dark_normal">Obscurité normale (cartes, barre de navigation, etc.)</string>
+    <string name="custom_dark_darker">Obscurité plus foncée (pas encore utilisé)</string>
+    <string name="custom_tab_sun">Couleur d\'accentuation de l\'onglet Soleil</string>
+    <string name="custom_tab_stars">Couleur d\'accentuation de l\'onglet Étoiles</string>
+    <string name="custom_tab_focus">Couleur d\'accentuation de l\'onglet Focus</string>
+    <string name="custom_tab_nd">Couleur d\'accentuation de l\'onglet ND</string>
+    <string name="custom_tab_settings">Couleur d\'accentuation de l\'onglet Réglages</string>
+    <string name="custom_tab_timelapse">Couleur d\'accentuation de l\'onglet Laps de temps</string>
+    <string name="custom_text_main_light">Texte principal (mode clair)</string>
+    <string name="custom_text_sub_light">Sous-texte (mode clair)</string>
+    <string name="custom_text_main_dark">Texte principal (mode sombre)</string>
+    <string name="custom_text_sub_dark">Sous-texte (mode sombre)</string>
+
+    <string name="sun_mode_details">Détails</string>
+    <string name="sun_mode_ar">RA</string>
+    <string name="sun_details_night">La nuit</string>
+    <string name="sun_details_astronomical">Crépuscule astronomique</string>
+    <string name="sun_details_nautical">Crépuscule nautique</string>
+    <string name="sun_details_bluehour">Heure bleue</string>
+    <string name="sun_details_goldenhour">Heure en or</string>
+    <string name="sun_details_sunrise">lever du soleil</string>
+    <string name="sun_details_day">Jour</string>
+    <string name="sun_details_noon">Midi solaire</string>
+    <string name="sun_details_sunset">Coucher du soleil</string>
+    <string name="sun_details_morning">Matin</string>
+    <string name="sun_details_morning_description_astronomical">Fin de la nuit</string>
+    <string name="sun_details_morning_description_nautical">Fin du crépuscule astronomique</string>
+    <string name="sun_details_morning_description_bluehour">Fin du crépuscule nautique&lt;br /&gt;Début du crépuscule civil</string>
+    <string name="sun_details_morning_description_goldenhour">Fin de l\'heure bleu</string>
+    <string name="sun_details_morning_description_sunrise">Fin du crépuscule civil</string>
+    <string name="sun_details_morning_description_day">Fin de l\'heure en or</string>
+    <string name="sun_details_morning_description_noon" translatable="false"/>
+    <string name="sun_details_evening">Soirée</string>
+    <string name="sun_details_evening_description_goldenhour">Fin de journée</string>
+    <string name="sun_details_evening_description_sunset">Début du crépuscule civil</string>
+    <string name="sun_details_evening_description_bluehour">Fin de l\'heure en or</string>
+    <string name="sun_details_evening_description_nautical">Fin de l\'heure bleu&lt;br /&gt;Fin du crépuscule civil</string>
+    <string name="sun_details_evening_description_astronomical">Fin du crépuscule nautique</string>
+    <string name="sun_details_evening_description_night">Fin du crépuscule astronomique</string>
+
+    <string name="focus_mode_hyper">Hyperfocale</string>
+    <string name="focus_mode_limits">Limites</string>
+    <string name="focus_mode_reverse">Ouverture</string>
+    <string name="focus_hyper_near_indicator">Près de la limite</string>
+    <string name="focus_hyper_hyper_indicator">Hyperfocale</string>
+    <string name="focus_hyper_far_indicator">Limite extrême</string>
+    <string name="focus_limits_near_indicator">De</string>
+    <string name="focus_limits_far_indicator">A</string>
+    <string name="focus_reverse_aperture_indicator">Ouverture:</string>
+    <string name="focus_reverse_distance_indicator">Distance de mise au point:</string>
+    <string name="focus_reverse_error">La limite de mise au point éloignée doit être supérieure à la limite de mise au point proche.</string>
+    <string name="focus_depth_indicator">Profondeur de champ:</string>
+    <string name="focus_length">Focale</string>
+    <string name="focus_aperture">Ouverture</string>
+    <string name="focus_distance">Distance</string>
+    <string name="focus_limit_near">Près de la limite</string>
+    <string name="focus_limit_far">Limite extrême</string>
+    <string name="focus_length_hint">Distance focale…</string>
+    <string name="focus_aperture_hint">Ouverture…</string>
+    <string name="focus_limit_near_hint">Près de la limite de mise au point…</string>
+    <string name="focus_limit_far_hint">Limite de mise au point éloignée…</string>
+    <string name="focus_distance_hint">Distance de l\'objet…</string>
+    <string name="focus_action_calculate">Équations</string>
+
+    <string name="nd_time_title">Exposition normale:</string>
+    <string name="nd_time_hint">Délai d\'exposition…</string>
+    <string name="nd_time_indicator_seconds_short">s</string>
+    <string name="nd_time_indicator_seconds_long">secondes</string>
+    <string name="nd_strength_title">Densité:</string>
+    <string name="nd_strength_hint">Transmission de la lumière…</string>
+    <string name="nd_strength_type_stops">stops</string>
+    <string name="nd_strength_type_times">Délai</string>
+    <string name="nd_result_indicator">Délai d\'exposition:</string>
+
+    <string name="stars_more">Autres règles</string>
+    <string name="stars_expand">Plus</string>
+    <string name="stars_collapse">Moins</string>
+    <string name="stars_npf">Règle NPF</string>
+    <string name="stars_npf_description">La règle NPF est une règle plus compliquée pour la netté des étoiles qui tient compte des nouveaux capteurs.</string>
+    <string name="stars_500">Règle 500</string>
+    <string name="stars_500_description">La règle 500 est une règle courante pour déterminer la vitesse d\'obturation maximale en divisant 500 par la distance focale.</string>
+    <string name="stars_600">Règle 600</string>
+    <string name="stars_600_description">La règle 600 est similaire à la règle 500, mais un peu plus permissive.</string>
+
+    <string name="action_help">Obtenir de l\'aide</string>
+    <string name="action_add_shortcut">Ajouter un raccourci</string>
+    <string name="action_advancedSettings">Réglages avancés</string>
+    <string name="action_show_hidden_cards">Afficher les cartes cachées</string>
+    <string name="action_toggle_alpha_cards">Basculer les outils inachevés</string>
+    <string name="action_used_libraries">Bibliothèques utilisées</string>
+
+    <string name="timer_start">Début</string>
+    <string name="timer_continue">Reprendre</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_reset">Réinitialiser</string>
+    <string name="timer_text">%s: %s restant</string>
+    <string name="timer_text_short">%s restant</string>
+    <string name="timer_finished">%s: Fini</string>
+    <string name="timer_finished_short">Fini</string>
+    <string name="timer_cancelled">%s annulé</string>
+    <string name="timer_override_title">Une autre minuterie est déjà en cours d\'exécution</string>
+    <string name="timer_override_confirm">Annuler %s et démarrer cette minuterie</string>
+
+    <string name="time_days">d</string>
+    <string name="time_hours">h</string>
+    <string name="time_minutes">m</string>
+    <string name="time_seconds">s</string>
+    <string name="meter" translatable="false">m</string>
+    <string name="feet" translatable="false">ft</string>
+    <string name="millimeter" translatable="false">mm</string>
+    <string name="micrometer" translatable="false">μm</string>
+    <string name="aperture" translatable="false">f/</string>
+    <string name="density_factor" translatable="false">x</string>
+    <string name="density_stops">stops</string>
+    <string name="megapixel">MP</string>
+    <string name="million">" million"</string>
+    <string name="pixel">px</string>
+    <string name="dimensions_separator" translatable="false">x</string>
+
+    <string name="details">Détails</string>
+    <string name="edit">Éditer</string>
+    <string name="delete">Supprimer</string>
+    <string name="use_next">Utiliser</string>
+    <string name="move_up">Déplacer vers le haut</string>
+    <string name="move_down">Déplacer vers le bas</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="cancel">Annuler</string>
+    <string name="save">Sauvegarder</string>
+    <string name="okay">D\'accord</string>
+    <string name="undo">Défaire</string>
+    <string name="show">Montrer</string>
+    <string name="offerHelp">Besoin d\'aide?</string>
+    <string name="history">Historique</string>
+    <string name="delete_history">Supprimer l\'historique</string>
+    <string name="requestFeature">Demander des fonctions</string>
+    <string name="feedback_title">Faire des commentaires</string>
+    <string name="feedback_description">Veuillez partager vos réflexions sur cette application afin que je puisse la rendre encore meilleure!</string>
+    <string name="feedback_action">Envoyer des commentaires</string>
+    <string name="warning_reset_colors_title">Réinitialiser les couleurs?</string>
+    <string name="warning_reset_colors_message">Cela annulera toutes les modifications que vous avez apportées au thème. Les autres paramètres ne seront pas affectés.</string>
+    <string name="more_coming_soon">Plus d\'options bientôt</string>
+    <string name="coming_soon_title">Désoler!</string>
+    <string name="coming_soon_description">Cette fonctionnalité est toujours en cours de développement. Elle sera bientôt disponible</string>
+    <string name="no_ar_measure_app_installed">Aucune application pour mesurer les distances installées</string>
+    <string name="no_ar_measure_app_installed_description">Vous pouvez ouvrir Measure ou ruleR directement à partir d\'ici une fois que l\'un d\'eux est installé.</string>
+    <string name="install_measure_by_google">Installer Measure</string>
+    <string name="install_aruler_by_grymala">Installer AruleR</string>
+
+    <string name="name">Name</string>
+    <string name="pixelcount_indicator">"Pixels: "</string>
+    <string name="resolution_indicator">"Résolution maximale: "</string>
+    <string name="sensorsize_indicator">"Taille du capteur: "</string>
+    <string name="cropfactor_indicator">"Coefficient réducteur: "</string>
+    <string name="pixelpitch_indicator">"Pixel pitch: "</string>
+    <string name="coc_indicator">"Cercle de confusion: "</string>
+    <string name="pixelcount_text">"Pixels: %s million"</string>
+    <string name="resolution_text">"Résolution maximale: %x x %y pixel"</string>
+    <string name="sensorsize_text">"Taille capteur: %x x %y mm"</string>
+    <string name="cropfactor_text">"Coefficient réducteur: %sx"</string>
+    <string name="pixelpitch_text">"Pixel pitch: %sμm"</string>
+    <string name="coc_text">"Cercle de confusion: %smm"</string>
+    <string name="resolution_size_seperator">" a "</string>
+    <string name="preset_choose">Choisissez un préréglage</string>
+    <string name="tip_share_beam">Conseil: l\'appareil photo actuellement active peut être partagée avec Android Beam</string>
+    <string name="no_cameras_added">Vous n\'avez pas encore ajouté d\'appareil photo</string>
+    <string name="no_cameras_added_description">Ajoutez votre apareil photo pour obtenir des résultats plus précis.</string>
+
+    <string name="color_palette">Palette de couleurs</string>
+    <string name="colors">Couleurs</string>
+
+    <string name="group_timers_name">Minuteries</string>
+    <string name="channel_timer_name">Minuteur</string>
+    <string name="channel_timer_description">Vous recevrez une notification si vous démarrez une minuterie dans l\'application.</string>
+    <string name="channel_timer_finished_name">Minuterie expirée</string>
+    <string name="channel_timer_finished_description">Vous avertir lorsqu\'un minuteur que vous avez défini a expiré.</string>
+
+    <string name="equation_hyperfocal">
+        Hyperfocal distance \\(d_h\\):
+        $$d_h = \\frac{f^2}{k + c} + f$$
+        Near limit \\(d_n\\):
+        $$d_n = \\frac{d_h^2}{2 * d_h - f}$$
+    </string>
+    <string name="equation_hyperfocal_description">
+        f = Focal length\nk = Aperture\nc = Circle of confusion
+    </string>
+    <string name="equation_focuslimits">
+        Hyperfocal distance \\(d_h\\):
+        $$d_h = \\frac{f^2}{k + c} + f$$
+        Near limit \\(d_n\\):
+        $$d_n = \\frac{d_h * d}{d_h + d - f}$$
+        Far limit \\(d_f\\):
+        $$d_f = \\frac{d_h * d}{d_h - d - f}$$
+    </string>
+    <string name="equation_focuslimits_description">
+        f = Focal length\nk = Aperture\nc = Circle of confusion\nd = Object distance
+    </string>
+    <string name="equation_reversefocus">
+        Interim result \\(i\\):
+        $$i = \\frac{ \\frac{f}{d_n} + \\frac{f}{d_f} - 2 }{ \\frac{1}{d_f} - \\frac{1}{d_n} }$$
+        Focus distance \\(d\\):
+        $$d = \\frac{ i - f }{ \\frac{i}{d_n} - 1 }$$
+        Aperture \\(k\\):
+        $$k = \\frac{f^2}{i * c}$$
+    </string>
+    <string name="equation_reversefocus_description">
+        f = Focal length\ndn = Near limit\ndf = Far limit\nc = Circle of confusion
+    </string>
+    <string name="equation_nd">
+        Long exposure \\(t_l\\):
+        $$t_l = t_i * k^2$$
+    </string>
+    <string name="equation_nd_description">
+        ti = Initial exposure time\nk = Filter strength (stops)
+    </string>
+    <string name="equation_spotstars">
+        NPF rule \\(t_n\\):
+        $$t_n = \\frac{ 35 * k + 30 * p }{ f }$$
+        500 rule \\(t_5\\):
+        $$t_5 = \\frac{ 500 }{ f }$$
+        600 rule \\(t_6\\):
+        $$t_6 = \\frac{ 600 }{ f }$$
+    </string>
+    <string name="equation_spotstars_description">
+        k = Aperture\np = Pixel pitch\nf = Focal length
+    </string>
+    <string name="equation_cropfactor">
+        Focal length \\(f\\):
+        $$f = f_f * c$$
+        Aperture \\(k\\):
+        $$k = k_f * c$$
+    </string>
+    <string name="equation_cropfactor_description">
+        ff = Full-frame focal length\nkf = Full-frame aperture\nc = Crop factor
+    </string>
+
+    <!-- Functional -->
+    <string name="sunDayDateFormat">EEEE, MMM d</string>
+    <string name="aboutLibraries_description_showIcon" translatable="false">true</string>
+    <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
+    <string name="sun_details_morning_astronomical">Crépuscule astronomique</string>
+    <string name="action_settings">Réglages</string>
+    <string name="action_search">Chercher</string>
+</resources>

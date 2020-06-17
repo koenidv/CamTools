@@ -116,7 +116,7 @@
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/cropfactor"/>
+                        android:src="@drawable/shortcut_ic_cropfactor"/>
 
                     <TextView
                         android:id="@+id/selectCropfactorTitle"
@@ -172,7 +172,7 @@
                         android:layout_weight="1"
                         android:importantForAccessibility="no"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/cropfactor"/>
+                        android:src="@drawable/shortcut_ic_cropfactor"/>
 
                     <TextView
                         android:id="@+id/selectExifTitle"

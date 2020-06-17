@@ -391,12 +391,12 @@ class ModuleManager {
 
                 final String which = String.valueOf(preset);
                 presetTextView.setOnClickListener(optionview -> {
-                    int resXid = mContext.getResources().getIdentifier("preset_size_" + which + "_x", "string", mContext.getPackageName());
-                    int resYid = mContext.getResources().getIdentifier("preset_size_" + which + "_y", "string", mContext.getPackageName());
+                    int sizeXid = mContext.getResources().getIdentifier("preset_size_" + which + "_x", "string", mContext.getPackageName());
+                    int sizeYid = mContext.getResources().getIdentifier("preset_size_" + which + "_y", "string", mContext.getPackageName());
                     int cocid = mContext.getResources().getIdentifier("preset_size_" + which + "_coc", "string", mContext.getPackageName());
 
-                    mResolutionXEditText.setText(mContext.getString(resXid));
-                    mResolutionYEditText.setText(mContext.getString(resYid));
+                    mSizeXEditText.setText(mContext.getString(sizeXid));
+                    mSizeYEditText.setText(mContext.getString(sizeYid));
                     mConfusionEditText.setText(mContext.getString(cocid));
                 });
                 linearLayout.addView(presetTextView);
